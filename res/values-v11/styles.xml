@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ 
+    <style name="proxTheme" parent="android:Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+    </style>
+ 
+    <style name="ActionBar" parent="android:style/Widget.Holo.ActionBar">     
+        <item name="android:background">@drawable/footer</item>
+    </style>
+ 
+</resources>
+ 
