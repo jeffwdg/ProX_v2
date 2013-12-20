@@ -98,6 +98,7 @@
                 android:layout_marginBottom="40dip"
                 android:text="New to ProX? Register here"
                 android:gravity="center"
+                android:onClick="forgotPassword"
                 android:textSize="20dip"
                 android:textColor="#1dae57"/>
           

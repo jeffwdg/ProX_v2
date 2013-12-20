@@ -88,6 +88,7 @@ public class Grid extends Activity{
 	 public class ImageAdapter extends BaseAdapter 
 	 {
 		 private Context context;
+		public int[] imageIDs;
 		 public ImageAdapter(Context c){
 			 context = c;
 		 }

@@ -2,12 +2,23 @@ package com.example.prox;
 
 public class Ebook {
 	
+	private String id;
 	private String title;
     private String author;
     private String ISBN;
     private String filename;
     private String status; 
+    
+    
+    public String getID() {
+        return id;
+    }
  
+    public void setID(String id) {
+        this.id = id;
+    }
+    
+    
     public String getTitle() {
         return title;
     }
@@ -38,6 +49,11 @@ public class Ebook {
     public void setFilename(String filename) {
         this.filename = filename;
     }
+
+	public CharSequence getText() {
+		// TODO Auto-generated method stub
+		return null;
+	}
  
  
  

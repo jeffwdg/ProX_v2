@@ -2,10 +2,17 @@ package com.example.prox;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import android.app.Fragment;
+ 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.ClipData.Item;
+import android.content.SharedPreferences.Editor;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,15 +32,9 @@ import com.parse.ParseQuery;
 
 public class EbooksFragment extends Fragment {
 	
-	 Integer[] imageIDs = {
-			 R.drawable.userguide,
-			 R.drawable.bookcover, 
-			 R.drawable.userguide,
-			 R.drawable.bookcover
-			 };
- 
-	 
-	 ArrayList<Ebook> myEbook;
+	GridView gridView;
+	ArrayList<Item> gridArray = new ArrayList<Item>();
+	CustomGridViewAdapter customGridAdapter;
 	 
 	 
 	public EbooksFragment(){}
@@ -41,146 +42,79 @@ public class EbooksFragment extends Fragment {
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
  
-        View rootView = inflater.inflate(R.layout.fragment_photos, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_ebooks, container, false);
         
-        Parse.initialize(getActivity(), "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
+        //Parse.initialize(getActivity(), "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
+        
+        Bitmap homeIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.userguide);
+        Bitmap userIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.bookcover);
+        
+        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
+	    Editor editor = pref.edit();
+	   
+	    String objectId = pref.getString("objectId", null);
+	    Log.d("ProX Ebooks", "Fetching User Ebooks of " +objectId);
+        //Get user ebooks from parse.com  
+	    Toast.makeText(getActivity(),"Loading...", 6000).show();
+    	ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
+    	query.whereEqualTo("userID", objectId);
+    	query.findInBackground(new FindCallback<ParseObject>() {
+			@SuppressLint("NewApi")
+			@Override
+			public void done(List<ParseObject> userebookslist, ParseException e) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getActivity(),"Checking internet connection...", Toast.LENGTH_LONG).show();
+				Log.d("ProX Ebooks", "Fetching User Ebooks");
+				
+				if (e == null) {
+					Log.d("ProX Ebooks", "Found " + userebookslist.size() + " ebooks");
+					String objectId, ebookID, uri;
+		    	      
+		    	      for(ParseObject userbooks : userebookslist) {
+		    	    	  objectId = userbooks.getObjectId();
+		    	    	  ebookID=(String) userbooks.get("ebookID");
+		    	    	  //objectId=(String) userbooks.get("objectId");
+		    	    	  
+		    	    	  Log.d("ProX Ebooks", "Retrieved " + objectId);
+		    	    	  gridArray.add(new Item(ebookID, objectId, null, null));
+		              }
+		    	      
+		    	      GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
+		    	      customGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, gridArray);
+		    	      gridView.setAdapter(customGridAdapter);
+ 
+	    	    } else {
+	    	      // something went wrong
+	    	    	Toast.makeText(getActivity(),"Not connected to a newtwork. Please check your internet connection.", Toast.LENGTH_LONG).show(); 
+	    	    	Log.d("ProX Ebooks", "Error");
+	    	    }
+			}
+    	});
+    	//END get user ebooks
     	
-        //getActivity().setContentView(R.layout.grid);
-       /* 
-        Ebook ebook = new Ebook();
-        Ebook ebook1 = new Ebook();
-        
-        myEbook  = new ArrayList<Ebook>();
-        
-        ebook.filename = "Android 101";
-        ebook.author = "ASam";
-        
-        ebook1.filename = "Android 102";
-        ebook1.author = "ASam2";
-        
-        myEbook.add(0,ebook);
-        myEbook.add(1,ebook1);
-        
-        Log.d("Author 1",ebook1.author);
-        Log.d("Author 2",ebook.author);
-        
-        */
-        
-   	 
+    	
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
-        //gridView.setAdapter(new ImageAdapter(getActivity()));
-	 
+        customGridAdapter = new CustomGridViewAdapter(getActivity(), R.layout.row_grid, gridArray);
+        gridView.setAdapter(customGridAdapter);
+        
+        final String[] ebook = null;
+        
         gridView.setOnItemClickListener(new OnItemClickListener(){
         	public void onItemClick(AdapterView parent,View v, int position, long id){	
-	 			//openBook(position);
-	 			Toast.makeText(getActivity(),"Ebook" + (position + 1) + " selected", Toast.LENGTH_SHORT).show();
+
+        		Item ebook =gridArray.get(position);
+        		Intent bookdetails = new Intent(getActivity(), StoreBookDetails.class);
+        		//bookdetails.putExtra("objectId", "http://files.parse.com/afc311a3-01af-4e45-ad6a-4ea2f171e17a/86d3d88b-17f4-4eaa-aac0-5846a636c3a7-book.pdf");
+        		bookdetails.putExtra("ebookID", ebook.getText());
+        		//bookdetails.putExtra("filename", ebook.getText());
+        		bookdetails.putExtra("id",position);
+        		
+        		Toast.makeText(getActivity(),"Ebook " +  position + " selected", Toast.LENGTH_SHORT).show();
+                startActivity(bookdetails);
 		 	}
 		 });
-		 
-		 
-        /**  Get data from parse.com **/
-    	//ParseQuery<ParseObject> query = new ParseQuery("userEbooks");  
-    	
-    	//query.whereEqualTo("userID", "se00mwg0q2");
-    	
-    	ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
-    	query.whereEqualTo("userID", "se00mwg0q2");
-    	//ParseQuery<ParseObject> myquery = ParseQuery.getQuery("ebook");
-    	//myquery.whereMatchesQuery("ebook", query);
-   
-    	
-    	query.include("e");
-    	
-    	query.findInBackground(new FindCallback<ParseObject>() {
-    		
-    	  public void done(List<ParseObject>  userebookslist, ParseException e) {
-    	    if (e == null) {
-
-    	    	Log.d("userEbooks", "Retrieved " + userebookslist.size() + " ebooks");
-    	    	Toast.makeText(getActivity(), "Ret", Toast.LENGTH_LONG).show(); 
-    	      
-    	      String mybooktitle;
-    	      
-    	      for (ParseObject userbooks : userebookslist) {
-                  
-				//list1Strings22[iii]=(String) country.get("name");
-    	    	  mybooktitle=(String) userbooks.get("title");
-    	    	  
-    	    	  Log.d("User", "Book  " + mybooktitle );
-    	    	  
-    	    	  
-                  //adapter.add((String) userbooks.get("title"));
-              }
-    	      
-
-
-    	    } else {
-    	      // something went wrong
-    	    	Toast.makeText(getActivity(),"Error", Toast.LENGTH_LONG).show(); 
-    	    }
-    	  }
-    	});
-    	
-
-    	
-    	/**END get data**/
-    	
-    	
-    	
-    	
+        
         return rootView;
     }
-	
-	public class Ebook{
-		
-		String id;
-		String filename;
-		String author;
-		String title;
-		
-	}
-	
-	/** Image adapter for grid View**/
-	
-	public class ImageAdapter extends BaseAdapter 
-	 {
-		 private Context context;
-		 public ImageAdapter(Context c){
-			 context = c;
-		 }
-		 
-		 //---returns the number of images---
-		 public int getCount() {
-			 return imageIDs.length;
-		 }
-		 
-		 //---returns the item---
-		 public Object getItem(int position) {
-			 return position;
-		 }
-		 
-		 //---returns the ID of an item---
-		 public long getItemId(int position) {
-			 return position;
-		 }
-		 
-		 //---returns an ImageView view---
-		 public View getView(int position, View convertView,ViewGroup parent){
-			 ImageView imageView;
-			 
-			 if (convertView == null){
-				 imageView = new ImageView(context);
-				 imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-				 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				 imageView.setPadding(5, 5, 5, 5);
-			 }
-			 else{
-				 imageView = (ImageView) convertView;
-			 }
-			 
-			 imageView.setImageResource(imageIDs[position]);
-			 return imageView;
-		 }
-	 }
-	
+ 
 }

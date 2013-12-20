@@ -54,14 +54,14 @@ public class CustomGridViewAdapter extends ArrayAdapter<Item> {
 			   holder.imageItem = (ImageView) row.findViewById(R.id.book_image);
 			   holder.ebookID = (TextView) row.findViewById(R.id.book_id);
 			   holder.ebookLocation = (TextView) row.findViewById(R.id.book_filelocation);
+			   
 			   row.setTag(holder);
 		  } else {
 			  	holder = (RecordHolder) row.getTag();
 		  }
 		  
 		  int bookcover = 0;
-		  Object curObj;
-		  
+ 
 		  Item item = data.get(position);
 		  holder.txtTitle.setText(item.getText());
 		  holder.imageItem.setBackgroundResource(bookcover);

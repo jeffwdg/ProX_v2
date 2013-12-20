@@ -1,17 +1,22 @@
 package com.example.prox;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
+import com.example.prox.Grid.ImageAdapter;
  
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,7 +30,7 @@ import android.widget.Toast;
 public class Download extends Activity {
  
     Button btnShowProgress;
-    TextView booktitle, bookauthor;
+    TextView booktitle, bookfilename;
  
     private ProgressDialog pDialog;
     ImageView my_image;
@@ -33,8 +38,8 @@ public class Download extends Activity {
     public static final int progress_bar_type = 0; 
  
     //file url to download
-    private static String file_url = "http://api.androidhive.info/progressdialog/hive.jpg";
- 
+    //private static String file_url = "http://api.androidhive.info/progressdialog/hive.jpg";
+    String file_url="";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,22 +47,30 @@ public class Download extends Activity {
         
         String title = "";
         String author = "";
+        String filename = "";
  
- 
-        Intent intent = getIntent();
-        if (null != intent) {
-            title = intent.getStringExtra("title");
-            author = intent.getStringExtra("author");
-        }
- 
-        Toast.makeText(this,"Ebook " +  author, Toast.LENGTH_SHORT).show();
+        Intent i = getIntent();
         
+        // Selected image id
+        int position = i.getExtras().getInt("id");
+        title = i.getExtras().getString("title");
+        //filename = i.getExtras().getString("filename");
+        
+        /*
+        String[] file1 = filename.split("/");
+        String[] file2 = file1[4].split("-");
+        String myfilename = file2[5];
+       */
+        //CustomGridViewAdapter adapter = new CustomGridViewAdapter(this, position, null);
+
         booktitle = (TextView) findViewById(R.id.bookTitle);
         booktitle.setText(title);
         
-        bookauthor = (TextView) findViewById(R.id.bookAuthor);
-        bookauthor.setText(title);
+       // bookfilename = (TextView) findViewById(R.id.book_filelocation);
+        //bookfilename.setText(myfilename);
         
+        file_url = i.getExtras().getString("filename");
+        Toast.makeText(this,"The ebook " +  title + " selected", Toast.LENGTH_SHORT).show();
  
         btnShowProgress = (Button) findViewById(R.id.btnProgressBar);
         
@@ -71,6 +84,7 @@ public class Download extends Activity {
             public void onClick(View v) {
                 // starting new Async Task
                 new DownloadFileFromURL().execute(file_url);
+                Log.d("Ebook Download", "Downloading..");
             }
         });
     }
@@ -116,6 +130,14 @@ public class Download extends Activity {
         @Override
         protected String doInBackground(String... f_url) {
             int count;
+            
+            File folder = new File("data/data/com.example.prox/proxbooks");
+            boolean success = true;
+            if (!folder.exists()) {
+                success = folder.mkdir();
+            }
+            
+            
             try {
                 URL url = new URL(f_url[0]);
                 URLConnection conection = url.openConnection();
@@ -126,8 +148,15 @@ public class Download extends Activity {
                 
                 // download the file
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                String root = "sdcard/proxbooks";
-                String bookfilename = "ebook.jpg";
+                String root = "data/data/com.example.prox/proxbooks";
+                
+ 
+                String[] file1 = file_url.split("/");
+                String[] file2 = file1[4].split("-");
+                String filename = file2[5];
+                Log.d("Filename", filename);
+                
+                String bookfilename = file2[5]; //"ebook.pdf";
                 // Output stream
                 OutputStream output = new FileOutputStream(root + "/" + bookfilename);
  
@@ -175,12 +204,28 @@ public class Download extends Activity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after the file was downloaded
             dismissDialog(progress_bar_type);
- 
+            
+            
+            File file = new File("data/data/com.example.prox/proxbooks/book.pdf"); 
+
+            if (file.exists()) { 
+                Uri path = Uri.fromFile(file); 
+                Intent intent = new Intent(Intent.ACTION_VIEW); 
+                intent.setDataAndType(path, "application/pdf"); 
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+
+                try { 
+                    startActivity(intent); 
+                }  
+                catch (ActivityNotFoundException e) { 
+                   // Toast.makeText(this,  "No Application Available to View PDF",  Toast.LENGTH_SHORT).show(); 
+                }  
+            }
             // Displaying downloaded image into image view
             // Reading image path from sdcard
-            String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.jpg";
+            //String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.pdf";
             // setting downloaded into image view
-            my_image.setImageDrawable(Drawable.createFromPath(imagePath));
+            //my_image.setImageDrawable(Drawable.createFromPath(imagePath));
         }
  
     }

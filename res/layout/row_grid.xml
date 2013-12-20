@@ -25,14 +25,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:visibility="invisible">
+        android:visibility="gone">
     </TextView>
     <TextView
         android:id="@+id/book_filelocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:visibility="invisible"
+        android:visibility="gone"
          >
     </TextView>
 

@@ -12,8 +12,7 @@
           android:orientation="vertical"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:padding="10dip"
-          android:layout_below="@id/header">
+          android:padding="10dip">
       <!--           
           <Button
               android:id="@+id/buttonSignIN"
@@ -32,22 +31,19 @@
           android:orientation="vertical"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:padding="10dip"
-          android:layout_below="@id/header">
+          android:padding="10dip" >
           
     <TextView android:id="@+id/link_to_register"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_marginTop="10dip"
            android:layout_marginBottom="40dip"
-           android:text="Already have an account? Sign in here."
+           android:text="New here? Create an account here."
            android:gravity="center"
            android:textSize="15dip"
-           android:onClick="signIn"
 		   android:clickable="true"
            android:textColor="#1dae57"/>            
-                
-                
+ 
           <!--  Email Label -->
           
           <EditText 
@@ -88,15 +84,18 @@
               android:layout_gravity="center_horizontal"
               android:width="50dp" />
           
-		<TextView android:id="@+id/link_to_register"
+		<TextView android:id="@+id/link_to_forgotPassword"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:layout_marginTop="50dip"
-           android:text="New here? Create an account."
+           android:onClick="forgotPassword"
+           android:text="Forgot password? Click here."
            android:gravity="center"
+           android:focusable="true"
+           android:clickable="true"
            android:textSize="15dip"
            android:textColor="#1dae57"/>   
-                
+        <!--        
     	<Button
     	    android:id="@+id/buttonSignUP"
     	    android:layout_width="160dp"
@@ -108,7 +107,7 @@
     	    android:onClick="signUp"
 		    android:clickable="true"
     	    android:textColor="#ffffff" />
- 
+ 	-->  
         </LinearLayout>
         </LinearLayout>
         <!-- Login Form Ends -->

@@ -1,9 +1,12 @@
 package com.example.prox;
 
-import android.app.Fragment;
+ 
+import com.parse.ParseUser;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LogoutFragment extends Fragment {
-	ImageView btnlogOut;
+	Button btnlogOut;
 	public LogoutFragment(){}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
-        View rootView = inflater.inflate(R.layout.fragment_whats_hot, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_logout, container, false);
          
-        btnlogOut=(ImageView) rootView.findViewById(R.id.btnlogOut);
+        btnlogOut=(Button) rootView.findViewById(R.id.sureLogout);
 			
 	    // Set OnClick Listener on SignUp button 
         btnlogOut.setOnClickListener(new View.OnClickListener() {
@@ -34,6 +37,12 @@ public class LogoutFragment extends Fragment {
 			
 			
 			pref.edit().remove("email").commit();
+			pref.edit().remove("objectId").commit();
+			pref.edit().remove("fname").commit();
+			pref.edit().remove("lname").commit();
+			
+			ParseUser.logOut();
+			ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
 			
 			Intent intent = new Intent(getActivity(), MainActivity.class);
 			startActivity(intent);
