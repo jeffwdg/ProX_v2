@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+ 
+    <ImageView
+           android:id="@+id/mCover"
+           android:layout_width="50dp"
+           android:layout_height="80dp"
+           android:src="@drawable/bookcover" />
+		
+ 
+    
+		<TextView
+		    android:id="@+id/mObjectId"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignParentRight="true"
+		    android:layout_marginRight="10sp"
+		    android:textSize="15sp" />
+		
+		<TextView
+		    android:id="@+id/mFilename"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignBottom="@+id/mObjectId"
+		    android:layout_marginLeft="19dp"
+		    android:layout_toRightOf="@+id/mCover"
+		    android:text=""
+		    android:visibility="gone"
+		    android:textSize="14dp" />
+
+		<TextView
+		    android:id="@+id/mAuthor"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignLeft="@+id/mTitle"
+		    android:layout_below="@+id/mTitle"
+		    android:text="Author"
+		    android:textSize="12sp" />
+
+		<TextView
+		    android:id="@+id/mTitle"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_marginLeft="33dp"
+		    android:layout_marginTop="25dp"
+		    android:layout_toRightOf="@+id/mCover"
+		    android:text="Title"
+		    android:textSize="14dp" />
+
+</RelativeLayout>

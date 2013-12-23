@@ -7,5 +7,8 @@
     <style name="ActionBar" parent="android:style/Widget.Holo.ActionBar">     
         <item name="android:background">@drawable/footer</item>
     </style>
+    <style name="proxTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    	<item name="android:textColor">@color/white</item>
+  	</style>
  
 </resources>

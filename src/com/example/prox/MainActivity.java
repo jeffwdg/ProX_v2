@@ -49,6 +49,12 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main);
 		internetdetected = new InternetDetector(getApplicationContext());
 		
+		boolean isloggedin = isLoggedIn();
+		if(isloggedin == true){
+			Intent intentMenu = new Intent(getApplicationContext(),MenuActivity.class);
+		    startActivity(intentMenu);
+		}
+		
 		// initialize parse
 		Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
 		//Calling ParseAnalytics to see Analytics of our app
@@ -70,8 +76,8 @@ public class MainActivity extends Activity {
 	    	
 			public void onClick(View v) {
 				//check if internet is present
-				boolean isloggedin = isLoggedIn();
-				
+					boolean isloggedin = isLoggedIn();
+					
 					if(isInternetPresent == true){
 						Log.d("ProX App Initialization","Internet is detected.");
 						// checks if already logged in - redirect to menu app

@@ -9,6 +9,9 @@ package com.example.prox;
 
 public final class R {
     public static final class array {
+        /**   EBook Spinner 
+         */
+        public static final int ebook_spinner_list=0x7f070002;
         /**  Nav Drawer List Item Icons 
  Keep them in order as the titles are in 
          */
@@ -20,12 +23,13 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int counter_text_bg=0x7f040004;
-        public static final int counter_text_color=0x7f040005;
-        public static final int list_background=0x7f040001;
-        public static final int list_background_pressed=0x7f040002;
-        public static final int list_divider=0x7f040003;
-        public static final int list_item_title=0x7f040000;
+        public static final int counter_text_bg=0x7f040005;
+        public static final int counter_text_color=0x7f040006;
+        public static final int list_background=0x7f040002;
+        public static final int list_background_pressed=0x7f040003;
+        public static final int list_divider=0x7f040004;
+        public static final int list_item_title=0x7f040001;
+        public static final int white=0x7f040000;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -42,114 +46,127 @@ public final class R {
         public static final int bookcover=0x7f020001;
         public static final int bookcover2=0x7f020002;
         public static final int books=0x7f020003;
-        public static final int calendar=0x7f020004;
-        public static final int counter_bg=0x7f020005;
-        public static final int ebookstore=0x7f020006;
-        public static final int fail=0x7f020007;
-        public static final int footer=0x7f020008;
-        public static final int free_tab=0x7f020009;
-        public static final int ic_action_network_wifi=0x7f02000a;
-        public static final int ic_action_overflow=0x7f02000b;
-        public static final int ic_action_refresh=0x7f02000c;
-        public static final int ic_action_search=0x7f02000d;
-        public static final int ic_communities=0x7f02000e;
-        public static final int ic_drawer=0x7f02000f;
-        public static final int ic_home=0x7f020010;
-        public static final int ic_launcher=0x7f020011;
-        public static final int ic_pages=0x7f020012;
-        public static final int ic_people=0x7f020013;
-        public static final int ic_photos=0x7f020014;
-        public static final int ic_whats_hot=0x7f020015;
-        public static final int images=0x7f020016;
-        public static final int list_item_bg_normal=0x7f020017;
-        public static final int list_item_bg_pressed=0x7f020018;
-        public static final int list_selector=0x7f020019;
-        public static final int new_tab=0x7f02001a;
-        public static final int nocover=0x7f02001b;
-        public static final int notes=0x7f02001c;
-        public static final int prox1=0x7f02001d;
-        public static final int row=0x7f02001e;
-        public static final int showitmini=0x7f02001f;
-        public static final int userguide=0x7f020020;
+        public static final int boxshadow=0x7f020004;
+        public static final int calendar=0x7f020005;
+        public static final int counter_bg=0x7f020006;
+        public static final int ebookstore=0x7f020007;
+        public static final int fail=0x7f020008;
+        public static final int footer=0x7f020009;
+        public static final int free_tab=0x7f02000a;
+        public static final int ic_action_network_wifi=0x7f02000b;
+        public static final int ic_action_overflow=0x7f02000c;
+        public static final int ic_action_refresh=0x7f02000d;
+        public static final int ic_action_search=0x7f02000e;
+        public static final int ic_communities=0x7f02000f;
+        public static final int ic_drawer=0x7f020010;
+        public static final int ic_home=0x7f020011;
+        public static final int ic_launcher=0x7f020012;
+        public static final int ic_pages=0x7f020013;
+        public static final int ic_people=0x7f020014;
+        public static final int ic_photos=0x7f020015;
+        public static final int ic_whats_hot=0x7f020016;
+        public static final int images=0x7f020017;
+        public static final int list_item_bg_normal=0x7f020018;
+        public static final int list_item_bg_pressed=0x7f020019;
+        public static final int list_selector=0x7f02001a;
+        public static final int logo=0x7f02001b;
+        public static final int new_tab=0x7f02001c;
+        public static final int nocover=0x7f02001d;
+        public static final int notes=0x7f02001e;
+        public static final int prox1=0x7f02001f;
+        public static final int row=0x7f020020;
+        public static final int shelfbg=0x7f020021;
+        public static final int showitmini=0x7f020022;
+        public static final int userguide=0x7f020023;
     }
     public static final class id {
         public static final int OpenPdf=0x7f0a0004;
-        public static final int action_ebookstore=0x7f0a0030;
-        public static final int action_help=0x7f0a0031;
-        public static final int action_refresh=0x7f0a0032;
-        public static final int action_search=0x7f0a002e;
-        public static final int action_settings=0x7f0a002f;
-        public static final int bookAuthor=0x7f0a0001;
+        public static final int action_ebookstore=0x7f0a0037;
+        public static final int action_help=0x7f0a0038;
+        public static final int action_refresh=0x7f0a0039;
+        public static final int action_search=0x7f0a0035;
+        public static final int action_settings=0x7f0a0036;
+        public static final int bookAuthor=0x7f0a0003;
         public static final int bookTitle=0x7f0a0000;
+        public static final int book_author=0x7f0a0026;
         public static final int book_cover=0x7f0a0002;
-        public static final int book_filelocation=0x7f0a0021;
-        public static final int book_id=0x7f0a0020;
-        public static final int book_image=0x7f0a001e;
-        public static final int book_title=0x7f0a001f;
-        public static final int btnProgressBar=0x7f0a0003;
-        public static final int btnforgotPassword=0x7f0a000c;
-        public static final int buttonCreateAccount=0x7f0a002a;
-        public static final int buttonSignIn=0x7f0a0018;
-        public static final int buttonUrl=0x7f0a0014;
+        public static final int book_filelocation=0x7f0a0028;
+        public static final int book_id=0x7f0a0027;
+        public static final int book_image=0x7f0a001b;
+        public static final int book_title=0x7f0a0025;
+        public static final int btnProgressBar=0x7f0a0001;
+        public static final int btnforgotPassword=0x7f0a0012;
+        public static final int buttonCreateAccount=0x7f0a0031;
+        public static final int buttonSignIn=0x7f0a001f;
+        public static final int buttonUrl=0x7f0a001a;
         public static final int counter=0x7f0a0007;
-        public static final int drawer_layout=0x7f0a001a;
-        public static final int editTextConfirmPassword=0x7f0a0027;
-        public static final int editTextEmail=0x7f0a0025;
-        public static final int editTextEmailToLogin=0x7f0a0016;
-        public static final int editTextFirstName=0x7f0a0028;
-        public static final int editTextLastName=0x7f0a0029;
-        public static final int editTextPassword=0x7f0a0026;
-        public static final int editTextPasswordToLogin=0x7f0a0017;
-        public static final int emailforgotPassword=0x7f0a000b;
-        public static final int footer=0x7f0a0008;
-        public static final int forgotPassword=0x7f0a000a;
-        public static final int frame_container=0x7f0a001b;
-        public static final int gridview=0x7f0a000d;
-        public static final int header=0x7f0a0024;
+        public static final int drawer_layout=0x7f0a0021;
+        public static final int ebook_spinner=0x7f0a0008;
+        public static final int editTextConfirmPassword=0x7f0a002e;
+        public static final int editTextEmail=0x7f0a002c;
+        public static final int editTextEmailToLogin=0x7f0a001d;
+        public static final int editTextFirstName=0x7f0a002f;
+        public static final int editTextLastName=0x7f0a0030;
+        public static final int editTextPassword=0x7f0a002d;
+        public static final int editTextPasswordToLogin=0x7f0a001e;
+        public static final int emailforgotPassword=0x7f0a0011;
+        public static final int footer=0x7f0a000e;
+        public static final int forgotPassword=0x7f0a0010;
+        public static final int frame_container=0x7f0a0022;
+        public static final int gridview=0x7f0a0013;
+        public static final int header=0x7f0a002b;
         public static final int icon=0x7f0a0005;
-        public static final int link_to_forgotPassword=0x7f0a0019;
-        public static final int link_to_register=0x7f0a0015;
-        public static final int list_slidermenu=0x7f0a001c;
-        public static final int myEbooks=0x7f0a001d;
-        public static final int my_image=0x7f0a002d;
-        public static final int newstoregridview=0x7f0a002b;
-        public static final int pager=0x7f0a002c;
-        public static final int sclView=0x7f0a0022;
-        public static final int sureLogout=0x7f0a0013;
-        public static final int tblLayout=0x7f0a0023;
-        public static final int textView1=0x7f0a0009;
-        public static final int textView2=0x7f0a0010;
-        public static final int textView3=0x7f0a0011;
+        public static final int link_to_forgotPassword=0x7f0a0020;
+        public static final int link_to_register=0x7f0a001c;
+        public static final int list_slidermenu=0x7f0a0023;
+        public static final int mAuthor=0x7f0a000c;
+        public static final int mCover=0x7f0a0009;
+        public static final int mFilename=0x7f0a000b;
+        public static final int mObjectId=0x7f0a000a;
+        public static final int mTitle=0x7f0a000d;
+        public static final int myEbooks=0x7f0a0024;
+        public static final int my_image=0x7f0a0034;
+        public static final int newstoregridview=0x7f0a0032;
+        public static final int pager=0x7f0a0033;
+        public static final int sclView=0x7f0a0029;
+        public static final int sureLogout=0x7f0a0019;
+        public static final int tblLayout=0x7f0a002a;
+        public static final int textView1=0x7f0a000f;
+        public static final int textView2=0x7f0a0016;
+        public static final int textView3=0x7f0a0017;
         public static final int title=0x7f0a0006;
-        public static final int txtLabel=0x7f0a0012;
-        public static final int userEmail=0x7f0a000f;
-        public static final int userName=0x7f0a000e;
+        public static final int txtLabel=0x7f0a0018;
+        public static final int userEmail=0x7f0a0015;
+        public static final int userName=0x7f0a0014;
     }
     public static final class layout {
         public static final int bookdetails=0x7f030000;
         public static final int bookreader=0x7f030001;
         public static final int drawer_list_item=0x7f030002;
-        public static final int footer=0x7f030003;
-        public static final int forgotpassword=0x7f030004;
-        public static final int fragment_ebooks=0x7f030005;
-        public static final int fragment_home=0x7f030006;
-        public static final int fragment_logout=0x7f030007;
-        public static final int fragment_notes=0x7f030008;
-        public static final int fragment_reminder=0x7f030009;
-        public static final int fragment_store=0x7f03000a;
-        public static final int gotostore=0x7f03000b;
-        public static final int grid=0x7f03000c;
-        public static final int header=0x7f03000d;
-        public static final int main=0x7f03000e;
-        public static final int menu=0x7f03000f;
-        public static final int myebooklist=0x7f030010;
-        public static final int row_grid=0x7f030011;
-        public static final int shelfrow=0x7f030012;
-        public static final int signin=0x7f030013;
-        public static final int signup=0x7f030014;
-        public static final int storeview=0x7f030015;
-        public static final int tabpager=0x7f030016;
-        public static final int test=0x7f030017;
+        public static final int ebook_spinner=0x7f030003;
+        public static final int ebooks_row=0x7f030004;
+        public static final int footer=0x7f030005;
+        public static final int forgotpassword=0x7f030006;
+        public static final int fragment_ebooks=0x7f030007;
+        public static final int fragment_home=0x7f030008;
+        public static final int fragment_logout=0x7f030009;
+        public static final int fragment_notes=0x7f03000a;
+        public static final int fragment_reminder=0x7f03000b;
+        public static final int fragment_store=0x7f03000c;
+        public static final int gotostore=0x7f03000d;
+        public static final int grid=0x7f03000e;
+        public static final int header=0x7f03000f;
+        public static final int main=0x7f030010;
+        public static final int menu=0x7f030011;
+        public static final int myebooklist=0x7f030012;
+        public static final int row_grid=0x7f030013;
+        public static final int shelfrow=0x7f030014;
+        public static final int signin=0x7f030015;
+        public static final int signup=0x7f030016;
+        public static final int storeview=0x7f030017;
+        public static final int tabpager=0x7f030018;
+        public static final int test=0x7f030019;
+        public static final int userebooks_list=0x7f03001a;
     }
     public static final class menu {
         public static final int actionbar=0x7f090000;
@@ -172,8 +189,8 @@ public final class R {
         public static final int required_field=0x7f060005;
     }
     public static final class style {
-        public static final int ActionBar=0x7f080002;
-        public static final int MyActionBar=0x7f080001;
+        public static final int ActionBar=0x7f080001;
         public static final int proxTheme=0x7f080000;
+        public static final int proxTheme_ActionBar_TitleTextStyle=0x7f080002;
     }
 }

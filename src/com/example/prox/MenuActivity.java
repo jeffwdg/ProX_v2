@@ -9,6 +9,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -69,6 +70,8 @@ public class MenuActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu);
 		
+
+        
 		Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF"); 
 		
 		

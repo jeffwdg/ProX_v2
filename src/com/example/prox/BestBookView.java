@@ -1,6 +1,5 @@
 package com.example.prox;
 
- 
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import android.content.Intent;
 import android.content.ClipData.Item;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,11 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-	public class BestBookView extends Activity {
+public class BestBookView extends Activity {
 		
 		GridView gridView;
-		ArrayList<Item> gridArray = new ArrayList<Item>();
-		CustomGridViewAdapter customGridAdapter;
+		ArrayList<Ebook> gridArray = new ArrayList<Ebook>();
+		MyGridViewAdapter customGridAdapter;
 		
 		
 		public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,17 +70,34 @@ import android.widget.AdapterView.OnItemClickListener;
 			    	    	Log.d("ebooks", "Found " + ebookslist.size() + " ebooks");
 			    	    	Toast.makeText(getApplicationContext(), "Displaying..", Toast.LENGTH_LONG).show();
 
-				    	      String mybooktitle, intent, uri;
+				    	      String mybooktitle, myebookID = null, cover, filename, author,ISBN, bookstatus, ebookID;
 				    	      for(ParseObject userbooks : ebookslist) {
+				    	    	  
+				    	    	  
 				    	    	  mybooktitle=(String) userbooks.get("title");
-				    	    	  //intent = (String) userbooks.get("filename");
-				    	    	  uri =  (String) userbooks.get("filename");
-				    	    	  Log.d("ebooks", "Retrieved " + mybooktitle);
-				    	    	  gridArray.add(new Item(mybooktitle,uri));
+				    	    	  filename = (String) userbooks.get("filename");
+				    	    	  cover =  (String) userbooks.get("cover");
+				    	    	  author = (String) userbooks.get("author");	
+				    	    	  ISBN =  (String) userbooks.get("ISBN");
+				    	    	  bookstatus =  (String) userbooks.get("status");
+				    	    	  ebookID =  userbooks.getObjectId();
+				    	    	  
+				    	    	  Ebook ebook = new Ebook();
+				    	    	  ebook.setFilename(filename);
+				    	    	  ebook.setAuthor(author);
+				    	    	  ebook.setCover(cover);
+				    	    	  ebook.setID(ebookID);
+				    	    	  ebook.setISBN(ISBN);
+				    	    	  ebook.setTitle(mybooktitle);
+				    	    	  
+				    	    	  userbooks.put("ebookID", ebookID);
+				    	    	  Log.d("Parse Data", "Retrieved ebook details " + cover + filename +author +mybooktitle+ ISBN +bookstatus);
+				    	    	  gridArray.add(ebook);
+
 				              }
 				    	      
 				    	     GridView gridView = (GridView) findViewById(R.id.newstoregridview);
-				  	        customGridAdapter = new CustomGridViewAdapter(BestBookView.this, R.layout.row_grid, gridArray);
+				  	        customGridAdapter = new MyGridViewAdapter(BestBookView.this, R.layout.row_grid, gridArray);
 				  	        gridView.setAdapter(customGridAdapter); 
 				    	      
 			    	    } else {
@@ -93,22 +110,26 @@ import android.widget.AdapterView.OnItemClickListener;
 
 		    	
 		        GridView gridView = (GridView) findViewById(R.id.newstoregridview);
-		        customGridAdapter = new CustomGridViewAdapter(this, R.layout.row_grid, gridArray);
+		        customGridAdapter = new MyGridViewAdapter(this, R.layout.row_grid, gridArray);
 		        gridView.setAdapter(customGridAdapter);
 		        
-		        final String[] ebook = null;
-		        
+	
 		        gridView.setOnItemClickListener(new OnItemClickListener(){
-		        	public void onItemClick(AdapterView parent,View v, int position, long id){	
+		        	@SuppressLint("NewApi")
+					public void onItemClick(AdapterView parent,View v, int position, long id){	
 			
-			 			//openBook(position);
-		        		Item ebook =gridArray.get(position);
+		        		Ebook ebook = new Ebook();
+		        		ebook = gridArray.get(position);
+ 	
 		        		Intent bookdetails = new Intent(getApplicationContext(), StoreBookDetails.class);
-		        		bookdetails.putExtra("filename", "http://files.parse.com/afc311a3-01af-4e45-ad6a-4ea2f171e17a/86d3d88b-17f4-4eaa-aac0-5846a636c3a7-book.pdf");
-		        		bookdetails.putExtra("title", ebook.getText());
-		        		//bookdetails.putExtra("filename", ebook.getText());
+
+		        		bookdetails.putExtra("title", ebook.getTitle());
+		        		bookdetails.putExtra("filename", ebook.getFilename());
+		        		bookdetails.putExtra("author", ebook.getAuthor());
+		        		bookdetails.putExtra("cover", ebook.getCover());
+		    	    	bookdetails.putExtra("ebookID", ebook.getID());
 		        		bookdetails.putExtra("id",position);
-		        		
+		        		Log.d("ebooks", "Retrieved bookcover " +ebook.getFilename());
 		        		//Toast.makeText(this,"Ebook " +  position + " selected", Toast.LENGTH_SHORT).show();
 		                startActivity(bookdetails);
 		                

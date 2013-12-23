@@ -35,4 +35,12 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     
+    <!--  EBook Spinner -->
+    <string-array name="ebook_spinner_list">
+    	<item>All</item>
+    	<item>Downloaded</item>
+    	<item>Recently Purchased</item>
+	</string-array>
+ 
+
 </resources>

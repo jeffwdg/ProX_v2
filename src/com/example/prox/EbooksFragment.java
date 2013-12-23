@@ -8,10 +8,13 @@ import android.content.SharedPreferences;
 import android.content.ClipData.Item;
 import android.content.SharedPreferences.Editor;
 import android.content.Intent;
+import android.widget.SimpleCursorAdapter;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,11 +22,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.prox.adapter.EbookDatabaseAdapter;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -35,15 +41,31 @@ public class EbooksFragment extends Fragment {
 	GridView gridView;
 	ArrayList<Item> gridArray = new ArrayList<Item>();
 	CustomGridViewAdapter customGridAdapter;
+	String[] ebookViewCategory;
 	 
-	 
+	private EbookDatabaseAdapter mDbHelper;
+	
 	public EbooksFragment(){}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
  
         final View rootView = inflater.inflate(R.layout.fragment_ebooks, container, false);
+        mDbHelper = new EbookDatabaseAdapter(getActivity());
+		mDbHelper.open();
+		
+		ActionBar actionBar = getActivity().getActionBar();
         
+        // Enabling Up / Back navigation
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+		
+		ebookViewCategory = getResources().getStringArray(R.array.ebook_spinner_list);
+		Spinner ebookSpinner = (Spinner) rootView.findViewById(R.id.ebook_spinner);
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(actionBar.getThemedContext(),android.R.layout.simple_list_item_1,ebookViewCategory);
+		
+		
         //Parse.initialize(getActivity(), "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
         
         Bitmap homeIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.userguide);
@@ -116,5 +138,10 @@ public class EbooksFragment extends Fragment {
         
         return rootView;
     }
- 
+
+	public void fetchLocalUserEbooks(){
+		 //Cursor ebooksCursor = mDbHelper.fetchAllUserEbooks();
+		 
+		 
+	}
 }

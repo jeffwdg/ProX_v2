@@ -41,6 +41,7 @@
 		<activity android:name=".BestBookView"/>
 		<activity android:name=".StoreBookDetails"/>
 		<activity android:name=".InternetDetector"/>
+		<activity android:name=".UserEbookList"/>
  
  
           

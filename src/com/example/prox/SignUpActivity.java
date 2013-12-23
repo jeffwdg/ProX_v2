@@ -127,7 +127,7 @@ public class SignUpActivity extends Activity implements OnClickListener
 			editTextPassword.setError(getString(R.string.required_field));
 			focusView = editTextPassword;
 			cancel =true;
-		}else if(password.length() < 6 && password.matches(pattern)){
+		}else if(password.length() < 6 && !password.matches(pattern)){
 			 editTextPassword.setError(getString(R.string.invalid_password));
 			 focusView = editTextPassword;
 			 cancel =true;
@@ -144,7 +144,7 @@ public class SignUpActivity extends Activity implements OnClickListener
 			cancel =true;
 		}
 		
-		// chec if first & last name are valid
+		// check if first & last name are valid
 		if(TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname)){
 			editTextFirstName.setError(getString(R.string.required_field));
 			editTextLastName.setError(getString(R.string.required_field));

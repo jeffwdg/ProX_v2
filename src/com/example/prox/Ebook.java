@@ -7,6 +7,8 @@ public class Ebook {
     private String author;
     private String ISBN;
     private String filename;
+    private String cover;
+    private String category;
     private String status; 
     
     
@@ -14,8 +16,8 @@ public class Ebook {
         return id;
     }
  
-    public void setID(String id) {
-        this.id = id;
+    public String setID(String id) {
+        return this.id = id;
     }
     
     
@@ -42,6 +44,30 @@ public class Ebook {
         this.ISBN = ISBN;
     }
     
+    public String getCover() {
+        return cover;
+    }
+ 
+    public void setCover(String cover) {
+        this.cover= cover;
+    }
+    public String getStatus() {
+        return status;
+    }
+ 
+    public void setStatus(String status) {
+        this.status= status;
+    }
+    
+    public String getCategory() {
+        return category;
+    }
+ 
+    public void setCategory(String categgory) {
+        this.category= category;
+    }
+    
+    
     public String getFilename() {
         return filename;
     }
@@ -49,6 +75,7 @@ public class Ebook {
     public void setFilename(String filename) {
         this.filename = filename;
     }
+    
 
 	public CharSequence getText() {
 		// TODO Auto-generated method stub
