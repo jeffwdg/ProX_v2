@@ -2,21 +2,24 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:paddingBottom="5dp"
     android:layout_height="match_parent">
  
     <ImageView
            android:id="@+id/mCover"
-           android:layout_width="50dp"
-           android:layout_height="80dp"
-           android:src="@drawable/bookcover" />
-		
- 
-    
+           android:layout_width="70dp"
+           android:paddingLeft="10dp"
+           android:paddingTop="15dp"
+           android:paddingBottom="15dp"
+           android:layout_marginLeft="5dp"
+           android:layout_height="80dp"/>
+
 		<TextView
 		    android:id="@+id/mObjectId"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"
+		    
 		    android:layout_marginRight="10sp"
 		    android:textSize="15sp" />
 		
@@ -28,8 +31,9 @@
 		    android:layout_marginLeft="19dp"
 		    android:layout_toRightOf="@+id/mCover"
 		    android:text=""
+		    
 		    android:visibility="gone"
-		    android:textSize="14dp" />
+		    android:textSize="13dp" />
 
 		<TextView
 		    android:id="@+id/mAuthor"
@@ -37,6 +41,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignLeft="@+id/mTitle"
 		    android:layout_below="@+id/mTitle"
+		    android:textColor="#444444"
 		    android:text="Author"
 		    android:textSize="12sp" />
 
@@ -46,6 +51,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_marginLeft="33dp"
 		    android:layout_marginTop="25dp"
+		    android:textColor="#ffffff"
 		    android:layout_toRightOf="@+id/mCover"
 		    android:text="Title"
 		    android:textSize="14dp" />

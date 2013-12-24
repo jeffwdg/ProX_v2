@@ -18,7 +18,7 @@ public class ReminderFragment extends Fragment {
  
         View rootView = inflater.inflate(R.layout.fragment_reminder, container, false);
         
-        Intent intent = new Intent(getActivity(), UserEbookList.class);
+        Intent intent = new Intent(getActivity(), UserBookListView.class);
 		startActivity(intent);
 		
         return rootView;

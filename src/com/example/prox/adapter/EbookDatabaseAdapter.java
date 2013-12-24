@@ -130,7 +130,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 			ArrayList<Ebook> ebooks = new ArrayList<Ebook>();
 			
 			SQLiteDatabase db=this.getReadableDatabase();
-			Cursor cur = db.rawQuery("select * from userebooks",  null);
+			Cursor cur = db.rawQuery("select * from userebooks order by objectId desc",  null);
 			
 			cur.moveToFirst();
 			while(!cur.isAfterLast()){

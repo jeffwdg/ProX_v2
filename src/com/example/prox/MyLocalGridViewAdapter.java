@@ -1,4 +1,6 @@
 package com.example.prox;
+
+ 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
@@ -7,8 +9,12 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData.Item;
+import android.content.SharedPreferences.Editor;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.StrictMode;
@@ -22,12 +28,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MyGridViewAdapter extends ArrayAdapter<Item> {
+public class MyLocalGridViewAdapter extends ArrayAdapter<Item> {
 	 Context context;
 	 int layoutResourceId;
 	 ArrayList<Ebook> data = new ArrayList<Ebook>();
 
-	 public MyGridViewAdapter(Context context, int layoutResourceId, ArrayList<Ebook> data) {
+	 public MyLocalGridViewAdapter(Context context, int layoutResourceId, ArrayList<Ebook> data) {
 		  super(context, layoutResourceId);
 		  this.layoutResourceId = layoutResourceId;
 		  this.context = context;
@@ -75,16 +81,29 @@ public class MyGridViewAdapter extends ArrayAdapter<Item> {
 		  int bookcover = 0;
  
 		  Ebook item = data.get(position);
-		 
+		  
 		  holder.txtTitle.setText(item.getTitle());
 		  holder.txtAuthor.setText(item.getAuthor());
 		  String thisurl = item.getCover();
-		  Log.d("Ebook", "Cover " +thisurl);
-		  if(TextUtils.isEmpty(thisurl)){thisurl="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSMeKS7nHHfbiw08SQ4Z7jQh6Vzji36dOzWENTmXEn74Fp_tCM3";}
-		  Drawable bookcover1 = LoadImageFromURL(thisurl);
-		  
-		  
-		  holder.imageItem.setImageDrawable(bookcover1);
+ 
+		  Drawable bookcover1;
+		  SharedPreferences pref = context.getSharedPreferences("MyPref", 1); // 0 - for private mode
+		  Editor editor = pref.edit();
+
+          String userFolderName = pref.getString("email", null);
+          
+		   
+		  String bitmapPath = "data/data/com.example.prox/proxbooks/" + userFolderName +"/" + item.getID() + ".jpg";
+          Bitmap bitmap = BitmapFactory.decodeFile(bitmapPath);
+          bookcover1 = new BitmapDrawable(bitmap);
+          Log.d("Ebook", "Cover " + bitmapPath );
+          
+          if(bitmapPath.equals("")){
+        	  holder.imageItem.setBackgroundResource(R.drawable.bookcover2);
+          } 
+          else{
+        	  holder.imageItem.setImageDrawable(bookcover1);
+          }
 		  holder.ebookID.setText(item.getID());
 		  holder.ebookLocation.setText(item.getFilename());
 		  return row;
@@ -113,4 +132,5 @@ public class MyGridViewAdapter extends ArrayAdapter<Item> {
 		  ImageView imageItem;
 	 }
 }
+
 

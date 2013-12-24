@@ -252,8 +252,7 @@ public class StoreBookDetails extends Activity {
 			    //you can select your preferred CompressFormat and quality.
 			    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 			    
-			    /*--- create a new file on SD card ---*/
-			    //File file = new File(Environment.getExternalStorageDirectory()  + File.separator + "myDownloadedImage.jpg");
+			    // create a new file on SD card  
 			    File file = new File("data/data/com.example.prox/proxbooks/"+userFolderName+"/"+objectId+".jpg");
 			    
 			    try {
@@ -262,7 +261,7 @@ public class StoreBookDetails extends Activity {
 			        e.printStackTrace();
 			    }
 			    
-			    /*--- create a new FileOutputStream and write bytes to file ---*/
+			    // create a new FileOutputStream and write bytes to file
 			    try {
 			        fos = new FileOutputStream(file);
 			    } catch (FileNotFoundException e) {

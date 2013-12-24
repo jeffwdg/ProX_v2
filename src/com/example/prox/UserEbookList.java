@@ -1,9 +1,16 @@
 package com.example.prox;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.example.prox.Download.DownloadFileFromURL;
 import com.example.prox.adapter.EbookDatabaseAdapter;
 
 import android.annotation.SuppressLint;
@@ -11,6 +18,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,10 +30,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -42,6 +55,36 @@ public class UserEbookList extends Activity {
 	
   private EbookDatabaseAdapter datasource;
   ArrayList<Ebook> data = new ArrayList<Ebook>();
+  TextView mTitle;
+  private ProgressDialog pDialog;
+  
+  // Progress dialog type (0 - for Horizontal progress bar)
+  public static final int progress_bar_type = 0; 
+  
+  @Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.ebook_list, menu);
+
+
+		return true;
+	}
+  
+	 @Override
+	  public boolean onOptionsItemSelected(MenuItem item) 
+	  {    
+	     switch (item.getItemId()) 
+	     {        
+	        case R.id.view_list: changeViewToList();     
+	        	return true;        
+	        default:            
+	           return super.onOptionsItemSelected(item);    
+	     }
+	  }
+	public void changeViewToList(){
+		Intent intent=new Intent(this, UserBookListView.class);
+		startActivity(intent);
+	}
+	
   
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +93,8 @@ public class UserEbookList extends Activity {
     setContentView(R.layout.grid);
     datasource = new EbookDatabaseAdapter(this);
     datasource.open();
+      
+
     
     fillData();
   }
@@ -71,7 +116,7 @@ public class UserEbookList extends Activity {
         // Now create an array adapter and set it to display using our row
         @SuppressWarnings("deprecation")
 		//SimpleCursorAdapter ebooks=new SimpleCursorAdapter(this, R.layout.ebooks_row, ebookCursor, from, to);
- 
+        	ArrayList<Ebook> gridArray = new ArrayList<Ebook>();
         	GridView grv = (GridView) findViewById(R.id.gridview);
         
         	if (ebookCursor != null) {
@@ -79,47 +124,26 @@ public class UserEbookList extends Activity {
         	    Ebook ebook = new Ebook();
         	    SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,R.layout.row_grid, ebookCursor, from, to);
         	    
-        	    ebookCursor.moveToPosition(0);
-        	    TextView booktitle = (TextView) findViewById(R.id.book_title);
-	            booktitle.setText("This Book");
-	            
-        	    ViewBinder viewBinder = new ViewBinder() {
-
-        	        public boolean setViewValue(View view, Cursor cursor,int columnIndex) {
-        	        	ebookCursor.moveToPosition(0);
-        	            ImageView image = (ImageView) findViewById(R.id.book_cover);
-        	            
-                        // just to see what is returned by this!
-                        Log.d("orange", "images: " + cursor.getString(columnIndex));
-                        //String mEbookID1 = ebookCursor.getString(ebookCursor.getColumnIndex());
-                	    String mEbookID=  "9bSPg88RYH";  
-                	    Log.d("ebooks", "Retrieved bookcover" + mEbookID);
-                	    //Get External Storage Directory
-                	    String coverlocation = "data/data/com.example.prox/proxbooks/aloofzehcnas@gmail.com";
-         
-                	    File cover = new File(coverlocation,"/");
-                	    String coverimg = mEbookID + ".jpg";
-                	    
-                	    File file = new File(cover, coverimg);
-                
-                	    String imagePath = cover + coverimg;
-                	    	
-         
-                        // Load this image
-                	    String bitmapPath = "data/data/com.example.prox/proxbooks/aloofzehcnas@gmail.com" + coverimg;
-                        Bitmap bitmap = BitmapFactory.decodeFile(bitmapPath);
-                        BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+        	    while (ebookCursor.moveToNext() ) {
  
-                        //Bitmap thumbImage = ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(cursor.getString(i)), 320, 240);
-                        image.setImageDrawable(bitmapDrawable);
-                        
-                        
-        	            return true;
-        	        }
-        	    };
+        	        Ebook gebook = new Ebook();
+	    	    	  gebook.setFilename(ebookCursor.getString(ebookCursor.getColumnIndex("filename")));
+	    	    	  //gebook.setAuthor(ebookCursor.getString(ebookCursor.getColumnIndex("author")));
+	    	    	  //gebook.setCover(ebookCursor.getString(ebookCursor.getColumnIndex("cover")));
+	    	    	  gebook.setID(ebookCursor.getString(ebookCursor.getColumnIndex("objectId")));
+	    	    	  gebook.setISBN(ebookCursor.getString(ebookCursor.getColumnIndex("ISBN")));
+	    	    	  gebook.setTitle(ebookCursor.getString(ebookCursor.getColumnIndex("title")));
+	    	    	  gebook.setStatus(ebookCursor.getString(ebookCursor.getColumnIndex("status")));
+	    	    	  //gebook.setCategory(ebookCursor.getString(ebookCursor.getColumnIndex("category")));
+	    	    	  Log.d("Ebook Details", "Details " + ebookCursor.getString(ebookCursor.getColumnIndex("cover")));
+	    	    	 
+	    	    	  gridArray.add(gebook);
+        	    }
         	    
-   
-        	    grv.setAdapter(adapter);
+ 
+        	      MyLocalGridViewAdapter customGridAdapter = new MyLocalGridViewAdapter(UserEbookList.this, R.layout.row_grid, gridArray);
+	        	  grv.setAdapter(customGridAdapter);
+        	    
         	     
         	}
         	
@@ -158,6 +182,7 @@ public class UserEbookList extends Activity {
 	        	  
 	        	    			switch(which){
 	        	    			case 0: Toast.makeText(getApplicationContext(), "You clicked Download", Toast.LENGTH_LONG).show(); 
+	        	    				downloadEbook(objectId, filename);
 	        	    				break;
 	        	    			case 1:
 	        	    				attemptDeleteMyEbook(objectId, title, filename);
@@ -176,6 +201,8 @@ public class UserEbookList extends Activity {
     
     	     
     }
+ 
+	
 	/*
 	 *  This method asks for confirmation from the user before deleting the book
 	 */
@@ -231,6 +258,170 @@ public class UserEbookList extends Activity {
 		
 		return deleted;
 	}
+	
+	/*
+	 * This method is called when the user click download ebook after purchasing it 
+	 * 
+	 */
+	public boolean downloadEbook(String objectId, String filename){
+		boolean downloaded =false;
+		
+		Toast.makeText(getApplicationContext(), "Ebook downloaded?" +filename, Toast.LENGTH_LONG).show();
+		
+		new DownloadFileFromURL().execute(filename);
+		
+		return downloaded;
+	}
+	
+	/**
+     * Showing Dialog
+     * */
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+        case progress_bar_type: // we set this to 0
+            pDialog = new ProgressDialog(this);
+            pDialog.setMessage("Downloading file. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setMax(100);
+            pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            pDialog.setCancelable(true);
+            pDialog.show();
+            return pDialog;
+        default:
+            return null;
+        }
+    }
+    
+    /**
+     * Background Async Task to download file
+     * */
+    class DownloadFileFromURL extends AsyncTask<String, String, String> {
+        /**
+         * Before starting background thread
+         * Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showDialog(progress_bar_type);
+        }
+ 
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
+		    Editor editor = pref.edit();
+            String userFolderName = pref.getString("email", null);
+            
+            File folder = new File("data/data/com.example.prox/proxbooks/"+userFolderName);
+            boolean success = true;
+            if (!folder.exists()) {
+                success = folder.mkdir();
+            }
+            
+            Log.d("Ebook Details", "Location " + f_url[0]);
+            
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+                
+                // this will be useful so that you can show a tipical 0-100% progress bar
+                int lenghtOfFile = conection.getContentLength();
+ 
+                
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                String root = "data/data/com.example.prox/proxbooks/"+userFolderName;
+                
+                String[] file1 = f_url[0].split("/");
+                String[] file2 = file1[4].split("-");
+                String filename = file2[5];
+                
+                Log.d("Ebook Details", "New filename" + filename);
+              
+                // Output stream
+                OutputStream output = new FileOutputStream(root + "/" + filename);
+ 
+                byte data[] = new byte[1024];
+ 
+                long total = 0;
+ 
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress(""+(int)((total*100)/lenghtOfFile));
+ 
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+ 
+                // flushing output
+                output.flush();
+ 
+                // closing streams
+                output.close();
+                input.close();
+ 
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+ 
+            return null;
+        }
+        
+        
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            pDialog.setProgress(Integer.parseInt(progress[0]));
+       }
+        
+        
+        
+        /**
+         * After completing background task
+         * Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url, String objectId) {
+            // dismiss the dialog after the file was downloaded
+            dismissDialog(progress_bar_type);
+            Log.d("Ebook Download", "Completed" + objectId);
+           /* 
+            File file = new File("data/data/com.example.prox/proxbooks/book.pdf"); 
+
+            if (file.exists()) { 
+                Uri path = Uri.fromFile(file); 
+                Intent intent = new Intent(Intent.ACTION_VIEW); 
+                intent.setDataAndType(path, "application/pdf"); 
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
+
+                try { 
+                    startActivity(intent); 
+                }  
+                catch (ActivityNotFoundException e) { 
+                   // Toast.makeText(this,  "No Application Available to View PDF",  Toast.LENGTH_SHORT).show(); 
+                }  
+            }
+            */
+            // Displaying downloaded image into image view
+            // Reading image path from sdcard
+            //String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.pdf";
+            // setting downloaded into image view
+            //my_image.setImageDrawable(Drawable.createFromPath(imagePath));
+        }
+ 
+    }
+ 
+
+ 
 	
 	@Override
 	protected void onResume() {

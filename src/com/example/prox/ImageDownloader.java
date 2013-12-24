@@ -32,10 +32,8 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 	private ImageLoaderListener listener;
 
 
-	/*--- constructor ---*/
-	public ImageDownloader(String url, ProgressBar pb, Button save,
-	        ImageView img, TextView percent, Context c, Bitmap bmp, ImageLoaderListener listener) {
-	/*--- we need to pass some objects we are going to work with ---*/
+	public ImageDownloader(String url, ProgressBar pb, Button save, ImageView img, TextView percent, Context c, Bitmap bmp, ImageLoaderListener listener) {
+		
 	    this.url = url;
 	    this.pb = pb;
 	    this.save = save;
@@ -47,12 +45,12 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 	}
 
 	/*--- we need this interface for keeping the reference to our Bitmap from the MainActivity. 
-	 *  Otherwise, bmp would be null in our MainActivity*/
+	 *  Otherwise, bmp would be null in our MainActivity */
 	public interface ImageLoaderListener {
 
 	    void onImageDownloaded(Bitmap bmp);
 
-	    }
+	}
 
 	@Override
 	protected void onPreExecute() {
@@ -65,6 +63,7 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 	    super.onPreExecute();
 	}
 
+	
 	@Override
 	protected Void doInBackground(Void... arg0) {
 
@@ -78,7 +77,7 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 
 	        /*--- an image download usually happens very fast so you would not notice 
 	         * how the ProgressBar jumps from 0 to 100 percent. You can use the method below 
-	         * to visually "slow down" the download and see the progress bein updated ---*/
+	         * to visually "slow down" the download and see the progress being updated ---*/
 
 	      SystemClock.sleep(200);
 
@@ -87,10 +86,11 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 	    return null;
 	}
 
+	
 	@Override
 	protected void onProgressUpdate(Integer... values) {
 
-	/*--- show download progress on main UI thread---*/
+	// show download progress on main UI thread
 	    pb.setProgress(values[0]);
 	    percent.setText(values[0] + "%");
 
@@ -105,7 +105,7 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 	        }
 	    img.setImageBitmap(bmp);
 	    save.setEnabled(true);
-	    Toast.makeText(c, "download complete", Toast.LENGTH_SHORT).show();
+	    Toast.makeText(c, "Download complete", Toast.LENGTH_SHORT).show();
 
 	    super.onPostExecute(result);
 	}
@@ -132,4 +132,4 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 	    }
 	}
 
-	     }
+}

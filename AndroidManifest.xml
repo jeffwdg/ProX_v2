@@ -42,6 +42,7 @@
 		<activity android:name=".StoreBookDetails"/>
 		<activity android:name=".InternetDetector"/>
 		<activity android:name=".UserEbookList"/>
+		<activity android:name=".UserBookListView"/>
  
  
           

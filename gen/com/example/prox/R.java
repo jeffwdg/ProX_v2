@@ -23,12 +23,13 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int counter_text_bg=0x7f040005;
-        public static final int counter_text_color=0x7f040006;
-        public static final int list_background=0x7f040002;
-        public static final int list_background_pressed=0x7f040003;
-        public static final int list_divider=0x7f040004;
-        public static final int list_item_title=0x7f040001;
+        public static final int counter_text_bg=0x7f040006;
+        public static final int counter_text_color=0x7f040007;
+        public static final int lightgreen=0x7f040001;
+        public static final int list_background=0x7f040003;
+        public static final int list_background_pressed=0x7f040004;
+        public static final int list_divider=0x7f040005;
+        public static final int list_item_title=0x7f040002;
         public static final int white=0x7f040000;
     }
     public static final class dimen {
@@ -64,26 +65,28 @@ public final class R {
         public static final int ic_pages=0x7f020013;
         public static final int ic_people=0x7f020014;
         public static final int ic_photos=0x7f020015;
-        public static final int ic_whats_hot=0x7f020016;
-        public static final int images=0x7f020017;
-        public static final int list_item_bg_normal=0x7f020018;
-        public static final int list_item_bg_pressed=0x7f020019;
-        public static final int list_selector=0x7f02001a;
-        public static final int logo=0x7f02001b;
-        public static final int new_tab=0x7f02001c;
-        public static final int nocover=0x7f02001d;
-        public static final int notes=0x7f02001e;
-        public static final int prox1=0x7f02001f;
-        public static final int row=0x7f020020;
-        public static final int shelfbg=0x7f020021;
-        public static final int showitmini=0x7f020022;
-        public static final int userguide=0x7f020023;
+        public static final int ic_view_grid=0x7f020016;
+        public static final int ic_view_list=0x7f020017;
+        public static final int ic_whats_hot=0x7f020018;
+        public static final int images=0x7f020019;
+        public static final int list_item_bg_normal=0x7f02001a;
+        public static final int list_item_bg_pressed=0x7f02001b;
+        public static final int list_selector=0x7f02001c;
+        public static final int logo=0x7f02001d;
+        public static final int new_tab=0x7f02001e;
+        public static final int nocover=0x7f02001f;
+        public static final int notes=0x7f020020;
+        public static final int prox1=0x7f020021;
+        public static final int row=0x7f020022;
+        public static final int shelfbg=0x7f020023;
+        public static final int showitmini=0x7f020024;
+        public static final int userguide=0x7f020025;
     }
     public static final class id {
         public static final int OpenPdf=0x7f0a0004;
-        public static final int action_ebookstore=0x7f0a0037;
+        public static final int action_ebookstore=0x7f0a003a;
         public static final int action_help=0x7f0a0038;
-        public static final int action_refresh=0x7f0a0039;
+        public static final int action_refresh=0x7f0a003b;
         public static final int action_search=0x7f0a0035;
         public static final int action_settings=0x7f0a0036;
         public static final int bookAuthor=0x7f0a0003;
@@ -138,6 +141,8 @@ public final class R {
         public static final int txtLabel=0x7f0a0018;
         public static final int userEmail=0x7f0a0015;
         public static final int userName=0x7f0a0014;
+        public static final int view_grid=0x7f0a0037;
+        public static final int view_list=0x7f0a0039;
     }
     public static final class layout {
         public static final int bookdetails=0x7f030000;
@@ -170,9 +175,11 @@ public final class R {
     }
     public static final class menu {
         public static final int actionbar=0x7f090000;
-        public static final int ereader_actionbar=0x7f090001;
-        public static final int main=0x7f090002;
-        public static final int menu_actionbar=0x7f090003;
+        public static final int ebook_grid=0x7f090001;
+        public static final int ebook_list=0x7f090002;
+        public static final int ereader_actionbar=0x7f090003;
+        public static final int main=0x7f090004;
+        public static final int menu_actionbar=0x7f090005;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;

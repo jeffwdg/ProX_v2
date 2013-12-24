@@ -76,7 +76,7 @@ import android.widget.AdapterView.OnItemClickListener;
 				    	    	  
 				    	    	  mybooktitle=(String) userbooks.get("title");
 				    	    	  filename = (String) userbooks.get("filename");
-				    	    	  cover =  (String) userbooks.get("cover");
+				    	    	  cover =  (String) userbooks.get("title");
 				    	    	  author = (String) userbooks.get("author");	
 				    	    	  ISBN =  (String) userbooks.get("ISBN");
 				    	    	  bookstatus =  (String) userbooks.get("status");
