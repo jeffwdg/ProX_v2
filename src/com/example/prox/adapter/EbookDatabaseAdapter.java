@@ -130,7 +130,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 			ArrayList<Ebook> ebooks = new ArrayList<Ebook>();
 			
 			SQLiteDatabase db=this.getReadableDatabase();
-			Cursor cur = db.rawQuery("select * from userebooks order by objectId desc",  null);
+			Cursor cur = db.rawQuery("select * from userebooks",  null);
 			
 			cur.moveToFirst();
 			while(!cur.isAfterLast()){
@@ -141,9 +141,14 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 			cur.close();
 			return ebooks;
 		}
+		public int countEbooks(){
+	    	Cursor cur = db.rawQuery("select * from userebooks",  null);
+	    	return cur.getCount();
+	    }
+		
 	    public Cursor fetchAllEbooks() {
 	    	 
-	        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID,KEY_TITLE,KEY_FILENAME,KEY_COVER, KEY_AUTHOR,KEY_ISBN,KEY_OBJECTID,KEY_STATUS}, null, null, null, null, null);
+	        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID,KEY_TITLE,KEY_FILENAME,KEY_COVER, KEY_AUTHOR,KEY_ISBN,KEY_OBJECTID,KEY_STATUS,KEY_CATEGORY}, null, null, null, null, null);
 	    }
 	    
 		private Ebook cursorToEbook(Cursor cursor){
@@ -155,7 +160,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 			
 		}
 		  
-		public int updateEntry(String objectId, String title, String filename, String author, String ISBN, String cover, int status, String category)
+		public int updateEntry(String objectId, String title, String filename, String author, String ISBN, String cover, String status, String category)
 		{
 			// Define the updated row content.
 			ContentValues updatedValues = new ContentValues();

@@ -79,8 +79,8 @@ public class MyGridViewAdapter extends ArrayAdapter<Item> {
 		  holder.txtTitle.setText(item.getTitle());
 		  holder.txtAuthor.setText(item.getAuthor());
 		  String thisurl = item.getCover();
-		  Log.d("Ebook", "Cover " +thisurl);
-		  if(TextUtils.isEmpty(thisurl)){thisurl="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSMeKS7nHHfbiw08SQ4Z7jQh6Vzji36dOzWENTmXEn74Fp_tCM3";}
+		  Log.d("Ebook", "Cover " + thisurl);
+		  //if(TextUtils.isEmpty(thisurl)){thisurl="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSMeKS7nHHfbiw08SQ4Z7jQh6Vzji36dOzWENTmXEn74Fp_tCM3";}
 		  Drawable bookcover1 = LoadImageFromURL(thisurl);
 		  
 		  

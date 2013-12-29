@@ -2,6 +2,7 @@ package com.example.prox;
 
 import java.io.File;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -16,7 +17,13 @@ public class BookReader extends Activity {
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.bookreader);
+	        
+	        ActionBar actionBar = this.getActionBar();
+	    	actionBar.setDisplayHomeAsUpEnabled(true);
+	    	actionBar.setTitle("ProX Ereader");
+	    	actionBar.setIcon(R.drawable.books);
 
+	    	
 	        Button button = (Button) findViewById(R.id.OpenPdf);
 	        
 	        button.setOnClickListener(new View.OnClickListener() {
@@ -42,4 +49,11 @@ public class BookReader extends Activity {
 	            }
 	        });
 	    }
+	    
+	    @Override
+	    protected void onResume() {
+	        super.onResume();
+	         
+	    }
+	    
 }

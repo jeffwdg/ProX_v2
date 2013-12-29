@@ -1,5 +1,6 @@
 package com.example.prox;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,6 +40,9 @@ public class SignUpActivity extends Activity implements OnClickListener
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.signup);
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		
 		internetdetected = new InternetDetector(getApplicationContext());
 		
 		// get Instance  of Database Adapter
@@ -109,6 +113,17 @@ public class SignUpActivity extends Activity implements OnClickListener
 		String pattern = "^[a-zA-Z0-9]*$";
 		String email_pattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 		
+		//check for a valid password
+		if(TextUtils.isEmpty(password)){
+				editTextPassword.setError(getString(R.string.required_field));
+				focusView = editTextPassword;
+				cancel =true;
+		}else if(password.length() < 7 || !password.matches(pattern)){
+				editTextPassword.setError(getString(R.string.invalid_password));
+				focusView = editTextPassword;
+				cancel =true;
+		}
+				
 		//Check if password & confirm password matches
 		if(TextUtils.isEmpty(confirmPassword)){
 			editTextConfirmPassword.setError(getString(R.string.required_field));
@@ -122,16 +137,7 @@ public class SignUpActivity extends Activity implements OnClickListener
 			
 		}
 		
-		//check for a valid password
-		if(TextUtils.isEmpty(password)){
-			editTextPassword.setError(getString(R.string.required_field));
-			focusView = editTextPassword;
-			cancel =true;
-		}else if(password.length() < 6 && !password.matches(pattern)){
-			 editTextPassword.setError(getString(R.string.invalid_password));
-			 focusView = editTextPassword;
-			 cancel =true;
-		}
+		
 		
 		//check for a valid email
 		if(TextUtils.isEmpty(email)){
@@ -145,10 +151,13 @@ public class SignUpActivity extends Activity implements OnClickListener
 		}
 		
 		// check if first & last name are valid
-		if(TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname)){
+		if(TextUtils.isEmpty(fname)){
 			editTextFirstName.setError(getString(R.string.required_field));
+			focusView = editTextFirstName; 
+			cancel =true;
+		}
+		if(TextUtils.isEmpty(lname)){
 			editTextLastName.setError(getString(R.string.required_field));
-			focusView = editTextFirstName;
 			focusView = editTextLastName;
 			cancel =true;
 		}

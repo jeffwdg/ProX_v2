@@ -46,14 +46,14 @@
        
               <Button
            android:id="@+id/btnProgressBar"
-           android:layout_width="100dp"
+           android:layout_width="150dp"
            android:layout_height="wrap_content"
            android:layout_alignParentBottom="true"
            android:layout_alignParentRight="true"
            android:layout_marginBottom="113dp"
            android:layout_marginRight="20dp"
            android:background="@layout/header"
-           android:text="Buy"
+           android:text="Add to account"
            android:textColor="#fff" />
 
               

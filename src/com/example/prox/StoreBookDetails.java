@@ -166,8 +166,8 @@ public class StoreBookDetails extends Activity {
                     	        }
                     		 
                     		 saveImageToSD(userFolderName,objectId);
-                    		 
-                    		ebookDatabaseAdapter.insertEntry(objectId, title, filename, author, ISBN, cover, status, category);
+                    		String ebookStatus = "0"; //not downloaded
+                     		ebookDatabaseAdapter.insertEntry(objectId, title, filename, author, ISBN, cover, ebookStatus, category);
                     		
                     		Log.d("Ebook Local Storage", "Added userebook to local db.");
                     	}

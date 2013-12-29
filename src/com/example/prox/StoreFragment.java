@@ -1,5 +1,6 @@
 package com.example.prox;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import com.parse.FindCallback;
@@ -60,10 +61,23 @@ public class StoreFragment extends Fragment{
 	public StoreFragment(){}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getActivity().getMenuInflater().inflate(R.menu.actionbar, menu);
-	 
+		getActivity().getMenuInflater().inflate(R.menu.ereader_actionbar, menu);
 		return true;
 	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	      // Handle item selection
+	      switch (item.getItemId()) {
+	      case R.id.action_ebookstore:  
+	    	  	Intent i = new Intent(getActivity(), SearchActivity.class);
+	    	  	startActivity(i);
+	      	break;
+
+	      }
+	      return false;
+	}
+	
+ 
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {

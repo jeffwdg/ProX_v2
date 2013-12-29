@@ -41,7 +41,7 @@ public class EbooksFragment extends Fragment {
 	GridView gridView;
 	ArrayList<Item> gridArray = new ArrayList<Item>();
 	CustomGridViewAdapter customGridAdapter;
-	String[] ebookViewCategory;
+	
 	 
 	private EbookDatabaseAdapter mDbHelper;
 	
@@ -58,11 +58,14 @@ public class EbooksFragment extends Fragment {
         
         // Enabling Up / Back navigation
 		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 		
-		ebookViewCategory = getResources().getStringArray(R.array.ebook_spinner_list);
-		Spinner ebookSpinner = (Spinner) rootView.findViewById(R.id.ebook_spinner);
 		
+		
+		Intent intent = new Intent(getActivity(), UserEbookList.class);
+		startActivity(intent);
+		
+		
+		/*
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(actionBar.getThemedContext(),android.R.layout.simple_list_item_1,ebookViewCategory);
 		
 		
@@ -135,13 +138,11 @@ public class EbooksFragment extends Fragment {
                 startActivity(bookdetails);
 		 	}
 		 });
-        
+        */
+		
+		
         return rootView;
     }
 
-	public void fetchLocalUserEbooks(){
-		 //Cursor ebooksCursor = mDbHelper.fetchAllUserEbooks();
-		 
-		 
-	}
+ 
 }

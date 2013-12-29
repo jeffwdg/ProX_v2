@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
@@ -41,10 +42,22 @@ import android.widget.AdapterView.OnItemClickListener;
 		
 		
 		public boolean onCreateOptionsMenu(Menu menu) {
-			 getMenuInflater().inflate(R.menu.actionbar, menu);
-		 
+			getMenuInflater().inflate(R.menu.ereader_actionbar, menu);
 			return true;
 		}
+		
+		public boolean onOptionsItemSelected(MenuItem item) {
+		      // Handle item selection
+		      switch (item.getItemId()) {
+		      case R.id.action_ebookstore:  
+		    	  	Intent i = new Intent(this, SearchActivity.class);
+		    	  	startActivity(i);
+		      	break;
+
+		      }
+		      return false;
+		}
+		
 		
 		
 		protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +89,7 @@ import android.widget.AdapterView.OnItemClickListener;
 				    	    	  
 				    	    	  mybooktitle=(String) userbooks.get("title");
 				    	    	  filename = (String) userbooks.get("filename");
-				    	    	  cover =  (String) userbooks.get("title");
+				    	    	  cover =  (String) userbooks.get("cover");
 				    	    	  author = (String) userbooks.get("author");	
 				    	    	  ISBN =  (String) userbooks.get("ISBN");
 				    	    	  bookstatus =  (String) userbooks.get("status");
@@ -99,7 +112,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 				              }
 				    	      
-				    	     GridView gridView = (GridView) findViewById(R.id.newstoregridview);
+				    	    GridView gridView = (GridView) findViewById(R.id.newstoregridview);
 				  	        customGridAdapter = new MyGridViewAdapter(LatestBookView.this, R.layout.row_grid, gridArray);
 				  	        gridView.setAdapter(customGridAdapter); 
 				    	      
@@ -136,7 +149,7 @@ import android.widget.AdapterView.OnItemClickListener;
 		    	    	bookdetails.putExtra("category", ebook.getCategory());
 		    	    	
 		        		bookdetails.putExtra("id",position);
-		        		Log.d("ebooks", "Retrieved bookcover " +ebook.getFilename());
+		        		//Log.d("ebooks", "Retrieved bookcover " +ebook.getCover());
 		        		//Toast.makeText(this,"Ebook " +  position + " selected", Toast.LENGTH_SHORT).show();
 		                startActivity(bookdetails);
 		                

@@ -1,6 +1,6 @@
 package com.example.prox;
 
- 
+import com.example.prox.note.NoteList;
 
 import android.app.Fragment;
 import android.app.LocalActivityManager;
@@ -19,11 +19,13 @@ public class NotesFragment extends Fragment {
 	public NotesFragment(){}
 	
 	@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
  
         View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
         
+        Intent intent = new Intent(getActivity(), NoteList.class);
+		startActivity(intent);
+        /*
         mTabHost = (TabHost) rootView.findViewById(android.R.id.tabhost);
         LocalActivityManager mLocalActivityManager = new LocalActivityManager(getActivity(), false);
         mLocalActivityManager.dispatchCreate(savedInstanceState);
@@ -50,7 +52,7 @@ public class NotesFragment extends Fragment {
         mTabHost.addTab(latest);
         mTabHost.addTab(best);
 		 
-        
+        */
  
 		
         return rootView;

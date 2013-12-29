@@ -10,7 +10,8 @@ public class Ebook {
     private String cover;
     private String category;
     private String status; 
-    
+  
+ 
     
     public String getID() {
         return id;

@@ -27,9 +27,11 @@
             </intent-filter>
         </activity>
         
-		<activity android:name=".SignUpActivity"/>
+		<activity android:name=".SignUpActivity"
+		    android:parentActivityName=".MainActivity"/>
 		<activity android:name=".MenuActivity"/>
-		<activity android:name=".ForgotPassword"/>
+		<activity android:name=".ForgotPassword"
+		    android:parentActivityName=".MainActivity"/>
 		<activity android:name=".StoreActivity"/>
 		<activity android:name=".Download"/>
 		<activity android:name=".BookView"/>
@@ -41,8 +43,39 @@
 		<activity android:name=".BestBookView"/>
 		<activity android:name=".StoreBookDetails"/>
 		<activity android:name=".InternetDetector"/>
-		<activity android:name=".UserEbookList"/>
-		<activity android:name=".UserBookListView"/>
+		<activity android:name=".UserEbookList"
+		    	android:parentActivityName=".MenuActivity"/>
+		<activity android:name="com.example.prox.UserBookListView"
+		    	android:parentActivityName=".UserEbookList"/>
+		<activity android:name=".ProxReader"
+				android:uiOptions="splitActionBarWhenNarrow"
+		    	android:parentActivityName="com.example.prox.UserEbookList"/>
+		<activity android:name=".SearchActivity"
+		    	android:parentActivityName="com.example.prox.StoreFragment">
+			<meta-data
+                android:name="android.app.default_searchable"
+                android:value=".BookSearch" />
+		</activity>
+		<activity android:name=".BookSearch"
+		    	android:parentActivityName="com.example.prox.SearchActivity">
+ 			<intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+			<meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/bookstore_searchable" />
+		</activity>
+		
+		
+		
+		<!-- NOTES sub app -->
+		<activity android:name="com.example.prox.note.NoteList"
+		    	android:parentActivityName=".MenuActivity"/>
+        <activity android:name="com.example.prox.note.NoteEdit"
+            	android:parentActivityName="com.example.prox.note.NoteList"
+         		android:windowSoftInputMode="adjustUnspecified"/>
+        <activity android:name="com.example.prox.note.SubjectList"
+            	android:parentActivityName="com.example.prox.note.NoteList"/>
  
  
           

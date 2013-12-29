@@ -1,8 +1,10 @@
 package com.example.prox;
 
 
+import com.example.prox.adapter.EbookDatabaseAdapter;
 import com.example.prox.adapter.NavDrawerListAdapter;
 import com.example.prox.model.NavDrawerItem;
+import com.example.prox.note.NotesDbAdapter;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
@@ -70,7 +72,11 @@ public class MenuActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu);
 		
-
+		EbookDatabaseAdapter ebookDatabaseAdapter = new EbookDatabaseAdapter(MenuActivity.this);
+		ebookDatabaseAdapter.open();
+		
+		NotesDbAdapter noteDatabaseAdapter = new NotesDbAdapter(MenuActivity.this);
+		noteDatabaseAdapter.open();
         
 		Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF"); 
 		
@@ -98,15 +104,17 @@ public class MenuActivity extends Activity{
 			// adding nav drawer items to array
 			// Home
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
-			// Find People
+			// Reminder
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
-			// Photos
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));
-			// Communities, Will add a counter here
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, "22"));
-			// Pages
+			// Ereader
+			String totalBooks = Integer.toString(ebookDatabaseAdapter.countEbooks());
+			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, totalBooks));
+			// NOtes
+			String totalNotes = Integer.toString(noteDatabaseAdapter.countNotes());
+			navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1), true, totalNotes));
+			// Store
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));
-			// What's hot, We  will add a counter here
+			// Logout
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
 			
 
@@ -175,12 +183,13 @@ public class MenuActivity extends Activity{
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.actionbar, menu);
+		getMenuInflater().inflate(R.menu.ereader_actionbar, menu);
 
   
 		return true;
 	}
-	
+ 
+ 
 
 
 	@Override
@@ -191,11 +200,15 @@ public class MenuActivity extends Activity{
 		}
 		// Handle action bar actions click
 		switch (item.getItemId()) {
-		case R.id.action_settings:
-			return true;
+ 
+		 case R.id.action_ebookstore:  
+	    	  	Intent i = new Intent(this, SearchActivity.class);
+	    	  	startActivity(i);
+	    	  	break;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+		return true;
 	}
 
 	/* *

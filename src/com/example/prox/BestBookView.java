@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup.LayoutParams;
@@ -41,9 +42,20 @@ public class BestBookView extends Activity {
 		
 		
 		public boolean onCreateOptionsMenu(Menu menu) {
-			 getMenuInflater().inflate(R.menu.actionbar, menu);
-		 
+			 getMenuInflater().inflate(R.menu.ereader_actionbar, menu);
 			return true;
+		}
+		
+		public boolean onOptionsItemSelected(MenuItem item) {
+		      // Handle item selection
+		      switch (item.getItemId()) {
+		      case R.id.action_ebookstore:  
+		    	  	Intent i = new Intent(this, SearchActivity.class);
+		    	  	startActivity(i);
+		      	break;
+
+		      }
+		      return false;
 		}
 		
 		
@@ -96,7 +108,7 @@ public class BestBookView extends Activity {
 
 				              }
 				    	      
-				    	     GridView gridView = (GridView) findViewById(R.id.newstoregridview);
+				    	    GridView gridView = (GridView) findViewById(R.id.newstoregridview);
 				  	        customGridAdapter = new MyGridViewAdapter(BestBookView.this, R.layout.row_grid, gridArray);
 				  	        gridView.setAdapter(customGridAdapter); 
 				    	      
@@ -129,7 +141,7 @@ public class BestBookView extends Activity {
 		        		bookdetails.putExtra("cover", ebook.getCover());
 		    	    	bookdetails.putExtra("ebookID", ebook.getID());
 		        		bookdetails.putExtra("id",position);
-		        		Log.d("ebooks", "Retrieved bookcover " +ebook.getFilename());
+		        		Log.d("ebooks", "Retrieved bookcover " +ebook.getCover());
 		        		//Toast.makeText(this,"Ebook " +  position + " selected", Toast.LENGTH_SHORT).show();
 		                startActivity(bookdetails);
 		                

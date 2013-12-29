@@ -4,6 +4,7 @@ import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +34,8 @@ public class ForgotPassword extends Activity{
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.forgotpassword);
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
 	    txtforgotPass = (TextView)findViewById(R.id.emailforgotPassword);
 		emailPassword=(Button)findViewById(R.id.btnforgotPassword);
