@@ -148,7 +148,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		
 	    public Cursor fetchAllEbooks() {
 	    	 
-	        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID,KEY_TITLE,KEY_FILENAME,KEY_COVER, KEY_AUTHOR,KEY_ISBN,KEY_OBJECTID,KEY_STATUS,KEY_CATEGORY}, null, null, null, null, null);
+	        return db.query(DATABASE_TABLE, new String[] {KEY_ROWID,KEY_TITLE,KEY_FILENAME,KEY_COVER, KEY_AUTHOR,KEY_ISBN,KEY_OBJECTID,KEY_STATUS,KEY_CATEGORY}, null, null, null, null, KEY_ROWID +" DESC");
 	    }
 	    
 		private Ebook cursorToEbook(Cursor cursor){

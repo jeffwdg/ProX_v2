@@ -104,6 +104,12 @@ public class MyLocalGridViewAdapter extends ArrayAdapter<Item> {
           else{
         	  holder.imageItem.setImageDrawable(bookcover1);
           }
+          
+          if(item.getStatus() == "1"){
+        	  Log.d("Ebook", "Status " + item.getStatus() );
+        	  holder.imageItem.setBackgroundResource(R.drawable.ribbon_downloaded);
+          }
+          
 		  holder.ebookID.setText(item.getID());
 		  holder.ebookLocation.setText(item.getFilename());
 		  return row;

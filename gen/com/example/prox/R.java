@@ -89,15 +89,17 @@ public final class R {
         public static final int notes=0x7f02002a;
         public static final int notetop=0x7f02002b;
         public static final int prox1=0x7f02002c;
-        public static final int right_arrow=0x7f02002d;
-        public static final int row=0x7f02002e;
-        public static final int save=0x7f02002f;
-        public static final int shelfbg=0x7f020030;
-        public static final int showitmini=0x7f020031;
-        public static final int singlerow=0x7f020032;
-        public static final int userguide=0x7f020033;
-        public static final int zoom_in=0x7f020034;
-        public static final int zoom_out=0x7f020035;
+        public static final int ribbon_downloaded=0x7f02002d;
+        public static final int ribbon_notdownloaded=0x7f02002e;
+        public static final int right_arrow=0x7f02002f;
+        public static final int row=0x7f020030;
+        public static final int save=0x7f020031;
+        public static final int shelfbg=0x7f020032;
+        public static final int showitmini=0x7f020033;
+        public static final int singlerow=0x7f020034;
+        public static final int userguide=0x7f020035;
+        public static final int zoom_in=0x7f020036;
+        public static final int zoom_out=0x7f020037;
     }
     public static final class id {
         public static final int OpenPdf=0x7f0b0004;

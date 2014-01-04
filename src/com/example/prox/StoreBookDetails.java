@@ -22,7 +22,9 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -36,9 +38,12 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,11 +73,30 @@ public class StoreBookDetails extends Activity {
 	    String file_url="";
 	    
 	    @Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+	        MenuInflater inflater = getMenuInflater();
+	        inflater.inflate(R.menu.actionbar, menu);
+	 
+	        // Associate searchable configuration with the SearchView
+	        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+	                .getActionView();
+	        searchView.setSearchableInfo(searchManager
+	                .getSearchableInfo(getComponentName()));
+	 
+	        return super.onCreateOptionsMenu(menu);
+	    }
+	    
+	    
+	    @Override
 	    public void onCreate(Bundle savedInstanceState) {
-	        super.onCreate(savedInstanceState);
-	       
-	        
+	        super.onCreate(savedInstanceState);  
 	        setContentView(R.layout.bookdetails);
+	        
+	        ActionBar ab = getActionBar();
+		    ab.setDisplayHomeAsUpEnabled(true);
+	
+	        ab.setIcon(R.drawable.ebookstore);
 	        
 	        Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
 
@@ -92,7 +116,6 @@ public class StoreBookDetails extends Activity {
 	        filename =i.getExtras().getString("filename");
 	        category =i.getExtras().getString("category");
 	        
-	        ActionBar ab = getActionBar();
 	        ab.setTitle("Book: "+title);
 	        
 	        Log.d("Ebook Store", "Details "+objectId + author +" " +cover);
@@ -172,7 +195,9 @@ public class StoreBookDetails extends Activity {
                     		Log.d("Ebook Local Storage", "Added userebook to local db.");
                     	}
 	                }
-
+	                
+	                Intent i = new Intent(StoreBookDetails.this, UserEbookList.class);
+		    	  	startActivity(i);
 	                
 	            }
 	        });

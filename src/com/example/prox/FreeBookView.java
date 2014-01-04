@@ -34,11 +34,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class FreeBookView extends Activity {
+	public class FreeBookView extends Activity {
 		
 		GridView gridView;
 		ArrayList<Ebook> gridArray = new ArrayList<Ebook>();
 		MyGridViewAdapter customGridAdapter;
+		Boolean isInternetPresent = false;
+		InternetDetector internetdetected;
+		Utilities util = new Utilities();  
 		
 		
 		public boolean onCreateOptionsMenu(Menu menu) {
@@ -69,9 +72,14 @@ public class FreeBookView extends Activity {
 			setContentView(R.layout.storeview);
 			Bitmap userIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.bookcover);
 
-		         //Get data from parse.com  
+		        //Get data from parse.com  
 			 
-		    	ParseQuery<ParseObject> query = ParseQuery.getQuery("ebook");
+			internetdetected = new InternetDetector(this.getApplicationContext());
+			
+			isInternetPresent = internetdetected.isNetworkAvailable();
+			
+			if(isInternetPresent == true){
+				ParseQuery<ParseObject> query = ParseQuery.getQuery("ebook");
 		    	query.whereEqualTo("categoryID", "0");
 		    	query.findInBackground(new FindCallback<ParseObject>() {
 					@SuppressLint("NewApi")
@@ -123,6 +131,10 @@ public class FreeBookView extends Activity {
 			    	    }
 					}
 		    	});
+			}else{
+				util.showAlertDialog(getApplicationContext(), "Network Error", "Please check your internet connection", false);
+			}
+		    	
 
 		    	
 		        GridView gridView = (GridView) findViewById(R.id.newstoregridview);

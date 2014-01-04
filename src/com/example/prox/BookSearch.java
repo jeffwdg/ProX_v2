@@ -15,9 +15,11 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
  
@@ -39,16 +42,32 @@ public class BookSearch extends Activity {
     ArrayList<Ebook> bookresults = new ArrayList<Ebook>();
     final ArrayList<Ebook> ebook = new ArrayList<Ebook>();
     private EbookAdapter e_adapter;
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar, menu);
+ 
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+ 
+        return super.onCreateOptionsMenu(menu);
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bookstore_search_results);
- 
-        // get the action bar
-        ActionBar actionBar = getActionBar();
-
-        // Enabling Back navigation on Action Bar icon
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        ActionBar ab = getActionBar();
+	    ab.setDisplayHomeAsUpEnabled(true);
+        ab.setTitle("Store Search");
+        ab.setIcon(R.drawable.ebookstore);
+        
+  
  
         txtQuery = (TextView) findViewById(R.id.txtQuery);
  
@@ -184,7 +203,7 @@ public class BookSearch extends Activity {
 			              
 		    	    	}else{
 		    	    		txtQuery.setText("No results found for " + searchquery);
-		    	    		Toast.makeText(getApplicationContext(),"No results found... try another", Toast.LENGTH_LONG).show(); 
+		    	    		//Toast.makeText(getApplicationContext(),"No results found... try another", Toast.LENGTH_LONG).show(); 
 		    	    	}
 		    	    	
 		    	    	

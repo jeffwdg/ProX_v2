@@ -41,7 +41,12 @@
 		<activity android:name=".FreeBookView"/>
 		<activity android:name=".LatestBookView"/>
 		<activity android:name=".BestBookView"/>
-		<activity android:name=".StoreBookDetails"/>
+		<activity android:name=".StoreBookDetails"
+		    	android:parentActivityName=".SearchActivity">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".BookSearch" />
+		</activity>
 		<activity android:name=".InternetDetector"/>
 		<activity android:name=".UserEbookList"
 		    	android:parentActivityName=".MenuActivity"/>

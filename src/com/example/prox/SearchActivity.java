@@ -5,13 +5,18 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.SearchView;
 
 public class SearchActivity extends Activity{
 
-	
+	  Boolean isInternetPresent = false;
+	    // Connection detector class
+	    InternetDetector internetdetected;
+	    Utilities util = new Utilities(); 
+	    
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -30,11 +35,23 @@ public class SearchActivity extends Activity{
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bookstore_search_results);
+        
+        internetdetected = new InternetDetector(getApplicationContext());
+        isInternetPresent = internetdetected.isNetworkAvailable();
         ActionBar ab = getActionBar();
 	    ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle("Store Search");
         ab.setIcon(R.drawable.ebookstore);
+        
+        Log.d("Internet detecting..", "Internet present =" + isInternetPresent);
+        
+        if(isInternetPresent == true){
+        	setContentView(R.layout.bookstore_search_results);
+        }else{
+        	util.showAlertDialog(getApplicationContext(), "Network Error", "Please check your internet cconnection.", false);
+        }
+        
+        
         
     }
 	

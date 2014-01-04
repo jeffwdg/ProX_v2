@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field; 
 
+import com.sun.pdfview.PDFFile;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,143 +39,17 @@ public class ProxReader extends  PdfViewerActivity implements OnClickListener{
     private GestureDetector gestureDetector;
     View.OnTouchListener gestureListener;
     Method m = null;
-    PdfViewerActivity d;
+    PdfViewerActivity  instance;
     
-    /*
+    private PDFFile mPdfFile;
+    private int mPage;
+	private float mZoom;
+    private final static int DIALOG_PAGENUM = 1;
+    
     private static final Object[] EMPTY = {};
     
     public void reflect() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        PdfViewerActivity instance = null;
-        Class secretClass = instance.getClass();
-        
-        // Print all the method names & execution result
-        Method methods[] = secretClass.getDeclaredMethods(); 
-        System.out.println("Access all the methods"); 
-        for (int i = 0; i < methods.length; i++) { 
-           System.out.println("Method Name: " + methods[i].getName());
-           System.out.println("Return type: " + methods[i].getReturnType());
-           methods[i].setAccessible(true);
-           System.out.println(methods[i].invoke(instance, EMPTY) + "\n");
-        }
-
-        //  Print all the field names & values
-        Field fields[] = secretClass.getDeclaredFields();
-        System.out.println("Access all the fields");
-        for (int i = 0; i < fields.length; i++){ 
-           System.out.println("Field Name: " + fields[i].getName()); 
-           fields[i].setAccessible(true); 
-           System.out.println(fields[i].get(instance) + "\n"); 
-        }
-    }
-	 */
-	//PdfViewerActivity pdfActivity =(PdfViewerActivity)getLastNonConfigurationInstance();
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    // Inflate the menu items for use in the action bar
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.proxreader_actions, menu);
-	   
-  
-	    return super.onCreateOptionsMenu(menu);
-	}
-	
-	public boolean onOptionsItemSelected(MenuItem item) {
-	      // Handle item selection
-	      switch (item.getItemId()) {
-	      case R.id.proxreader_back: try {
-								gotoBack();
-							} catch (IllegalArgumentException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IllegalAccessException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (InvocationTargetException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-	      	break;
-
-	      }
-	      return false;
-	}
-	
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.proxreader);
-		ActionBar actionBar = this.getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
- 
-		
-		Button next = (Button) findViewById(R.id.proxreader_next);
-		Button back = (Button) findViewById(R.id.proxreader_back);
-		Button zoomin = (Button) findViewById(R.id.proxreader_zoomin);
-		Button zoomout = (Button) findViewById(R.id.proxreader_zoomout);
-		
-		  
-	        
-	       
-	        
-		 
-	 /*
-		
-		next.setBackgroundResource(R.drawable.right_arrow);
-		back.setBackgroundResource(R.drawable.left_arrow);
-		zoomin.setBackgroundResource(R.drawable.zoom_in);
-		zoomout.setBackgroundResource(R.drawable.zoom_out);
-		
-
- 
-		
-		
-		back.setOnClickListener(new View.OnClickListener(){
-			public void onClick(View v) {
-				//pdfActivity.prevPage();
-				//pdfActivity.onMenuItemSelected(3, null);
-				String prevPage = "prevPage";
-				Method prevPager = null;
-				try {
-					prevPager = pdfActivity.getClass().getDeclaredMethod(prevPage);
-				} catch (NoSuchMethodException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				prevPager.setAccessible(true);
-				try {
-					Object r =  prevPager.invoke(pdfActivity);
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
-		});
-		*/
-		
-		
-		// Gesture detection
-        gestureDetector = new GestureDetector(this, new MyGestureDetector());
-        gestureListener = new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        };
-		
-		
-	}
-	
-	public void gotoBack() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException{
-		
-		Log.d("Action bar", "back");
-		d = new PdfViewerActivity() {
+        instance =  new PdfViewerActivity() {
 			
 			@Override
 			public int getZoomOutImageResource() {
@@ -235,37 +111,157 @@ public class ProxReader extends  PdfViewerActivity implements OnClickListener{
 				return 0;
 			}
 		};
+		
+        Class secretClass = instance.getClass();
+        
+        // Print all the method names & execution result
+        Method methods[] = secretClass.getDeclaredMethods(); 
+        System.out.println("Access all the methods"); 
+        for (int i = 0; i < methods.length; i++) { 
+        	
+           //System.out.println("Method Name: " + methods[i].getName());
+        	String mname = methods[i].getName();
+           Log.d("Reflect","Methods "+mname);
+           System.out.println("Return type: " + methods[i].getReturnType());
+           methods[i].setAccessible(true);
+           System.out.println(methods[i].invoke(instance, EMPTY) + "\n");
+        }
+
+        //  Print all the field names & values
+        Field fields[] = secretClass.getDeclaredFields();
+        System.out.println("Access all the fields");
+        for (int i = 0; i < fields.length; i++){ 
+          // System.out.println("Field Name: " + fields[i].getName()); 
+           String mfield = fields[i].getName();
+           Log.d("Reflect","Fields "+mfield);
+           fields[i].setAccessible(true); 
+           System.out.println(fields[i].get(instance) + "\n"); 
+        }
+    }
+	 
+	//PdfViewerActivity pdfActivity =(PdfViewerActivity)getLastNonConfigurationInstance();
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    // Inflate the menu items for use in the action bar
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.proxreader_actions, menu);
+	   
+	    
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) {
+	      // Handle item selection
+	      switch (item.getItemId()) {
+	      case R.id.proxreader_back: nextPage();
+	      			break;
+	      case R.id.proxreader_next: nextPage();
+			break;
+	      default: break;
+	      }
+	      return false;
+	}
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		//setContentView(R.layout.proxreader);
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+ 
+		
+		Button next = (Button) findViewById(R.id.proxreader_next);
+		Button back = (Button) findViewById(R.id.proxreader_back);
+		Button zoomin = (Button) findViewById(R.id.proxreader_zoomin);
+		Button zoomout = (Button) findViewById(R.id.proxreader_zoomout);
+		
+		  
+ 
+	    
+	    
+		try {
+			reflect();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
 	        
-			try {
-				m = PdfViewerActivity.class.getDeclaredMethod("zoomOut");
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				 Log.d("Testing", "Testing11");
-				e.printStackTrace();
+		 
+	 /*
+		
+		next.setBackgroundResource(R.drawable.right_arrow);
+		back.setBackgroundResource(R.drawable.left_arrow);
+		zoomin.setBackgroundResource(R.drawable.zoom_in);
+		zoomout.setBackgroundResource(R.drawable.zoom_out);
+		
+
+ 
+		
+		
+		back.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v) {
+				//pdfActivity.prevPage();
+				//pdfActivity.onMenuItemSelected(3, null);
+				String prevPage = "prevPage";
+				Method prevPager = null;
+				try {
+					prevPager = pdfActivity.getClass().getDeclaredMethod(prevPage);
+				} catch (NoSuchMethodException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				prevPager.setAccessible(true);
+				try {
+					Object r =  prevPager.invoke(pdfActivity);
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
-	        //m.invoke(d);//exception java.lang.IllegalAccessException
-	        m.setAccessible(true);//Abracadabra 
-	        try {
-	        	m.invoke(d);
-				 Log.d("Testing", "Testingrr");
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				 Log.d("Testing", "Testing1");
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				 Log.d("Testing", "Testing2");
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				 Log.d("Testing", "Testing3");
-				e.printStackTrace();
-			}//now its ok
-	        
+		});
+		*/
+		
+		
+		// Gesture detection
+        gestureDetector = new GestureDetector(this, new MyGestureDetector());
+        gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        };
 		
 		
 	}
-
+	
+	public void nextPage() {
+		
+    	if (mPdfFile != null) {
+    		if (mPage < mPdfFile.getNumPages()) {
+    			mPage += 1;
+    			
+    			//super.startRenderThread(mPage, mZoom);
+    		}
+    	}
+    	Log.d("Page","next "+mPage);
+	}
+	
+ 
+	
+	
     class MyGestureDetector extends SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {

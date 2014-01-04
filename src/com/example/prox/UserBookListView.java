@@ -111,7 +111,10 @@ public class UserBookListView extends ListActivity {
 	actionBar.setIcon(R.drawable.books);
 	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 	
- 
+	internetdetected = new InternetDetector(this.getApplicationContext());
+	
+	isInternetPresent = internetdetected.isNetworkAvailable();
+	
 	 
 	    
     datasource = new EbookDatabaseAdapter(this);
@@ -299,21 +302,33 @@ public class UserBookListView extends ListActivity {
 			File file = new File("data/data/com.example.prox/proxbooks/"+userFolderName+"/"+objectId+".jpg");
 			boolean filedeleted = file.delete();
 			deleted = true;
-			Toast.makeText(getApplicationContext(), "Deleted book " + title, Toast.LENGTH_LONG).show();
+			
 			
 			if(deleted == true){
 				
-				ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
+				if(isInternetPresent == true){
+					ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
 					// Retrieve the object by id
 					query.getInBackground(objectId, new GetCallback<ParseObject>() {
-						  public void done(ParseObject userebooks, ParseException e) {
-							   
-							      //userebooks.deleteEventually();
-							      Log.d("Ebook Deletion", "Ebook will be deleted when connection is detected.");
-							   
+						  public void done(ParseObject userebooks, ParseException e) {  
+							  userebooks.deleteInBackground();
+							  Log.d("Ebook Deletion", "Ebook deleted.");   
+						  }
+					 });
+					
+				}else{
+					ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
+					// Retrieve the object by id
+					query.getInBackground(objectId, new GetCallback<ParseObject>() {
+						  public void done(ParseObject userebooks, ParseException e) {  
+							  userebooks.deleteEventually();
+							  Log.d("Ebook Deletion", "Ebook will be deleted when connection is detected.");   
 						  }
 					 });
 				}
+				
+				Toast.makeText(getApplicationContext(), "Deleted book " + title, Toast.LENGTH_LONG).show();
+			}
 		}
 		return deleted;
 	}
