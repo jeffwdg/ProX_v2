@@ -108,6 +108,8 @@ public class BookSearch extends Activity {
              */
             
             txtQuery.setText("Searching: " + searchquery);
+            Log.d("Store Search","Searching..."+ searchquery);
+            Toast.makeText(getApplicationContext(),"Searching...", Toast.LENGTH_LONG).show(); 
             
             Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
             
@@ -119,7 +121,7 @@ public class BookSearch extends Activity {
 				public void done(List<ParseObject> ebookslist, ParseException e) {
 					// TODO Auto-generated method stub
 					res =  ebookslist.size();
-					Toast.makeText(getApplicationContext(),"Searching...", Toast.LENGTH_LONG).show(); 
+					
 					Log.d("ebooks", "Found " + res + " ebooks");
 					txtQuery.setText( res +" result(s) found for " + searchquery);
 					
@@ -218,7 +220,7 @@ public class BookSearch extends Activity {
 	    	});
 	    	       	
 	    	 
-            Log.d("Store Search","Searching..."+ searchquery);
+            
             
              
         }

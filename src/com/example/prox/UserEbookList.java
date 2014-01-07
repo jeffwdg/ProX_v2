@@ -20,6 +20,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.radaee.reader.MyPDFOpen;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -263,8 +264,11 @@ public class UserEbookList extends Activity {
 		
 		if(ebookLocal.exists()){
 			// Redirect screen to pdf viewer
-			Intent intent = new Intent(this, ProxReader.class);
-			intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME,ebookLocation+ebookFile);
+			Intent intent = new Intent(this, MyPDFOpen.class);
+			intent.putExtra("ebookFile", ebookLocation+ebookFile);
+			
+			//Intent intent = new Intent(this, ProxReader.class);
+			//intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME,ebookLocation+ebookFile);
 			startActivity(intent);
 		}else{
 			Toast.makeText(getApplicationContext(), "File not found for " + title, Toast.LENGTH_LONG).show();
@@ -355,10 +359,34 @@ public class UserEbookList extends Activity {
 		isInternetPresent = internetdetected.isNetworkAvailable();
 		
 		if(isInternetPresent == true){
-			Toast.makeText(getApplicationContext(), "Ebook downloaded?" +filename, Toast.LENGTH_LONG).show();
+			long freememory = util.getAvailableInternalMemorySize();
+			// get filesize before download
+			int file_size = 0;
 			
-			new DownloadFileFromURL().execute(filename,objectId);
-			downloaded =true;
+			try{
+				URL url = new URL(filename);
+				URLConnection urlConnection = url.openConnection();
+				urlConnection.connect();
+				file_size = urlConnection.getContentLength();
+				
+				if (file_size >= 1024) {
+					file_size /= 1024;  
+		        }
+		        
+				
+			}catch (Exception e) {
+				Toast.makeText(getApplicationContext(), "An error occured.", Toast.LENGTH_LONG).show();
+            }
+			
+			Toast.makeText(getApplicationContext(), "Ebook downloaded?" +file_size, Toast.LENGTH_LONG).show();
+			Log.d("File ", "Size:" + file_size + " Free: "+ freememory);
+			
+			if(freememory > file_size){
+				new DownloadFileFromURL().execute(filename,objectId);
+				downloaded =true;
+			}else{
+				Toast.makeText(getApplicationContext(), "Memory not enough to store file.", Toast.LENGTH_LONG).show();
+			}
 			
 		}else{
 			util.showAlertDialog(this, "Network Error", "Please check your internet connection.", false);
@@ -381,7 +409,7 @@ public class UserEbookList extends Activity {
             pDialog.setIndeterminate(false);
             pDialog.setMax(100);
             pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pDialog.setCancelable(true);
+            pDialog.setCancelable(false);
             pDialog.show();
             return pDialog;
         default:

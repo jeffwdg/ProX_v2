@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -72,6 +73,14 @@ public class MainActivity extends Activity {
 	    editTextPassword = (EditText)findViewById(R.id.editTextPasswordToLogin);
 	    editTextEmail = (EditText)findViewById(R.id.editTextEmailToLogin);
 		
+	     
+        Typeface font = Typeface.createFromAsset(getAssets(), "daddysgirl.ttf");
+        btnSignIn.setTypeface(font);
+        linktosignup.setTypeface(font);
+        linktoforgetPassword.setTypeface(font);
+        editTextPassword.setTypeface(font);
+        editTextEmail.setTypeface(font);
+	    
 	    btnSignIn.setOnClickListener(new OnClickListener() {
 	    	
 			public void onClick(View v) {

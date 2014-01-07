@@ -41,6 +41,7 @@
 		<activity android:name=".FreeBookView"/>
 		<activity android:name=".LatestBookView"/>
 		<activity android:name=".BestBookView"/>
+		<activity android:name="com.radaee.reader.MyPDFOpen"/>
 		<activity android:name=".StoreBookDetails"
 		    	android:parentActivityName=".SearchActivity">
             <meta-data

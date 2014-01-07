@@ -20,6 +20,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.radaee.reader.MyPDFOpen;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -353,8 +354,9 @@ public class UserBookListView extends ListActivity {
 		
 		if(ebookLocal.exists()){
 			// Redirect screen to pdf viewer
-			Intent intent = new Intent(this, ProxReader.class);
-			intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME,ebookLocation+ebookFile);
+			Intent intent = new Intent(this, MyPDFOpen.class);
+			intent.putExtra("ebookFile", ebookLocation+ebookFile);
+			//intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME,ebookLocation+ebookFile);
 			startActivity(intent);
 		}else{
 			Toast.makeText(getApplicationContext(), "File not found for " + title, Toast.LENGTH_LONG).show();

@@ -71,6 +71,7 @@
 	    android:fadingEdge="vertical"
 	    android:gravity="top"
 	    android:padding="5dp"
+	    android:textColor="#666666"
 	    android:maxLength="1000"
 	    android:scrollbars="vertical"
 	    android:textSize="22sp" />

@@ -1,5 +1,6 @@
 package com.example.prox;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
+import android.os.StatFs;
 
 public class Utilities extends Activity {
  
@@ -46,5 +49,25 @@ public class Utilities extends Activity {
             // Showing Alert Message
             alertDialog.show();
     }
+	
+	public static long getAvailableInternalMemorySize() {
+		 
+        File path = Environment.getDataDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        long size = availableBlocks * blockSize /  (1024);
+        
+        return size;
+    }
+	
+	
+	public long getFreeMemory()
+    {
+        StatFs statFs = new StatFs(Environment.getRootDirectory().getAbsolutePath());
+        long Free  = (statFs.getAvailableBlocks() *  (long) statFs.getBlockSize()) / 1048576;
+        return Free;
+    }
+	
 
 }

@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 
@@ -26,6 +28,7 @@ import com.parse.SignUpCallback;
 public class SignUpActivity extends Activity implements OnClickListener
 {
 	EditText editTextEmail,editTextPassword,editTextConfirmPassword, editTextFirstName, editTextLastName;
+	TextView editText1, editText2;
 	Button btnCreateAccount;
 	 // flag for Internet connection status
     Boolean isInternetPresent = false;
@@ -51,6 +54,9 @@ public class SignUpActivity extends Activity implements OnClickListener
 		util = new Utilities();
 		
 		// Get References of Views
+		editText1 = (TextView)findViewById(R.id.textView1);
+		editText2 = (TextView)findViewById(R.id.textView2);
+		
 		editTextEmail = (EditText)findViewById(R.id.editTextEmail);
 		editTextPassword=(EditText)findViewById(R.id.editTextPassword);
 		editTextConfirmPassword=(EditText)findViewById(R.id.editTextConfirmPassword);
@@ -59,6 +65,14 @@ public class SignUpActivity extends Activity implements OnClickListener
 		
 		btnCreateAccount=(Button)findViewById(R.id.buttonCreateAccount);
 		btnCreateAccount.setOnClickListener(this);
+		
+		Typeface font = Typeface.createFromAsset(getAssets(), "daddysgirl.ttf");
+		editTextEmail.setTypeface(font);
+		editTextPassword.setTypeface(font);
+		editTextConfirmPassword.setTypeface(font);
+		editTextFirstName.setTypeface(font);
+		editTextLastName.setTypeface(font);
+		btnCreateAccount.setTypeface(font);
 		
 	}
 	
@@ -271,7 +285,6 @@ public class SignUpActivity extends Activity implements OnClickListener
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		
-		loginDataBaseAdapter.close();
 	}
 }
 

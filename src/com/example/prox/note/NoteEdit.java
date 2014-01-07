@@ -17,6 +17,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -69,7 +70,11 @@ public class NoteEdit extends Activity{
         mSpinner = (Spinner)findViewById(R.id.subject_spinner);
         mBodyText = (EditText) findViewById(R.id.body);
         mDateText = (TextView) findViewById(R.id.notelist_date);
-
+        
+        
+         
+	    
+	    
         long msTime = System.currentTimeMillis();  
         Date curDateTime = new Date(msTime);
  	

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/shelfbg"
     android:orientation="vertical" >
      
 
@@ -19,7 +20,7 @@
                   android:layout_toRightOf="@+id/book_cover"
                   android:text="Title"
                    android:layout_marginLeft="10dp"
-                  android:textColor="#1dae57"
+                  android:textColor="#ffffff"
                   android:textSize="16dip" />
        
        <TextView
@@ -32,7 +33,7 @@
            android:layout_marginLeft="10dp"
            android:shadowColor="#444"
            android:text="Author"
-           android:textColor="#1dae00"
+           android:textColor="#eee"
            android:textSize="13dip" />
         <ImageView
            android:id="@+id/book_cover"

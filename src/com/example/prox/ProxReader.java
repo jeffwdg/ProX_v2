@@ -24,7 +24,7 @@ import android.app.Activity;
 import android.widget.Toast;
 
 
-public class ProxReader extends  PdfViewerActivity implements OnClickListener{
+public class ProxReader extends PdfViewerActivity implements OnClickListener{
 	
 	private static final int SWIPE_MIN_DISTANCE = 120;
     private static final int SWIPE_MAX_OFF_PATH = 250;
@@ -48,98 +48,8 @@ public class ProxReader extends  PdfViewerActivity implements OnClickListener{
     
     private static final Object[] EMPTY = {};
     
-    public void reflect() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        instance =  new PdfViewerActivity() {
-			
-			@Override
-			public int getZoomOutImageResource() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getZoomInImageResource() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getPreviousPageImageResource() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getPdfPasswordOkButton() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getPdfPasswordLayoutResource() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getPdfPasswordExitButton() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getPdfPasswordEditField() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getPdfPageNumberResource() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getPdfPageNumberEditField() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public int getNextPageImageResource() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-		};
-		
-        Class secretClass = instance.getClass();
-        
-        // Print all the method names & execution result
-        Method methods[] = secretClass.getDeclaredMethods(); 
-        System.out.println("Access all the methods"); 
-        for (int i = 0; i < methods.length; i++) { 
-        	
-           //System.out.println("Method Name: " + methods[i].getName());
-        	String mname = methods[i].getName();
-           Log.d("Reflect","Methods "+mname);
-           System.out.println("Return type: " + methods[i].getReturnType());
-           methods[i].setAccessible(true);
-           System.out.println(methods[i].invoke(instance, EMPTY) + "\n");
-        }
-
-        //  Print all the field names & values
-        Field fields[] = secretClass.getDeclaredFields();
-        System.out.println("Access all the fields");
-        for (int i = 0; i < fields.length; i++){ 
-          // System.out.println("Field Name: " + fields[i].getName()); 
-           String mfield = fields[i].getName();
-           Log.d("Reflect","Fields "+mfield);
-           fields[i].setAccessible(true); 
-           System.out.println(fields[i].get(instance) + "\n"); 
-        }
-    }
-	 
 	//PdfViewerActivity pdfActivity =(PdfViewerActivity)getLastNonConfigurationInstance();
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    // Inflate the menu items for use in the action bar
@@ -153,9 +63,9 @@ public class ProxReader extends  PdfViewerActivity implements OnClickListener{
 	public boolean onOptionsItemSelected(MenuItem item) {
 	      // Handle item selection
 	      switch (item.getItemId()) {
-	      case R.id.proxreader_back: nextPage();
+	      case R.id.proxreader_back:  
 	      			break;
-	      case R.id.proxreader_next: nextPage();
+	      case R.id.proxreader_next:  
 			break;
 	      default: break;
 	      }
@@ -176,23 +86,10 @@ public class ProxReader extends  PdfViewerActivity implements OnClickListener{
 		Button zoomin = (Button) findViewById(R.id.proxreader_zoomin);
 		Button zoomout = (Button) findViewById(R.id.proxreader_zoomout);
 		
-		  
- 
-	    
-	    
-		try {
-			reflect();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}   
-	        
+		 
+	   ProxReader pdf = new ProxReader();
+	 
+		 
 		 
 	 /*
 		
@@ -247,17 +144,7 @@ public class ProxReader extends  PdfViewerActivity implements OnClickListener{
 		
 	}
 	
-	public void nextPage() {
-		
-    	if (mPdfFile != null) {
-    		if (mPage < mPdfFile.getNumPages()) {
-    			mPage += 1;
-    			
-    			//super.startRenderThread(mPage, mZoom);
-    		}
-    	}
-    	Log.d("Page","next "+mPage);
-	}
+ 
 	
  
 	

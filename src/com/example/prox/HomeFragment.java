@@ -4,6 +4,7 @@ import java.util.List;
 
  
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -41,9 +42,19 @@ public class HomeFragment extends Fragment {
 		    
 		    
 		    //Toast.makeText(getActivity(), email, Toast.LENGTH_LONG).show(); 
+		    TextView textView1 = (TextView) rootView.findViewById(R.id.textView1);
+		    TextView textView2 = (TextView) rootView.findViewById(R.id.textView2);
+		    TextView textView3 = (TextView) rootView.findViewById(R.id.textView3);
 		    TextView userEmail = (TextView) rootView.findViewById(R.id.userEmail);
 		    TextView userName = (TextView) rootView.findViewById(R.id.userName);
 		    
+		    Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "daddysgirl.ttf");
+		    textView1.setTypeface(font);
+		    textView2.setTypeface(font);
+		    textView3.setTypeface(font);
+			userEmail.setTypeface(font);
+			userName.setTypeface(font);
+			
 		    userName.setText(fname +" " + lname);
 		    userEmail.setText("" + email);
 		 

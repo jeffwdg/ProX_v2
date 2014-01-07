@@ -11,6 +11,18 @@
     <string name="invalid_password">Password must be at least 6 characters and alphanumeric.</string>
     <string name="invalid_confirm_password">Password does not match.</string>
     <string name="search_hint">Search ebook..</string>
+   <string name="s_ink">Ink</string>
+    <string name="s_rect">Rect</string>
+    <string name="s_remove">Remove</string>
+    <string name="s_save">Save</string>
+    <string name="s_end">End</string>
+    <string name="s_prev">&lt;</string>
+    <string name="s_next">&gt;</string>
+    <string name="s_find">search word here</string>
+    <string name="s_act">Do</string>
+    <string name="s_saveas">Save as</string>
+    <color name="clr_back">#FFCCCC80</color>
+    <string name="s_edit">Edit</string>
     
     <!-- NOTES -->
     <string name="title">Title : </string>

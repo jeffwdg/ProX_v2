@@ -9,7 +9,8 @@
     	android:layout_height="wrap_content"
     	android:layout_alignParentLeft="true"
     	android:layout_marginLeft="10sp"
-    	android:textSize="25sp"
+    	android:textSize="17sp"
+    	android:textColor="#1da357"
     	android:hint="@string/no_title"
    		android:id="@+id/text1"/>
 
@@ -20,7 +21,8 @@
 	    android:layout_alignLeft="@+id/text1"
 	    android:layout_below="@+id/text1"
 	    android:hint="@string/no_subject"
-	    android:textSize="25sp" />
+	    android:textColor="#1d7357"
+	    android:textSize="13sp" />
 	
 		<TextView
 		    android:id="@+id/date_row"
@@ -29,6 +31,6 @@
 		    android:layout_above="@+id/text2"
 		    android:layout_alignParentRight="true"
 		    android:layout_marginRight="10sp"
-		    android:textSize="25sp" />
+		    android:textSize="14sp" />
 
 </RelativeLayout>
