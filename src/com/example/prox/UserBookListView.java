@@ -13,7 +13,6 @@ import java.util.Random;
 
 import net.sf.andpdf.pdfviewer.PdfViewerActivity;
 
-import com.example.prox.R.layout;
 import com.example.prox.UserEbookList.DownloadFileFromURL;
 import com.example.prox.adapter.EbookDatabaseAdapter;
 import com.parse.GetCallback;
@@ -21,6 +20,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.radaee.reader.MyPDFOpen;
+import com.radaee.reader.R;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -165,7 +165,7 @@ public class UserBookListView extends ListActivity {
              	            String userFolderName = pref.getString("email", null);
              	            
              	  		   
-             	  		  	String bitmapPath = "data/data/com.example.prox/proxbooks/" + userFolderName +"/" + coverString + ".jpg";
+             	  		  	String bitmapPath = "data/data/com.radaee.reader/proxbooks/" + userFolderName +"/" + coverString + ".jpg";
              	            Bitmap bitmap = BitmapFactory.decodeFile(bitmapPath);
              	            bookcover = new BitmapDrawable(bitmap);
              	            bookCover.setImageDrawable(bookcover);
@@ -300,7 +300,7 @@ public class UserBookListView extends ListActivity {
 		    Editor editor = pref.edit();
             String userFolderName = pref.getString("email", null);
             // delete the ebook file and cover
-			File file = new File("data/data/com.example.prox/proxbooks/"+userFolderName+"/"+objectId+".jpg");
+			File file = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName+"/"+objectId+".jpg");
 			boolean filedeleted = file.delete();
 			deleted = true;
 			
@@ -346,7 +346,7 @@ public class UserBookListView extends ListActivity {
 	    Editor editor = pref.edit();
         String userFolderName = pref.getString("email", null);
         
-		String ebookLocation = "data/data/com.example.prox/proxbooks/"+ userFolderName +"/";
+		String ebookLocation = "data/data/com.radaee.reader/proxbooks/"+ userFolderName +"/";
 		String ebookFile = objectId +".pdf";
 		Toast.makeText(getApplicationContext(), "Opening.. " + ebookLocation+ebookFile, Toast.LENGTH_LONG).show();
 		
@@ -354,7 +354,7 @@ public class UserBookListView extends ListActivity {
 		
 		if(ebookLocal.exists()){
 			// Redirect screen to pdf viewer
-			Intent intent = new Intent(this, MyPDFOpen.class);
+			Intent intent = new Intent(UserBookListView.this, MyPDFOpen.class);
 			intent.putExtra("ebookFile", ebookLocation+ebookFile);
 			//intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME,ebookLocation+ebookFile);
 			startActivity(intent);
@@ -414,7 +414,7 @@ public class UserBookListView extends ListActivity {
 		    Editor editor = pref.edit();
             String userFolderName = pref.getString("email", null);
             
-            File folder = new File("data/data/com.example.prox/proxbooks/"+userFolderName);
+            File folder = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName);
             boolean success = true;
             if (!folder.exists()) {
                 success = folder.mkdir();
@@ -433,7 +433,7 @@ public class UserBookListView extends ListActivity {
                 
                 // download the file
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                String root = "data/data/com.example.prox/proxbooks/"+userFolderName;
+                String root = "data/data/com.radaee.reader/proxbooks/"+userFolderName;
                 
                 
                 String[] file1 = f_url[0].split("/");

@@ -4,7 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import com.example.prox.R;
+import com.radaee.reader.R;
+
+ 
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -60,16 +62,16 @@ public class NoteEdit extends Activity{
         ActionBar ab = getActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle("Note");
-        ab.setIcon(R.drawable.notes);
+        ab.setIcon(com.radaee.reader.R.drawable.notes);
         
-        setContentView(R.layout.note_edit);
+        setContentView(com.radaee.reader.R.layout.note_edit);
         //setTitle(R.string.app_name);
 
-        mTitleText = (EditText) findViewById(R.id.title);
+        mTitleText = (EditText) findViewById(com.radaee.reader.R.id.title);
        // mSubjectText = (EditText) findViewById(R.id.subject);
-        mSpinner = (Spinner)findViewById(R.id.subject_spinner);
-        mBodyText = (EditText) findViewById(R.id.body);
-        mDateText = (TextView) findViewById(R.id.notelist_date);
+        mSpinner = (Spinner)findViewById(com.radaee.reader.R.id.subject_spinner);
+        mBodyText = (EditText) findViewById(com.radaee.reader.R.id.body);
+        mDateText = (TextView) findViewById(com.radaee.reader.R.id.notelist_date);
         
         
          

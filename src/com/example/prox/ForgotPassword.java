@@ -3,6 +3,7 @@ package com.example.prox;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
+import com.radaee.reader.R;
 
 import android.app.ActionBar;
 import android.app.Activity;

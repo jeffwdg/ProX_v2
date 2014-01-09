@@ -1,6 +1,8 @@
 package com.example.prox;
 
  
+import com.radaee.reader.R;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;

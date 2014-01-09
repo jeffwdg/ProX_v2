@@ -16,6 +16,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.radaee.reader.R;
 
 public class StoreActivity extends Activity{
 

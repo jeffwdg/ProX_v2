@@ -7,6 +7,7 @@ import com.example.prox.model.NavDrawerItem;
 import com.example.prox.note.NotesDbAdapter;
 import com.parse.Parse;
 import com.parse.ParseUser;
+import com.radaee.reader.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field; 
 
+import com.radaee.reader.R;
 import com.sun.pdfview.PDFFile;
 
 import android.content.Intent;

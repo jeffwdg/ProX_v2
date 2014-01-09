@@ -1,6 +1,7 @@
 package com.example.prox;
 
 import com.example.prox.Grid.ImageAdapter;
+import com.radaee.reader.R;
 
 import android.os.Bundle;
 import android.app.Activity;

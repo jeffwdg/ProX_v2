@@ -1,16 +1,20 @@
 package com.example.prox;
 
 
+import java.io.File;
+
 import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.radaee.reader.R;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,6 +25,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -31,6 +37,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.prox.model.TypefaceSpan;
 
 public class MainActivity extends Activity {
 	
@@ -81,6 +88,13 @@ public class MainActivity extends Activity {
         editTextPassword.setTypeface(font);
         editTextEmail.setTypeface(font);
 	    
+        SpannableString s = new SpannableString("ProX");
+        s.setSpan(new TypefaceSpan(this, "daddysgirl.otf"), 0, s.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        
+        // Update the action bar title with the TypefaceSpan instance
+        ActionBar actionBar = getActionBar();
+        actionBar.setTitle(s);
+        
 	    btnSignIn.setOnClickListener(new OnClickListener() {
 	    	
 			public void onClick(View v) {
@@ -231,6 +245,12 @@ public class MainActivity extends Activity {
 						Editor editor = pref.edit();
 					
 						
+						File folder = new File("data/data/com.radaee.reader/proxbooks/");
+			            boolean success = true;
+			            if (!folder.exists()) {
+			                success = folder.mkdir();
+			            }
+			            
 						ParseUser currentUser = ParseUser.getCurrentUser();
 						String fname = (String) currentUser.get("first_name");
 						String lname = (String) currentUser.get("last_name");
@@ -243,7 +263,7 @@ public class MainActivity extends Activity {
 						editor.putString("lname", lname); // Storing last name
 						editor.commit();
 						
-						Intent in =  new Intent(MainActivity.this,MenuActivity.class);
+						Intent in =  new Intent(MainActivity.this, MenuActivity.class);
 	                	startActivity(in);
 					}
 					else{

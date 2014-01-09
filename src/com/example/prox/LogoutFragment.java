@@ -2,6 +2,7 @@ package com.example.prox;
 
  
 import com.parse.ParseUser;
+import com.radaee.reader.R;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

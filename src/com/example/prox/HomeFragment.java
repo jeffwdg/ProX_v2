@@ -6,7 +6,11 @@ import java.util.List;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.radaee.reader.R;
 
 
 public class HomeFragment extends Fragment {
@@ -48,6 +53,13 @@ public class HomeFragment extends Fragment {
 		    TextView userEmail = (TextView) rootView.findViewById(R.id.userEmail);
 		    TextView userName = (TextView) rootView.findViewById(R.id.userName);
 		    
+		    SpannableString s = new SpannableString("Account");
+	        s.setSpan(new TypefaceSpan("daddysgirl.ttf"), 0, s.length(),Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+	        
+	        // Update the action bar title with the TypefaceSpan instance
+	        ActionBar actionBar = getActivity().getActionBar();
+	        actionBar.setTitle(s);
+	        
 		    Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "daddysgirl.ttf");
 		    textView1.setTypeface(font);
 		    textView2.setTypeface(font);

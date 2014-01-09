@@ -1,10 +1,10 @@
 package com.radaee.util;
 
-import com.example.prox.R;
 import com.radaee.pdf.Document;
 import com.radaee.pdf.Matrix;
 import com.radaee.pdf.Page;
- 
+import com.radaee.reader.R;
+
 
 import android.content.Context;
 import android.graphics.Bitmap;

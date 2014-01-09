@@ -24,6 +24,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+import com.radaee.reader.R;
 
 public class SignUpActivity extends Activity implements OnClickListener
 {

@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.radaee.reader.R;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData.Item;
@@ -93,7 +95,7 @@ public class MyLocalGridViewAdapter extends ArrayAdapter<Item> {
           String userFolderName = pref.getString("email", null);
           
 		   
-		  String bitmapPath = "data/data/com.example.prox/proxbooks/" + userFolderName +"/" + item.getID() + ".jpg";
+		  String bitmapPath = "data/data/com.radaee.reader/proxbooks/" + userFolderName +"/" + item.getID() + ".jpg";
           Bitmap bitmap = BitmapFactory.decodeFile(bitmapPath);
           bookcover1 = new BitmapDrawable(bitmap);
           Log.d("Ebook", "Cover " + bitmapPath );

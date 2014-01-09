@@ -2,8 +2,9 @@ package com.example.prox.note;
 
 import java.util.ArrayList;
 
-import com.example.prox.R;
+import com.radaee.reader.R;
 
+ 
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;

@@ -20,7 +20,6 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
  
-import com.example.prox.R;
 import com.radaee.pdf.Document;
 import com.radaee.pdf.Global;
 import com.radaee.pdf.Page;
@@ -86,52 +85,33 @@ public class PDFReaderAct extends Activity implements OnItemClickListener, OnCli
 		
 		setContentView(m_vFiles);
 
-        LinearLayout bar_cmd = (LinearLayout)m_layout.findViewById(R.id.bar_cmd);
-        LinearLayout bar_act = (LinearLayout)m_layout.findViewById(R.id.bar_act);
+        //LinearLayout bar_cmd = (LinearLayout)m_layout.findViewById(R.id.bar_cmd);
+        //LinearLayout bar_act = (LinearLayout)m_layout.findViewById(R.id.bar_act);
         LinearLayout bar_find = (LinearLayout)m_layout.findViewById(R.id.bar_find);
-        btn_ink = (Button)bar_cmd.findViewById(R.id.btn_ink);
-        btn_rect = (Button)bar_cmd.findViewById(R.id.btn_rect);
-        btn_oval = (Button)bar_cmd.findViewById(R.id.btn_oval);
-        btn_note = (Button)bar_cmd.findViewById(R.id.btn_note);
-        btn_line = (Button)bar_cmd.findViewById(R.id.btn_line);
-        btn_cancel = (Button)bar_cmd.findViewById(R.id.btn_cancel);
-        btn_save = (Button)bar_cmd.findViewById(R.id.btn_save);
-        btn_close = (Button)bar_cmd.findViewById(R.id.btn_close);
+        //btn_ink = (Button)bar_cmd.findViewById(R.id.btn_ink);
+        //btn_rect = (Button)bar_cmd.findViewById(R.id.btn_rect);
+        //btn_oval = (Button)bar_cmd.findViewById(R.id.btn_oval);
+        //btn_note = (Button)bar_cmd.findViewById(R.id.btn_note);
+        //btn_line = (Button)bar_cmd.findViewById(R.id.btn_line);
+        //btn_cancel = (Button)bar_cmd.findViewById(R.id.btn_cancel);
+        //btn_save = (Button)bar_cmd.findViewById(R.id.btn_save);
+        //btn_close = (Button)bar_cmd.findViewById(R.id.btn_close);
 
-        btn_sel = (Button)bar_act.findViewById(R.id.btn_sel);
-        btn_act = (Button)bar_act.findViewById(R.id.btn_act);
-        btn_edit = (Button)bar_act.findViewById(R.id.btn_edit);
-        btn_remove = (Button)bar_act.findViewById(R.id.btn_remove);
+        //btn_sel = (Button)bar_act.findViewById(R.id.btn_sel);
+        //btn_act = (Button)bar_act.findViewById(R.id.btn_act);
+        //btn_edit = (Button)bar_act.findViewById(R.id.btn_edit);
+        //btn_remove = (Button)bar_act.findViewById(R.id.btn_remove);
         
         txt_find = (EditText)bar_find.findViewById(R.id.txt_find);
         btn_prev = (Button)bar_find.findViewById(R.id.btn_prev);
         btn_next = (Button)bar_find.findViewById(R.id.btn_next);
-        btn_gotoPage = (Button)bar_find.findViewById(R.id.btn_goToPage);
+        //btn_gotoPage = (Button)bar_find.findViewById(R.id.btn_goToPage);
 
-        btn_sel.setOnClickListener(this);
-        btn_act.setOnClickListener(this);
-        btn_edit.setOnClickListener(this);
-        btn_remove.setOnClickListener(this);
- 
-        btn_ink.setOnClickListener(this);
-        btn_rect.setOnClickListener(this);
-        btn_oval.setOnClickListener(this);
-        btn_note.setOnClickListener(this);
-        btn_line.setOnClickListener(this);
-        btn_cancel.setOnClickListener(this);
-        btn_save.setOnClickListener(this);
-        btn_close.setOnClickListener(this);
-
+        
         btn_prev.setOnClickListener(this);
         btn_next.setOnClickListener(this);
-        btn_gotoPage.setOnClickListener(this);
-
-        btn_act.setEnabled(false);
-        btn_save.setEnabled(false);
-        btn_edit.setEnabled(false);
-        btn_remove.setEnabled(false);
-        
-        btn_cancel.setEnabled(false);
+        //btn_gotoPage.setOnClickListener(this);
+ 
     }
     protected void onDestroy()
     {
@@ -556,7 +536,7 @@ public class PDFReaderAct extends Activity implements OnItemClickListener, OnCli
 	{
 		switch( v.getId() )
 		{
-		case R.id.btn_ink:
+			/*case R.id.btn_ink:
 			onInk();
 			break;
 		case R.id.btn_rect:
@@ -588,14 +568,14 @@ public class PDFReaderAct extends Activity implements OnItemClickListener, OnCli
 			break;
 		case R.id.btn_edit:
 			onEdit();
-			break;
+			break;*/
 		case R.id.btn_prev:
 			onFindPrev();
 			break;
 		case R.id.btn_next:
 			onFindNext();
 			break;
-		case R.id.btn_goToPage:
+		/*case R.id.btn_goToPage:
 			onGoToPage();
 			break;
 		case R.id.btn_close:
@@ -604,7 +584,7 @@ public class PDFReaderAct extends Activity implements OnItemClickListener, OnCli
         	if( m_doc != null ) m_doc.Close();
     		str_find = null;
 	    	setContentView(m_vFiles);
-			break;
+			break;*/
 		}
 	}
 	public void OnPageClicked(int pageno)

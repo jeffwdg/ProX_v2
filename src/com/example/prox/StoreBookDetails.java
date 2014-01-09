@@ -17,6 +17,7 @@ import com.example.prox.adapter.EbookDatabaseAdapter;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.radaee.reader.R;
  
 import android.app.ActionBar;
 import android.app.Activity;
@@ -160,7 +161,7 @@ public class StoreBookDetails extends Activity {
 	   		     	Editor editor = pref.edit();
 		
 	                String userFolderName = pref.getString("email", null);
-	                File folder = new File("data/data/com.example.prox/proxbooks");
+	                File folder = new File("data/data/com.radaee.reader/proxbooks");
 	                boolean success = true;
 	                
 	                if(!folder.exists()) {
@@ -172,7 +173,7 @@ public class StoreBookDetails extends Activity {
 	                
 	                if(folder.exists()){
                     	boolean userfoldersuccess = true;
-                    	File userFolder = new File("data/data/com.example.prox/proxbooks/"+userFolderName);
+                    	File userFolder = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName);
                     	userfoldersuccess= userFolder.mkdir(); // create user folder
                     	Log.d("Ebook Folder Creation", "Created user folder.");
                     	
@@ -228,7 +229,7 @@ public class StoreBookDetails extends Activity {
 	                
 	                // download the file
 	                InputStream input = new BufferedInputStream(url.openStream(), 8192);
-	                String root = "data/data/com.example.prox/proxbooks";
+	                String root = "data/data/com.radaee.reader/proxbooks";
 	                
 	 
 	                String[] file1 = file_url.split("/");
@@ -278,7 +279,7 @@ public class StoreBookDetails extends Activity {
 			    bmp.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 			    
 			    // create a new file on SD card  
-			    File file = new File("data/data/com.example.prox/proxbooks/"+userFolderName+"/"+objectId+".jpg");
+			    File file = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName+"/"+objectId+".jpg");
 			    
 			    try {
 			        file.createNewFile();

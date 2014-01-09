@@ -1,14 +1,19 @@
 package com.radaee.reader;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,7 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.example.prox.R;
+import com.example.prox.Utilities;
 import com.radaee.pdf.Document;
 import com.radaee.pdf.Global;
 import com.radaee.pdf.Page;
@@ -37,6 +42,7 @@ import com.radaee.view.PDFViewThumb.PDFThumbListener;
 
 public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickListener, PDFReaderListener, PDFThumbListener{
 	
+	Utilities util = new Utilities();
 	private PDFGridView m_vFiles = null;
 	private PDFReader m_reader = null;
 	private PDFThumbView m_thumb = null;
@@ -53,6 +59,44 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
     private PDFVPage m_annot_vpage;
     private Annotation m_annot;
     
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.proxreader_actions, menu);
+ 
+        // Associate searchable configuration with the SearchView
+        /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+         */
+        return super.onCreateOptionsMenu(menu);
+    }
+	
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{    
+	     switch (item.getItemId()) 
+	     {        
+	        case R.id.proxreader_wordsearch: onGoToPage(); showArrows();     
+	        	return true;        
+	        default:            
+	           return super.onOptionsItemSelected(item);    
+	     }
+	}
+	
+	public void showArrows(){
+		
+		
+		btn_prev.setVisibility(1);
+		btn_next.setVisibility(1);
+		btn_prev.setEnabled(true);
+        btn_next.setEnabled(true); 
+	}
+	
+	
 	@Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -62,15 +106,19 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 		m_reader = (PDFReader)m_layout.findViewById(R.id.view);
 		m_thumb = (PDFThumbView)m_layout.findViewById(R.id.thumbs);
 		
+		ActionBar actionBar = this.getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setTitle("Prox Reader");
+		actionBar.setIcon(R.drawable.books);
+		
 		Intent i = getIntent();
         
         // Get ebook details
-        //int position = i.getExtras().getChar("ebookFile");
         String pdfpath = i.getExtras().getString("ebookFile");
-        Log.d("File", "Loc"+pdfpath);
+        //Log.d("File", "Loc"+pdfpath);
         
 		m_doc = new Document();
-		String pdf_path = pdfpath; //"/mnt/asec/RobotoSpecimenBook.pdf";
+		String pdf_path = pdfpath;
 		String password = "";
 		m_doc.Open( pdf_path, password );
 		m_reader.PDFOpen(m_doc, false, this);
@@ -86,20 +134,20 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 		//m_thumb.thumbOpen(m_reader.PDFGetDoc(), this);
 		setContentView(m_layout);
 
-        LinearLayout bar_cmd = (LinearLayout)m_layout.findViewById(R.id.bar_cmd);
-        LinearLayout bar_act = (LinearLayout)m_layout.findViewById(R.id.bar_act);
+        //LinearLayout bar_cmd = (LinearLayout)m_layout.findViewById(R.id.bar_cmd);
+        //LinearLayout bar_act = (LinearLayout)m_layout.findViewById(R.id.bar_act);
         LinearLayout bar_find = (LinearLayout)m_layout.findViewById(R.id.bar_find);
     
        
         txt_find = (EditText)bar_find.findViewById(R.id.txt_find);
         btn_prev = (Button)bar_find.findViewById(R.id.btn_prev);
         btn_next = (Button)bar_find.findViewById(R.id.btn_next);
-        btn_gotoPage = (Button)bar_find.findViewById(R.id.btn_goToPage);
+        //btn_gotoPage = (Button)bar_find.findViewById(R.id.btn_goToPage);
 
         
         btn_prev.setOnClickListener(this);
         btn_next.setOnClickListener(this);
-        btn_gotoPage.setOnClickListener(this);
+        //btn_gotoPage.setOnClickListener(this);
 
   
     }
@@ -189,6 +237,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	private void onFindPrev()
 	{
 		String str = txt_find.getText().toString();
+		
 		if( str_find != null )
 		{
 			if( str != null && str.compareTo(str_find) == 0 )
@@ -197,6 +246,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 				return;
 			}
 		}
+		
 		if( str != null && str.length() > 0 )
 		{
 			m_reader.PDFFindStart(str, false, false);
@@ -204,17 +254,22 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 			str_find = str;
 		}
 	}
+	
 	private void onFindNext()
 	{
 		String str = txt_find.getText().toString();
+ 
+		Toast.makeText(getApplicationContext(), "Search:"+ str, Toast.LENGTH_LONG).show();
+		
 		if( str_find != null )
-		{
+		{	
 			if( str != null && str.compareTo(str_find) == 0 )
 			{
 				m_reader.PDFFind(1);
 				return;
 			}
 		}
+		
 		if( str != null && str.length() > 0 )
 		{
 			m_reader.PDFFindStart(str, false, false);
@@ -226,7 +281,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	private void onGoToPage()
 	{
 		
-		AlertDialog.Builder builder4 =new AlertDialog.Builder(MyPDFOpen.this);
+		final AlertDialog.Builder builder4 =new AlertDialog.Builder(MyPDFOpen.this);
 		final EditText thispagenum = new EditText(this);
 		builder4.setView(thispagenum);
 		
@@ -234,13 +289,20 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 			public void onClick(DialogInterface dialog, int which)
 			{
 				  
-				Toast.makeText(getApplicationContext(), "Searching page...", Toast.LENGTH_LONG).show();
+				
 				
 				String thisPage = thispagenum.getText().toString();
-				//Toast.makeText(getApplicationContext(), "Page " + thisPage, Toast.LENGTH_LONG).show();
-				int p = Integer.parseInt(thisPage);
-				m_reader.PDFGotoPage(p);
-				dialog.dismiss();
+				 
+				if(util.isNumeric(thisPage) == true){
+					Toast.makeText(getApplicationContext(), "Searching page...", Toast.LENGTH_LONG).show();
+					int p = Integer.parseInt(thisPage);
+					m_reader.PDFGotoPage(p);
+					dialog.dismiss();
+				}
+				else{
+					Toast.makeText(getApplicationContext(), "Please enter a valid page number.", Toast.LENGTH_LONG).show();
+					builder4.setTitle("Please enter a valid page number!");
+				}
 				 
 			}});
 		builder4.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
@@ -249,17 +311,14 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 				dialog.dismiss();
 				 
 			}});
+		
 		builder4.setTitle("Go To Page");
 		builder4.setCancelable(false);
 		 
- 
     	builder4.show();
-		
-		
+			
 	}
 	
-	
-	 
 	 
 	public void onClick(View v)
 	{
@@ -272,7 +331,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 		case R.id.btn_next:
 			onFindNext();
 			break;
-		case R.id.btn_goToPage:
+		/*case R.id.btn_goToPage:
 			onGoToPage();
 			break;
 		case R.id.btn_close:
@@ -281,7 +340,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         	if( m_doc != null ) m_doc.Close();
     		str_find = null;
 	    	setContentView(m_vFiles);
-			break;
+			break;*/
 		}
 	}
 	public void OnPageClicked(int pageno)
@@ -360,6 +419,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 		AlertDialog dlg = builder.create();
 		dlg.show();
 	}
+	
 	public void OnPageModified(int pageno)
 	{
 		m_thumb.thumbUpdatePage(pageno);

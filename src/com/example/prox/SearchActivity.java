@@ -1,5 +1,7 @@
 package com.example.prox;
 
+import com.radaee.reader.R;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;

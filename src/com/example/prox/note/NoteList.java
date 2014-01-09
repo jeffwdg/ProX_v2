@@ -1,6 +1,8 @@
 package com.example.prox.note;
 
-import com.example.prox.R;
+ 
+
+import com.radaee.reader.R;
 
 import android.app.ActionBar;
 import android.app.ListActivity;

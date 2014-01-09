@@ -1,10 +1,8 @@
 package com.example.prox.adapter;
 
-
-import com.example.prox.R;
-import com.example.prox.R.id;
-import com.example.prox.R.layout;
+ 
 import com.example.prox.model.NavDrawerItem;
+import com.radaee.reader.R;
  
 import java.util.ArrayList;
  

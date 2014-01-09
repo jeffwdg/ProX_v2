@@ -3,7 +3,6 @@ package com.example.prox.adapter;
 import java.util.ArrayList;
 
 import com.example.prox.Ebook;
-import com.example.prox.R;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -52,18 +51,18 @@ public class EbookAdapter extends ArrayAdapter{
 		// to inflate it basically means to render, or show, the view.
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.ebooks_row, null);
+			v = inflater.inflate(com.radaee.reader.R.layout.ebooks_row, null);
 		}
 
 		Ebook i = objects.get(position);
 
 		if (i != null) {
 
-			TextView title = (TextView) v.findViewById(R.id.mTitle);
-			TextView author = (TextView) v.findViewById(R.id.mAuthor);
-			TextView objectId = (TextView) v.findViewById(R.id.mObjectId);
-			ImageView cover = (ImageView) v.findViewById(R.id.mCover);
-			TextView filename = (TextView) v.findViewById(R.id.mFilename);
+			TextView title = (TextView) v.findViewById(com.radaee.reader.R.id.mTitle);
+			TextView author = (TextView) v.findViewById(com.radaee.reader.R.id.mAuthor);
+			TextView objectId = (TextView) v.findViewById(com.radaee.reader.R.id.mObjectId);
+			ImageView cover = (ImageView) v.findViewById(com.radaee.reader.R.id.mCover);
+			TextView filename = (TextView) v.findViewById(com.radaee.reader.R.id.mFilename);
 		 
 			if (title != null){
 				title.setText(i.getTitle());

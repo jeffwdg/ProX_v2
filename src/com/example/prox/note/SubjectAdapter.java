@@ -2,7 +2,8 @@ package com.example.prox.note;
 
 import java.util.ArrayList;
 
-import com.example.prox.R;
+import com.radaee.reader.R;
+
 
 import android.content.Context;
 import android.view.LayoutInflater;

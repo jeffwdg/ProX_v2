@@ -1,6 +1,6 @@
 package com.radaee.reader;
 
-import com.example.prox.R;
+
 import com.radaee.pdfex.*;
 import com.radaee.pdf.*;
 import com.radaee.util.ComboList;
@@ -109,7 +109,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 	{
 		switch( v.getId() )
 		{
-		case R.id.btn_ink:
+		/*case R.id.btn_ink:
 			btn_ink.setEnabled(false);
 			btn_rect.setEnabled(false);
 			btn_remove.setEnabled(true);
@@ -133,7 +133,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 			btn_edit.setEnabled(false);
 			m_vPDF.annotRect();
 			break;
-		/*case R.id.btn_end:
+		case R.id.btn_end:
 			btn_ink.setEnabled(true);
 			btn_rect.setEnabled(true);
             btn_end.setEnabled(false);
@@ -142,7 +142,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
             btn_save.setEnabled(false);
 			btn_edit.setEnabled(false);
             m_vPDF.annotEnd();
-			break;*/
+			break;
 		case R.id.btn_remove:
 			btn_ink.setEnabled(true);
 			btn_rect.setEnabled(true);
@@ -216,7 +216,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 				content.setText(m_vPDF.annotGetText());
 				dlg.show();
 			}
-			break;
+			break;*/
 		case R.id.btn_prev:
 			{
 				String str = txt_find.getText().toString();
@@ -262,7 +262,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 				//	m_doc.SaveAs(Global.sdPath + "/ebook/unenc.pdf");
 			}
 			break;
-		case R.id.btn_close:
+		/*case R.id.btn_close:
 	    	if( m_vThumb != null )
 	    		m_vThumb.thumbClose();
 	    	if( m_vPDF != null )
@@ -279,7 +279,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 	    		str_find = null;
 	    	}
 	    	setContentView(m_vFiles);
-			break;
+			break;*/
 		}
 	}
 	public void onAnnotDragStart(boolean has_goto, boolean has_popup)
@@ -432,7 +432,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 	            
 	            //expand_outline(0);
 	            
-				RelativeLayout lout = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.proxmain, null);
+				RelativeLayout lout = (RelativeLayout)LayoutInflater.from(this).inflate(R.layout.main, null);
 	            setContentView( lout );
 	            m_vPDF = (PDFReaderOld)lout.findViewById(R.id.PDFView);
 	            m_vThumb = (ThumbView)lout.findViewById(R.id.PDFThumb);
@@ -441,21 +441,21 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 	            m_vPDF.setAnnotListener(this);
 	            m_vPDF.setViewListener(m_vPDF);
 	            m_vPDF.set_thumb(m_vThumb);
-	            LinearLayout bar_cmd = (LinearLayout)lout.findViewById(R.id.bar_cmd);
+	            //LinearLayout bar_cmd = (LinearLayout)lout.findViewById(R.id.bar_cmd);
 	            LinearLayout bar_find = (LinearLayout)lout.findViewById(R.id.bar_find);
-	            btn_ink = (Button)bar_cmd.findViewById(R.id.btn_ink);
+	            /*btn_ink = (Button)bar_cmd.findViewById(R.id.btn_ink);
 	            btn_rect = (Button)bar_cmd.findViewById(R.id.btn_rect);
-	            //btn_end = (Button)bar_cmd.findViewById(R.id.btn_end);
+	            btn_end = (Button)bar_cmd.findViewById(R.id.btn_end);
 	            btn_remove = (Button)bar_cmd.findViewById(R.id.btn_remove);
 	            btn_save = (Button)bar_cmd.findViewById(R.id.btn_save);
 	            btn_act = (Button)bar_cmd.findViewById(R.id.btn_act);
 	            btn_edit = (Button)bar_cmd.findViewById(R.id.btn_edit);
 	            btn_close = (Button)bar_cmd.findViewById(R.id.btn_close);
-
+				*/
 	            txt_find = (EditText)bar_find.findViewById(R.id.txt_find);
 	            btn_prev = (Button)bar_find.findViewById(R.id.btn_prev);
 	            btn_next = (Button)bar_find.findViewById(R.id.btn_next);
-	            btn_saveas = (Button)bar_find.findViewById(R.id.btn_saveas);
+	            /*btn_saveas = (Button)bar_find.findViewById(R.id.btn_saveas);
 	            
 	            btn_ink.setOnClickListener(this);
 	            btn_rect.setOnClickListener(this);
@@ -468,7 +468,7 @@ public class PDFReaderOldAct extends Activity implements OnItemClickListener, On
 	            btn_saveas.setOnClickListener(this);
 	            btn_edit.setOnClickListener(this);
 	            btn_close.setOnClickListener(this);
-
+	             */
 	            if( !m_doc.CanSave() )
 	            {
 	            	btn_ink.setEnabled(false);

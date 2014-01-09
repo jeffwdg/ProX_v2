@@ -21,6 +21,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.radaee.reader.MyPDFOpen;
+import com.radaee.reader.R;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -85,9 +86,9 @@ public class UserEbookList extends Activity {
 		return true;
 	}
   
-	 @Override
-	  public boolean onOptionsItemSelected(MenuItem item) 
-	  {    
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{    
 	     switch (item.getItemId()) 
 	     {        
 	        case R.id.view_list: changeViewToList();     
@@ -95,7 +96,8 @@ public class UserEbookList extends Activity {
 	        default:            
 	           return super.onOptionsItemSelected(item);    
 	     }
-	  }
+	}
+	
 	public void changeViewToList(){
 		Intent intent=new Intent(this, UserBookListView.class);
 		startActivity(intent);
@@ -139,8 +141,7 @@ public class UserEbookList extends Activity {
         // Get all of the notes from the database and create the item list
         final Cursor ebookCursor = datasource.fetchAllEbooks();
 
-        
-
+       
         String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};
         int[] to = new int[] { R.id.mTitle ,R.id.mFilename, R.id.mCover,R.id.mAuthor, R.id.mObjectId};
         
@@ -256,7 +257,7 @@ public class UserEbookList extends Activity {
 	    Editor editor = pref.edit();
         String userFolderName = pref.getString("email", null);
         
-		String ebookLocation = "data/data/com.example.prox/proxbooks/"+ userFolderName +"/";
+		String ebookLocation = "data/data/com.radaee.reader/proxbooks/"+ userFolderName +"/";
 		String ebookFile = objectId +".pdf";
 		Toast.makeText(getApplicationContext(), "Opening.. " + ebookLocation+ebookFile, Toast.LENGTH_LONG).show();
 		
@@ -264,7 +265,7 @@ public class UserEbookList extends Activity {
 		
 		if(ebookLocal.exists()){
 			// Redirect screen to pdf viewer
-			Intent intent = new Intent(this, MyPDFOpen.class);
+			Intent intent = new Intent(UserEbookList.this, MyPDFOpen.class);
 			intent.putExtra("ebookFile", ebookLocation+ebookFile);
 			
 			//Intent intent = new Intent(this, ProxReader.class);
@@ -324,7 +325,7 @@ public class UserEbookList extends Activity {
 		    Editor editor = pref.edit();
             String userFolderName = pref.getString("email", null);
             // delete the ebook file and cover
-			File file = new File("data/data/com.example.prox/proxbooks/"+userFolderName+"/"+objectId+".jpg");
+			File file = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName+"/"+objectId+".jpg");
 			boolean filedeleted = file.delete();
 			deleted = true;
 			Toast.makeText(getApplicationContext(), "Deleted book " + title, Toast.LENGTH_LONG).show();
@@ -441,7 +442,7 @@ public class UserEbookList extends Activity {
 		    Editor editor = pref.edit();
             String userFolderName = pref.getString("email", null);
             
-            File folder = new File("data/data/com.example.prox/proxbooks/"+userFolderName);
+            File folder = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName);
             boolean success = true;
             if (!folder.exists()) {
                 success = folder.mkdir();
@@ -460,7 +461,7 @@ public class UserEbookList extends Activity {
                 
                 // download the file
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                String root = "data/data/com.example.prox/proxbooks/"+userFolderName;
+                String root = "data/data/com.radaee.reader/proxbooks/"+userFolderName;
                 
                 
                 String[] file1 = f_url[0].split("/");
@@ -546,9 +547,6 @@ public class UserEbookList extends Activity {
         }
  
     }
- 
-
- 
 	
 	@Override
 	protected void onResume() {

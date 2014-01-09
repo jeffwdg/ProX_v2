@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.prox"
+    package="com.radaee.reader"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -9,60 +9,60 @@
         android:targetSdkVersion="15" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
+	<supports-screens android:largeScreens="true" android:anyDensity="true" android:normalScreens="true" android:smallScreens="true" android:resizeable="true" android:xlargeScreens="true"/>
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/proxTheme">
-        
+        android:theme="@style/proxTheme">  
             
         <activity
             android:name="com.example.prox.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
-		<activity android:name=".SignUpActivity"
-		    android:parentActivityName=".MainActivity"/>
-		<activity android:name=".MenuActivity"/>
-		<activity android:name=".ForgotPassword"
-		    android:parentActivityName=".MainActivity"/>
-		<activity android:name=".StoreActivity"/>
-		<activity android:name=".Download"/>
-		<activity android:name=".BookView"/>
-		<activity android:name=".Utilities"/>
-		<activity android:name=".Grid"/>
-		<activity android:name=".BookReader"/>
-		<activity android:name=".FreeBookView"/>
-		<activity android:name=".LatestBookView"/>
-		<activity android:name=".BestBookView"/>
-		<activity android:name="com.radaee.reader.MyPDFOpen"/>
-		<activity android:name=".StoreBookDetails"
-		    	android:parentActivityName=".SearchActivity">
+		<activity android:name="com.example.prox.SignUpActivity"
+		    android:parentActivityName="com.example.prox.MainActivity"/>
+		<activity android:name="com.example.prox.MenuActivity"/>
+		<activity android:name="com.example.prox.ForgotPassword"
+		    android:parentActivityName="com.example.prox.MainActivity"/>
+		<activity android:name="com.example.prox.StoreActivity"/>
+		<activity android:name="com.example.prox.Download"/>
+		<activity android:name="com.example.prox.BookView"/>
+		<activity android:name="com.example.prox.Utilities"/>
+		<activity android:name="com.example.prox.Grid"/>
+		<activity android:name="com.example.prox.BookReader"/>
+		<activity android:name="com.example.prox.FreeBookView"/>
+		<activity android:name="com.example.prox.LatestBookView"/>
+		<activity android:name="com.example.prox.BestBookView"/>
+		<activity android:name="com.radaee.reader.MyPDFOpen"
+		    android:parentActivityName="com.example.prox.UserEbookList"/>  
+		<activity android:name="com.example.prox.StoreBookDetails"
+		    	android:parentActivityName="com.example.prox.SearchActivity">
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".BookSearch" />
+                android:value="com.example.prox.BookSearch" />
 		</activity>
-		<activity android:name=".InternetDetector"/>
-		<activity android:name=".UserEbookList"
-		    	android:parentActivityName=".MenuActivity"/>
+		<activity android:name="com.example.prox.InternetDetector"/>
+		<activity android:name="com.example.prox.UserEbookList"
+		    	android:parentActivityName="com.example.prox.MenuActivity"/>
 		<activity android:name="com.example.prox.UserBookListView"
 		    	android:parentActivityName=".UserEbookList"/>
-		<activity android:name=".ProxReader"
+		<activity android:name="com.example.prox.ProxReader"
 				android:uiOptions="splitActionBarWhenNarrow"
 		    	android:parentActivityName="com.example.prox.UserEbookList"/>
-		<activity android:name=".SearchActivity"
+		<activity android:name="com.example.prox.SearchActivity"
 		    	android:parentActivityName="com.example.prox.StoreFragment">
 			<meta-data
                 android:name="android.app.default_searchable"
-                android:value=".BookSearch" />
+                android:value="com.example.prox.BookSearch" />
 		</activity>
-		<activity android:name=".BookSearch"
+		<activity android:name="com.example.prox.BookSearch"
 		    	android:parentActivityName="com.example.prox.SearchActivity">
  			<intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -76,7 +76,7 @@
 		
 		<!-- NOTES sub app -->
 		<activity android:name="com.example.prox.note.NoteList"
-		    	android:parentActivityName=".MenuActivity"/>
+		    	android:parentActivityName="com.example.prox.MenuActivity"/>
         <activity android:name="com.example.prox.note.NoteEdit"
             	android:parentActivityName="com.example.prox.note.NoteList"
          		android:windowSoftInputMode="adjustUnspecified"/>

@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import com.example.prox.Grid.ImageAdapter;
+import com.radaee.reader.R;
  
 import android.app.Activity;
 import android.app.Dialog;

@@ -1,6 +1,7 @@
 package com.example.prox;
 
 import com.example.prox.note.NoteList;
+import com.radaee.reader.R;
 
 import android.app.Fragment;
 import android.app.LocalActivityManager;

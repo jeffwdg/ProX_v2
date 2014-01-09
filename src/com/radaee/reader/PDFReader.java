@@ -1,6 +1,5 @@
 package com.radaee.reader;
 
-import com.example.prox.R;
 import com.radaee.pdf.Document;
 import com.radaee.pdf.Global;
 import com.radaee.pdf.Ink;
@@ -735,11 +734,11 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 		PDFEndAnnot();
 	}
 	public void PDFFindStart( String key, boolean match_case, boolean whole_word )
-	{
+	{	Log.d("PDFFindStart","Key: "+ key);
 		m_view.vFindStart(key, match_case, whole_word);
 	}
 	public void PDFFind(int dir)
-	{
+	{	Log.d("PDFFind","Dir: "+ dir);
 		m_view.vFind(dir);
 	}
 	public boolean PDFSetSelMarkup(int type)

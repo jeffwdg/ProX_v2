@@ -35,6 +35,7 @@ import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.radaee.reader.R;
 
 public class EbooksFragment extends Fragment {
 	

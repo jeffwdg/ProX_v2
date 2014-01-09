@@ -10,6 +10,7 @@ import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.radaee.reader.R;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

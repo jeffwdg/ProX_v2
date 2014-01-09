@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.radaee.reader.R;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.StatFs;
+import android.util.Log;
 
 public class Utilities extends Activity {
  
@@ -25,6 +28,16 @@ public class Utilities extends Activity {
 	    matcher = pattern.matcher(email);
 	    return matcher.matches();
 		
+	}
+	
+	public boolean isNumeric(String str){
+		String pattern = "-?\\d+(\\.\\d+)?";
+		boolean ret = false;
+		if(str.matches(pattern)){
+			ret =true;
+		}
+		Log.d("Util", "IsNumeric"+ret);
+		return ret;
 	}
 	
 	@SuppressWarnings("deprecation")

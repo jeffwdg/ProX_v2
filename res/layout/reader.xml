@@ -15,8 +15,7 @@
         android:id="@+id/bar_find"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="false"
+        android:layout_alignParentTop="true"
         android:layout_centerInParent="false" >
 
         <EditText
@@ -39,16 +38,9 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:text=">" />
-
-        <Button
-            android:id="@+id/btn_goToPage"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:text=">" />
-        
+ 
         </LinearLayout>
-
+<!--  
     <LinearLayout
         android:id="@+id/bar_cmd"
         android:layout_width="match_parent"
@@ -145,11 +137,12 @@
             android:layout_height="wrap_content"
             android:text="Remove" />
     </LinearLayout>
-
+-->
     <com.radaee.util.PDFThumbView
         android:id="@+id/thumbs"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_above="@+id/bar_find" />
+        android:layout_above="@+id/bar_find" 
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

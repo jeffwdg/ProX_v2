@@ -2,6 +2,8 @@ package com.example.prox;
 
 import java.io.File;
 
+import com.radaee.reader.R;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;

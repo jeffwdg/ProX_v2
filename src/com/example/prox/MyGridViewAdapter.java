@@ -4,6 +4,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.radaee.reader.R;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData.Item;

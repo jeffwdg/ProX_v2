@@ -2,7 +2,6 @@ package com.radaee.reader;
 
 import java.io.File;
 
-import com.example.prox.R;
 import com.radaee.pdf.*;
 import com.radaee.pdfex.*;
 import com.radaee.pdfex.PDFView.PDFAnnotListener;
