@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightgray" 
+    android:orientation="vertical"
+    >
+//title    
+    <TextView 
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:text="@string/title" 
+        android:paddingTop="15dip"
+        android:layout_marginLeft="20dip"
+        android:textColor="@color/green"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+       />
+	
+    <EditText
+        android:id="@+id/editTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:ems="10"
+        android:hint="Title"
+        android:textColor="@color/dark"
+        
+         >
+
+        <requestFocus />
+    </EditText>
+   
+
+   
+  <!-- Child linear layout with horizontal orientation -->
+
+  <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dip"
+      android:orientation="horizontal" >
+
+      <!-- android:background="#2a2a2a" -->
+
+      <TextView
+          android:layout_width="77dp"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dip"
+          android:paddingTop="15dip"
+          android:text="Date"
+          android:textAppearance="?android:attr/textAppearanceLarge"
+          android:textColor="@color/green" />
+
+      <EditText
+          android:id="@+id/editText1"
+          android:layout_width="158dp"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="10dip"
+          android:layout_marginRight="20dip"
+          android:layout_weight="0.50"
+          android:textColor="@color/dark"
+          android:ems="10" 
+           />
+      
+
+        <ImageButton
+          android:id="@+id/imageButton1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_event" 
+          android:layout_marginRight="15dp"/>
+    
+    
+<!--
+      <Button
+          android:id="@+id/button1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Date" /> -->
+
+  </LinearLayout>
+  
+  <!-- for timepicker -->
+   <LinearLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="10dip"
+      android:orientation="horizontal" >
+
+      <!-- android:background="#2a2a2a" -->
+
+      <TextView
+          android:layout_width="77dp"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dip"
+          android:paddingTop="15dip"
+          android:text="Time"
+          android:textAppearance="?android:attr/textAppearanceLarge"
+          android:textColor="@color/green" />
+
+      <EditText
+          android:id="@+id/editText2"
+          android:layout_width="158dp"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="10dip"
+          android:layout_marginRight="20dip"
+          android:layout_weight="0.50"
+          android:textColor="@color/dark"
+          android:ems="10" 
+           />
+      
+
+       <ImageButton
+          android:id="@+id/imageButton2"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_event" 
+          android:layout_marginRight="15dp"/>
+    
+   
+
+   <!--    <Button
+          android:id="@+id/button1"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="Date" />--> 
+
+  </LinearLayout>
+
+    <TextView 
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:text="@string/desc" 
+        android:paddingTop="15dip"
+        android:layout_marginLeft="20dip"
+        android:textColor="@color/green"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+       />
+	
+    <EditText
+        android:id="@+id/editDesc"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_marginBottom="10dip"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:ems="10"
+        android:hint="Description"
+        android:textColor="@color/dark"
+         
+         />
+   
+</LinearLayout>

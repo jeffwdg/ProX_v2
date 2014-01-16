@@ -8,12 +8,15 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.sf.andpdf.pdfviewer.PdfViewerActivity;
 
 import com.example.prox.Download.DownloadFileFromURL;
+import com.example.prox.adapter.EbookAdapter;
 import com.example.prox.adapter.EbookDatabaseAdapter;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
@@ -30,7 +33,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,6 +61,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
@@ -74,16 +81,23 @@ public class UserEbookList extends Activity {
   InternetDetector internetdetected;
   Utilities util = new Utilities();
   String[] ebookViewCategory;
-  
+  Cursor  ebookCursor;
   // Progress dialog type (0 - for Horizontal progress bar)
   public final int progress_bar_type = 0; 
   
   @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.ebook_list, menu);
+		// Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+ 
+        return super.onCreateOptionsMenu(menu);
 
-
-		return true;
+		//return true;
 	}
   
 	@Override
@@ -131,7 +145,10 @@ public class UserEbookList extends Activity {
 
     
     fillData();
+    handleIntent(getIntent());
   }
+  
+  
   
   /*
    * Displays user ebook from local sqlite in a listview
@@ -139,7 +156,7 @@ public class UserEbookList extends Activity {
   
 	private void fillData() {
         // Get all of the notes from the database and create the item list
-        final Cursor ebookCursor = datasource.fetchAllEbooks();
+       ebookCursor = datasource.fetchAllEbooks();
 
        
         String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};
@@ -180,7 +197,7 @@ public class UserEbookList extends Activity {
         	     
         	}
         	
-        	
+        	 stopManagingCursor(ebookCursor);
         	
         	 grv.setOnItemClickListener(new OnItemClickListener(){
         		 
@@ -259,7 +276,7 @@ public class UserEbookList extends Activity {
         
 		String ebookLocation = "data/data/com.radaee.reader/proxbooks/"+ userFolderName +"/";
 		String ebookFile = objectId +".pdf";
-		Toast.makeText(getApplicationContext(), "Opening.. " + ebookLocation+ebookFile, Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), "Opening.. " + title, Toast.LENGTH_LONG).show();
 		
 		File ebookLocal = new File(ebookLocation+ebookFile);
 		
@@ -547,11 +564,141 @@ public class UserEbookList extends Activity {
         }
  
     }
+    
+    /**EBOOK Search**/
+    
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+ 
+    /**
+     * Handling intent data
+     */
+    private void handleIntent(Intent intent) {
+    	 
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            final String searchquery = intent.getStringExtra(SearchManager.QUERY);
+            
+            Log.d("Searching",""+searchquery);
+ 
+            ebookCursor = datasource.searchBook(searchquery);
+            
+            String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};
+            int[] to = new int[] { R.id.mTitle ,R.id.mFilename, R.id.mCover,R.id.mAuthor, R.id.mObjectId};
+            
+            
+            // Now create an array adapter and set it to display using our row
+            @SuppressWarnings("deprecation")
+    		//SimpleCursorAdapter ebooks=new SimpleCursorAdapter(this, R.layout.ebooks_row, ebookCursor, from, to);
+            	ArrayList<Ebook> gridArray = new ArrayList<Ebook>();
+            	GridView grv = (GridView) findViewById(R.id.gridview);
+            
+            	if (ebookCursor != null) {
+            	    startManagingCursor(ebookCursor);
+            	    Ebook ebook = new Ebook();
+            	    SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,R.layout.row_grid, ebookCursor, from, to);
+            	    
+            	    while (ebookCursor.moveToNext() ) {
+     
+            	        Ebook gebook = new Ebook();
+    	    	    	  gebook.setFilename(ebookCursor.getString(ebookCursor.getColumnIndex("filename")));
+    	    	    	  gebook.setAuthor(ebookCursor.getString(ebookCursor.getColumnIndex("author")));
+    	    	    	  gebook.setCover(ebookCursor.getString(ebookCursor.getColumnIndex("cover")));
+    	    	    	  gebook.setID(ebookCursor.getString(ebookCursor.getColumnIndex("objectId")));
+    	    	    	  gebook.setISBN(ebookCursor.getString(ebookCursor.getColumnIndex("ISBN")));
+    	    	    	  gebook.setTitle(ebookCursor.getString(ebookCursor.getColumnIndex("title")));
+    	    	    	  gebook.setStatus(ebookCursor.getString(ebookCursor.getColumnIndex("status")));
+    	    	    	  gebook.setCategory(ebookCursor.getString(ebookCursor.getColumnIndex("category")));
+    	    	    	  Log.d("Ebook Details", "Details " + ebookCursor.getString(ebookCursor.getColumnIndex("cover")));
+    	    	    	 
+    	    	    	  gridArray.add(gebook);
+            	    }
+            	    
+     
+            	      MyLocalGridViewAdapter customGridAdapter = new MyLocalGridViewAdapter(UserEbookList.this, R.layout.row_grid, gridArray);
+    	        	  grv.setAdapter(customGridAdapter);
+            	    
+            	     
+            	}
+            	
+            	 stopManagingCursor(ebookCursor);
+            	 grv.setOnItemClickListener(new OnItemClickListener(){
+            		 
+ 		        	@SuppressLint("NewApi")
+ 					public void onItemClick(AdapterView parent,View v, final int position, final long id){	
+ 		        		ebookCursor.moveToPosition(position);
+         	    		final String objectId = ebookCursor.getString(ebookCursor.getColumnIndex("objectId"));
+         	    		final String title = ebookCursor.getString(ebookCursor.getColumnIndex("title"));
+         	    		final String author = ebookCursor.getString(ebookCursor.getColumnIndex("author"));
+         	    		final String ISBN = ebookCursor.getString(ebookCursor.getColumnIndex("ISBN"));
+         	    		final String cover = ebookCursor.getString(ebookCursor.getColumnIndex("cover"));
+         	    		final String filename = ebookCursor.getString(ebookCursor.getColumnIndex("filename"));
+         	    		String status =  ebookCursor.getString(ebookCursor.getColumnIndex("status"));
+         	    		final String category =  ebookCursor.getString(ebookCursor.getColumnIndex("category"));
+         	    		
+         	    		Log.d("Ebook Details", "Details " + status+filename+cover);
+         	    		 
+         	    		CharSequence[] items = {"View","Delete","Download"};
+ 		        		
+ 		        		if(status.equals("1")){
+ 		        			 CharSequence[] newitems={"View","Delete"};
+ 		        			 items = newitems;
+ 		        			 Log.d("Ebook Details", "Not Downloaded" + status);
+ 		        		}else{
+ 		        			 Log.d("Ebook Details", "Downloaded" + status);
+ 		        		} 
+ 		        		
+ 		        		
+ 		        		
+ 		        		AlertDialog.Builder builder3 =new AlertDialog.Builder(UserEbookList.this);
+ 						builder3.setTitle("Select an action").setItems(items, new DialogInterface.OnClickListener() {
+
+ 	        	    	@Override
+ 	        	    	public void onClick(DialogInterface dialog, int which) {
+ 	        	  
+ 	        	    			switch(which){
+ 	        	    			case 0: 
+ 	        	    				openEbook(objectId, title);
+ 	        	    				break;
+ 	        	    			case 1:
+ 	        	    				
+ 	        	    				attemptDeleteMyEbook(objectId, title, filename);
+ 	        	    				break;
+ 	        	    			case 2:
+ 	        	    				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_LONG).show(); 
+         	    					boolean downloadedFile = downloadEbook(objectId, filename);
+         	    					String downloadedStatus = "1";
+         	    					if(downloadedFile == true){ 
+         	    						datasource.updateEntry(objectId, title,filename,author, ISBN, cover, downloadedStatus, category); 
+         	    					}
+         	    					break;
+ 	        	    				
+ 	        	    			}
+ 	        	    	}
+ 	        	    	});
+ 	        	    	
+ 	        	    	builder3.show();
+ 		        	}
+         	 });
+ 			 
+            
+           
+        }
+ 
+    }
 	
 	@Override
 	protected void onResume() {
 		datasource.open();
 		super.onResume();
+	}
+	
+	@Override
+	protected void onRestart() {
+		//datasource.open();
+		super.onRestart();
+		ebookCursor.requery();
 	}
 
   @Override

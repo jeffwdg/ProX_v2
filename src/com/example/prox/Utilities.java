@@ -31,7 +31,7 @@ public class Utilities extends Activity {
 	}
 	
 	public boolean isNumeric(String str){
-		String pattern = "-?\\d+(\\.\\d+)?";
+		String pattern = "[1-9][0-9]{0,8}";
 		boolean ret = false;
 		if(str.matches(pattern)){
 			ret =true;

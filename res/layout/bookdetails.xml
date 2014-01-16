@@ -35,6 +35,19 @@
            android:text="Author"
            android:textColor="#eee"
            android:textSize="13dip" />
+       <TextView
+           android:id="@+id/bookISBN"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"
+           android:layout_alignLeft="@+id/bookTitle"
+           android:layout_below="@+id/bookAuthor"
+           android:layout_marginTop="20dp"
+           android:layout_marginLeft="10dp"
+           android:shadowColor="#444"
+           android:text="ISBN"
+           android:textColor="#eee"
+           android:textSize="13dip" />
+       
         <ImageView
            android:id="@+id/book_cover"
            android:layout_width="130dp"

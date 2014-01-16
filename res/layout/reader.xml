@@ -16,8 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerInParent="false" >
-
+        android:layout_centerInParent="false"
+        android:background="@color/holo_green_3"
+        android:gravity="center"
+        android:alpha=".7" >
+	
         <EditText
             android:id="@+id/txt_find"
             android:layout_width="150dp"
@@ -30,16 +33,33 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:text="&lt;" />
+            android:background="@drawable/cal_left_arrow_on"
+            android:title="Previous" />
 
         <Button
             android:id="@+id/btn_next"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="40dp"
+            android:background="@drawable/cal_right_arrow_on"
             android:layout_height="wrap_content"
-            android:text=">" />
+            android:text="Next" />
  
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/bar_cmd"
+            android:paddingLeft="10dp"
+            android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_alignTop="@+id/thumbs">
+        
+            <TextView
+            android:id="@+id/pageNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Page"
+            android:textColor="#1d5347"
+            android:textSize="16sp" />
+       </LinearLayout>
 <!--  
     <LinearLayout
         android:id="@+id/bar_cmd"
@@ -138,11 +158,16 @@
             android:text="Remove" />
     </LinearLayout>
 -->
+
+	
+		
     <com.radaee.util.PDFThumbView
         android:id="@+id/thumbs"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_above="@+id/bar_find" 
         android:layout_alignParentBottom="true"/>
-
+    
+		
+		
 </RelativeLayout>

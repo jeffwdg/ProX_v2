@@ -25,13 +25,14 @@
     <string name="s_edit">Edit</string>
     
     <!-- NOTES -->
-    <string name="title">Title : </string>
+    <string name="title">Title</string>
     <string name="menu_delete">Delete Item</string>
     <string name="no_title">No Title</string>
     <string name="edit_note">Edit Note</string>
     <string name="save_menu_noteedit">Save</string>
     <string name="delete_menu_noteedit">Delete</string>
     <string name="no_subject">No Subject</string>
+    <string name="add_subject_first">Add a subject first.</string>
     <string name="subject">Subject : </string>
     <string name="save_menu_subject">Save</string>
  	<string name="delete_menu_subject">Delete</string>
@@ -39,6 +40,24 @@
     <string name="str_cnt_mnu_share">Share</string>
     <string name="str_cnt_mnu_delete">Delete</string>
     
+     <!-- REMINDERS -->
+    <string name="action_new">New</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <!--  <string name="title">Title</string> -->
+    <string name="desc">Description</string>
+    <string name="thismonth">This Month</string>
+    <string name="lastmonth">Last Month</string>
+    <string name="nextmonth">Next Month</string>
+    <string name="datepicker">Date</string>
+    <string name="body1">one</string>
+    <string name="body2">two</string>
+    <string-array name="labelMenu">
+        <item>Reminder</item>
+        <item>This Month</item>
+        <item> Last Month</item>
+    </string-array>
+
      
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
@@ -71,5 +90,6 @@
     	<item>Recently Purchased</item>
 	</string-array>
  
+
 
 </resources>

@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -32,11 +34,14 @@ import com.radaee.pdf.Document;
 import com.radaee.pdf.Global;
 import com.radaee.pdf.Page;
 import com.radaee.pdf.Page.Annotation;
+import com.radaee.pdfex.PDFView;
+import com.radaee.pdfex.PDFView.PDFPosition;
 import com.radaee.reader.PDFReader.PDFReaderListener;
 import com.radaee.util.PDFGridItem;
 import com.radaee.util.PDFGridView;
 import com.radaee.util.PDFThumbView;
 import com.radaee.view.PDFVPage;
+import com.radaee.view.PDFView.PDFPos;
 import com.radaee.view.PDFView.PDFViewListener;
 import com.radaee.view.PDFViewThumb.PDFThumbListener;
 
@@ -48,6 +53,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	private PDFThumbView m_thumb = null;
 	private RelativeLayout m_layout;
 	private Document m_doc = new Document();
+	private PDFView m_viewer = null;
 	
     private Button btn_prev;
     private Button btn_next;
@@ -59,6 +65,8 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
     private PDFVPage m_annot_vpage;
     private Annotation m_annot;
     
+    LinearLayout bar_find;
+    int totalpage;
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,16 +88,17 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	{    
 	     switch (item.getItemId()) 
 	     {        
-	        case R.id.proxreader_wordsearch: onGoToPage(); showArrows();     
-	        	return true;        
-	        default:            
-	           return super.onOptionsItemSelected(item);    
+	        case R.id.proxreader_wordsearch: onGoToPage(); break;
+	        case R.id.txt_find: showArrows(); break;
+	        default:               
+	           
 	     }
+	     return super.onOptionsItemSelected(item);    
 	}
 	
 	public void showArrows(){
 		
-		
+		bar_find.setVisibility(1);
 		btn_prev.setVisibility(1);
 		btn_next.setVisibility(1);
 		btn_prev.setEnabled(true);
@@ -117,6 +126,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         String pdfpath = i.getExtras().getString("ebookFile");
         //Log.d("File", "Loc"+pdfpath);
         
+        
 		m_doc = new Document();
 		String pdf_path = pdfpath;
 		String password = "";
@@ -124,26 +134,32 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 		m_reader.PDFOpen(m_doc, false, this);
 		m_thumb.thumbOpen(m_doc, this);
 		
+		totalpage = m_doc.GetPageCount();
+	 
+		
+		
 		//m_reader.PDFOpen(m_doc, false, this);
 		/*
         m_vFiles = new PDFGridView(this, null);
 		m_vFiles.PDFSetRootPath("/mnt");
 		m_vFiles.setOnItemClickListener(this);
 		*/
-		//((ViewGroup) m_thumb.getParent()).removeView(m_thumb);
-		//m_thumb.thumbOpen(m_reader.PDFGetDoc(), this);
+		 
 		setContentView(m_layout);
 
-        //LinearLayout bar_cmd = (LinearLayout)m_layout.findViewById(R.id.bar_cmd);
+        LinearLayout bar_cmd = (LinearLayout)m_layout.findViewById(R.id.bar_cmd);
         //LinearLayout bar_act = (LinearLayout)m_layout.findViewById(R.id.bar_act);
-        LinearLayout bar_find = (LinearLayout)m_layout.findViewById(R.id.bar_find);
+        bar_find = (LinearLayout)m_layout.findViewById(R.id.bar_find);
     
-       
+        bar_find.setVisibility(-1);
         txt_find = (EditText)bar_find.findViewById(R.id.txt_find);
         btn_prev = (Button)bar_find.findViewById(R.id.btn_prev);
         btn_next = (Button)bar_find.findViewById(R.id.btn_next);
         //btn_gotoPage = (Button)bar_find.findViewById(R.id.btn_goToPage);
-
+        
+        //TextView pageNumcont = (TextView) bar_cmd.findViewById(R.id.pageNum);
+        //String tpage = "/"+totalpage;
+		//pageNumcont.setText(tpage);
         
         btn_prev.setOnClickListener(this);
         btn_next.setOnClickListener(this);
@@ -238,44 +254,52 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	{
 		String str = txt_find.getText().toString();
 		
-		if( str_find != null )
-		{
-			if( str != null && str.compareTo(str_find) == 0 )
+		if(TextUtils.isEmpty(str)){
+        	Toast.makeText(getApplicationContext(), "Please enter a valid search query.", Toast.LENGTH_LONG).show();
+        }else{
+        	Toast.makeText(getApplicationContext(), "Searching ...", Toast.LENGTH_SHORT).show();
+			if( str_find != null )
 			{
-				m_reader.PDFFind(-1);
-				return;
+				if( str != null && str.compareTo(str_find) == 0 )
+				{
+					m_reader.PDFFind(-1);
+					return;
+				}
 			}
-		}
-		
-		if( str != null && str.length() > 0 )
-		{
-			m_reader.PDFFindStart(str, false, false);
-			m_reader.PDFFind(1);
-			str_find = str;
+			
+			if( str != null && str.length() > 0 )
+			{
+				m_reader.PDFFindStart(str, false, false);
+				m_reader.PDFFind(1);
+				str_find = str;
+			}
 		}
 	}
 	
 	private void onFindNext()
 	{
 		String str = txt_find.getText().toString();
- 
-		Toast.makeText(getApplicationContext(), "Search:"+ str, Toast.LENGTH_LONG).show();
-		
-		if( str_find != null )
-		{	
-			if( str != null && str.compareTo(str_find) == 0 )
-			{
-				m_reader.PDFFind(1);
-				return;
+		if(TextUtils.isEmpty(str)){
+        	Toast.makeText(getApplicationContext(), "Please enter a valid search query.", Toast.LENGTH_LONG).show();
+        }else{
+			Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
+			
+			if( str_find != null )
+			{	
+				if( str != null && str.compareTo(str_find) == 0 )
+				{
+					m_reader.PDFFind(1);
+					return;
+				}
 			}
-		}
-		
-		if( str != null && str.length() > 0 )
-		{
-			m_reader.PDFFindStart(str, false, false);
-			m_reader.PDFFind(1);
-			str_find = str;
-		}
+			
+			if( str != null && str.length() > 0 )
+			{
+				m_reader.PDFFindStart(str, false, false);
+				m_reader.PDFFind(1);
+				str_find = str;
+			}
+        }
 	}
 	
 	private void onGoToPage()
@@ -293,7 +317,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 				
 				String thisPage = thispagenum.getText().toString();
 				 
-				if(util.isNumeric(thisPage) == true){
+				if(util.isNumeric(thisPage) == true ||Integer.parseInt(thisPage) > totalpage+1 ||  Integer.parseInt(thisPage) <= 0){
 					Toast.makeText(getApplicationContext(), "Searching page...", Toast.LENGTH_LONG).show();
 					int p = Integer.parseInt(thisPage);
 					m_reader.PDFGotoPage(p);
@@ -350,6 +374,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	public void OnPageChanged(int pageno)
 	{
 		m_thumb.thumbGotoPage(pageno);
+		//Log.d("Page", ""+pageno);
 	}
 	 
 	public void OnOpenURI(String uri)

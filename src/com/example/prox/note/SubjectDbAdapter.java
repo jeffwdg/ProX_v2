@@ -5,6 +5,7 @@ package com.example.prox.note;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -88,7 +89,11 @@ public class SubjectDbAdapter {
 
 	            return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	        }
-
+	        
+	        public int countSubjects(){
+	        	Cursor cur = mDb.rawQuery("select * from Subject",  null);
+	        	return cur.getCount();
+	        }
 	     
 	        public Cursor fetchAllSubject() {
 
@@ -101,8 +106,13 @@ public class SubjectDbAdapter {
 	        		return false;
 	        	return true;
 	        }
+	        
+	       
+	        
+	      
 
-	        public Cursor fetchSubject(long rowId) throws SQLException {
+
+	        public Cursor fetchSubject(String rowId) throws SQLException {
 
 	            Cursor mCursor =
 
@@ -124,6 +134,6 @@ public class SubjectDbAdapter {
 	            
 	            return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
 	        }
-	        
+	        	        
 
 }

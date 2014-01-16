@@ -82,8 +82,9 @@ public class PDFReaderOld extends View implements PDFView.PDFViewListener, Thumb
 		}
 		if( m_viewer != null )
 		{
-			if( doc != null ) m_viewer.viewOpen(getContext(), doc, 0xFFCC0000, 4);
-			m_viewer.viewSetAnnotListener( annot_listener );
+			if( doc != null ) 
+				m_viewer.viewOpen(getContext(), doc, 0xFFCC0000, 4);
+				m_viewer.viewSetAnnotListener( annot_listener );
 			m_viewer.viewSetViewListener( view_listener );
 			m_viewer.viewResize(getWidth(), getHeight());
 			if( pos != null ) m_viewer.viewGoto(pos);

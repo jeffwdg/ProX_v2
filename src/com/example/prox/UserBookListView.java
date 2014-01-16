@@ -74,6 +74,7 @@ public class UserBookListView extends ListActivity {
   InternetDetector internetdetected;
   Utilities util = new Utilities();
   String[] ebookViewCategory;
+  Cursor ebookCursor;
   
   // Progress dialog type (0 - for Horizontal progress bar)
   public static final int progress_bar_type = 0; 
@@ -131,7 +132,7 @@ public class UserBookListView extends ListActivity {
   
 	private void fillData() {
         // Get all of the notes from the database and create the item list
-        final Cursor ebookCursor = datasource.fetchAllEbooks();
+         ebookCursor = datasource.fetchAllEbooks();
 
 
         String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};
@@ -189,7 +190,7 @@ public class UserBookListView extends ListActivity {
         	    
         	}
         	
-        
+        	 stopManagingCursor(ebookCursor);
     }
 	
  
@@ -348,7 +349,7 @@ public class UserBookListView extends ListActivity {
         
 		String ebookLocation = "data/data/com.radaee.reader/proxbooks/"+ userFolderName +"/";
 		String ebookFile = objectId +".pdf";
-		Toast.makeText(getApplicationContext(), "Opening.. " + ebookLocation+ebookFile, Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), "Opening.. " + title, Toast.LENGTH_LONG).show();
 		
 		File ebookLocal = new File(ebookLocation+ebookFile);
 		
@@ -526,6 +527,14 @@ public class UserBookListView extends ListActivity {
 	protected void onResume() {
 		datasource.open();
 		super.onResume();
+	}
+	
+	@Override
+	protected void onRestart() {
+		//datasource.open();
+		super.onRestart();
+		ebookCursor.requery();
+ 
 	}
 
   @Override

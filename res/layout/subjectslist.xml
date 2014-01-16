@@ -2,25 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/notelist">
+    android:background="@drawable/notelist3">
    
     <TextView
         android:id="@+id/subjects"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingBottom="20dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
         android:text="Subjects"
-        android:textSize="27sp" />
+        android:textSize="22sp"
+        android:textColor="#ffffff" />
       
-		<Button
-        android:id="@+id/deletebtn"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="14dp"
-        android:background="@drawable/ic_menu_delete" /> 
         
 		
     <ListView
@@ -30,7 +24,7 @@
         android:layout_above="@+id/btmLayout"
         android:layout_below="@+id/subjects"
         android:background="#FFF9C8"
-        android:divider="#D3D3D3"
+        android:divider="#1aff00"
         android:dividerHeight="1sp" 
         android:footerDividersEnabled="true" />
 
@@ -53,14 +47,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/counter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/subjects"
-        android:layout_alignBottom="@+id/subjects"
-        android:layout_marginRight="89dp"
-        android:layout_toLeftOf="@+id/deletebtn"
-        android:text="" />
+    
     	
 </RelativeLayout> 

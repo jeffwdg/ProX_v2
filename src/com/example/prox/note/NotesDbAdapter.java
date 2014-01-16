@@ -125,6 +125,14 @@ public class NotesDbAdapter {
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
     
+    public Boolean findSubjectIfExist(String subject)
+    {
+    	Cursor cursor = mDb.rawQuery("select * from notes where subject = ?", new String[] { subject });
+    	if(cursor.getCount()<1)
+    		return false;
+    	return true;
+    }
+    
     
     public int countNotes(){
     	Cursor cur = mDb.rawQuery("select * from notes",  null);

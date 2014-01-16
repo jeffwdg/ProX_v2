@@ -228,7 +228,7 @@ public class SignUpActivity extends Activity implements OnClickListener
 	}
 	
 	private void signUp(final String email, String password, final String fname, final String lname){
-		
+		Toast.makeText(getApplicationContext(), "Sign up.. Please wait for a moment.", Toast.LENGTH_LONG).show();
 		 Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
 		
 		 ParseUser user = new ParseUser();

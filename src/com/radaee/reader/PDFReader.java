@@ -1,12 +1,15 @@
 package com.radaee.reader;
 
+import java.io.File;
 import com.radaee.pdf.Document;
 import com.radaee.pdf.Global;
 import com.radaee.pdf.Ink;
 import com.radaee.pdf.Matrix;
 import com.radaee.pdf.Page;
 import com.radaee.pdf.Page.Annotation;
+import com.radaee.pdfex.PDFView.PDFPosition;
 import com.radaee.util.ComboList;
+import com.radaee.util.PDFThumbView;
 import com.radaee.view.PDFVPage;
 import com.radaee.view.PDFView;
 import com.radaee.view.PDFViewCurl;
@@ -15,6 +18,7 @@ import com.radaee.view.PDFViewHorz;
 import com.radaee.view.PDFViewVert;
 import com.radaee.view.PDFView.PDFPos;
 import com.radaee.view.PDFView.PDFViewListener;
+
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -38,9 +42,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class PDFReader extends View implements PDFViewListener, OnItemClickListener, PopupWindow.OnDismissListener
+public class PDFReader extends View implements  PDFViewListener,   OnItemClickListener, PopupWindow.OnDismissListener
 {
 	private PDFView m_view = null;
 	private Document m_doc = null;
@@ -69,6 +74,8 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 	private int m_pageno = 0;
     private int m_edit_type = 0;
     private int m_sel_index = -1;
+    private PDFVPage ppage;
+    
     private boolean m_rtol = false;
     class PDFVPageSet
     {
@@ -215,8 +222,19 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 				m_pageno = pageno;
 				m_listener.OnPageChanged(pageno);
 			}
+			Log.d("Page",""+m_pageno);
 		}
+		
+		Canvas canvas = new Canvas();
+		  
+		Paint paint = new Paint();
+		paint.setARGB(255, 255, 0, 0);
+		paint.setTextSize(20);
+		canvas.drawText( "Page:" + String.valueOf(m_pageno), 230, 160, paint);
+		//super.onDraw(canvas);
 	}
+	
+
 	public boolean OnPDFDoubleTapped(float x, float y)
 	{
 		if( m_status != STA_NORMAL ) return false;
@@ -334,7 +352,7 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 	public void OnPDFFound(boolean found)
 	{
 		if( !found )
-			Toast.makeText(getContext(), "no more found", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "No more found", Toast.LENGTH_SHORT).show();
 	}
 	public void PDFSetInk(int code)
 	{
@@ -901,6 +919,7 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 			}
 		}
 	}
+	 
 	@Override
 	public void computeScroll()
 	{
@@ -924,9 +943,14 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 		ActivityManager.MemoryInfo info = new ActivityManager.MemoryInfo();
 		mgr.getMemoryInfo(info);
 		Paint paint = new Paint();
-		paint.setARGB(255, 255, 0, 0);
-		paint.setTextSize(30);
-		//canvas.drawText( "AvialMem:" + info.availMem/(1024*1024) + " M", 20, 150, paint);
+		paint.setARGB(233, 0, 0233, 0);
+		paint.setTextSize(18);
+		//canvas.drawText( "AvailMem:" + info.availMem/(1024*1024) + " MB", 20, 150, paint);
+		//Log.d("TotalPage",""+m_doc.GetPageCount());
+		int screen_h = m_view.vGetWinH();
+		int screen_w = m_view.vGetWinW();
+		int sh =  (int) ((int) screen_h / 1.25);
+		canvas.drawText( String.valueOf(m_pageno) + "/" + m_doc.GetPageCount() , screen_w/2, sh, paint);
 	}
 	@Override
 	protected void onSizeChanged( int w, int h, int oldw, int oldh )
@@ -1273,6 +1297,7 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 			//m_view.vCenterPage(pos.pageno);
 		}
         invalidate();
+    
 	}
 	public void OnPDFPageDisplayed(Canvas canvas, PDFVPage vpage)
 	{
@@ -1290,4 +1315,7 @@ public class PDFReader extends View implements PDFViewListener, OnItemClickListe
 		//paint.setARGB(128, 255, 255, 128);
 		//canvas.drawRect(mark_left, mark_top, mark_right, mark_bottom, paint);
 	}
+	
+	 
+ 
 }

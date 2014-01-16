@@ -51,7 +51,7 @@ import android.widget.Toast;
 public class StoreBookDetails extends Activity {
 	 
 	    Button btnShowProgress;
-	    TextView booktitle, bookfilename, bookauthor;
+	    TextView booktitle, bookfilename, bookauthor, bookisbn;
 	    private ProgressDialog pDialog;
 	    ImageView my_image;
 	    String objectId , userId;
@@ -130,6 +130,9 @@ public class StoreBookDetails extends Activity {
 	        
 	        bookauthor= (TextView) findViewById(R.id.bookAuthor);
 	        bookauthor.setText("By: " +author);
+	        
+	        bookisbn= (TextView) findViewById(R.id.bookISBN);
+	        bookisbn.setText(ISBN);
 	        
 	        file_url = i.getExtras().getString("filename");
 	        Toast.makeText(this,"Ebook " +  title + " selected", Toast.LENGTH_SHORT).show();

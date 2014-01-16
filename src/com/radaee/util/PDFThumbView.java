@@ -103,6 +103,7 @@ public class PDFThumbView extends View implements PDFViewListener
 	{
 		m_thumb.vRender(m_thumb.vGetPage(pageno));
 	}
+	
 	private Paint m_paint = new Paint();
 	public void OnPDFPageDisplayed(Canvas canvas, PDFVPage vpage)
 	{
@@ -116,7 +117,6 @@ public class PDFThumbView extends View implements PDFViewListener
 		else
 			m_paint.setTextSize(m_thumb.vGetWinH() / 5);
 		m_paint.setTextAlign(Align.CENTER);
-		canvas.drawText(String.valueOf(vpage.GetPageNo() + 1),
-				(left + right)/2, (top + bottom)/2, m_paint);
+		canvas.drawText(String.valueOf(vpage.GetPageNo() + 1),(left + right)/2, (top + bottom)/2, m_paint);
 	}
 }

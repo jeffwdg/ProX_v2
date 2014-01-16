@@ -9,4 +9,22 @@
     <color name="counter_text_bg">#626262</color>
     <color name="counter_text_bg_green">#1da257</color>
     <color name="counter_text_color">#c5c4c4</color>
+    
+    <color name="holo_green_light">#99CC00</color>
+    <color name="holo_green_dark">#669900</color>
+    <color name="holo_green_1">#F0F8DB</color>
+    <color name="holo_green_2">#E2F0B6</color>
+    <color name="holo_green_3">#D3E992</color>
+    <color name="holo_green_4">#C5E26D</color>
+    <color name="holo_green_5">#B6DB49</color>
+    <color name="holo_green_6">#A8D324</color>
+    <color name="holo_green_7">#99CC00</color>
+    <color name="holo_green_8">#92C500</color>
+    <color name="holo_green_9">#8ABD00</color>
+    <color name="holo_green_10">#83B600</color>
+    <color name="holo_green_11">#7CAF00</color>
+    <color name="holo_green_12">#75A800</color>
+    <color name="holo_green_13">#6DA000</color>
+    <color name="holo_green_14">#669900</color>
+    
 </resources>

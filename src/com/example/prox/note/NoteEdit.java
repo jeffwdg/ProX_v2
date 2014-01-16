@@ -6,34 +6,27 @@ import java.util.List;
 
 import com.radaee.reader.R;
 
- 
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 
 public class NoteEdit extends Activity{
@@ -42,7 +35,7 @@ public class NoteEdit extends Activity{
 	public static String curDate = "";
 	public static String curText = "";	
     private EditText mTitleText;
-    private EditText mSubjectText;
+  //  private EditText mSubjectText;
     private EditText mBodyText;
     private TextView mDateText;
     private Long mRowId;
@@ -62,21 +55,17 @@ public class NoteEdit extends Activity{
         ActionBar ab = getActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setTitle("Note");
-        ab.setIcon(com.radaee.reader.R.drawable.notes);
+        ab.setIcon(R.drawable.notes);
         
-        setContentView(com.radaee.reader.R.layout.note_edit);
+        setContentView(R.layout.note_edit);
         //setTitle(R.string.app_name);
 
-        mTitleText = (EditText) findViewById(com.radaee.reader.R.id.title);
+        mTitleText = (EditText) findViewById(R.id.title);
        // mSubjectText = (EditText) findViewById(R.id.subject);
-        mSpinner = (Spinner)findViewById(com.radaee.reader.R.id.subject_spinner);
-        mBodyText = (EditText) findViewById(com.radaee.reader.R.id.body);
-        mDateText = (TextView) findViewById(com.radaee.reader.R.id.notelist_date);
-        
-        
-         
-	    
-	    
+        mSpinner = (Spinner)findViewById(R.id.subject_spinner);
+        mBodyText = (EditText) findViewById(R.id.body);
+        mDateText = (TextView) findViewById(R.id.notelist_date);
+
         long msTime = System.currentTimeMillis();  
         Date curDateTime = new Date(msTime);
  	
@@ -85,23 +74,19 @@ public class NoteEdit extends Activity{
         
         mDateText.setText(""+curDate);
         
-
-        mRowId = (savedInstanceState == null) ? null :
-            (Long) savedInstanceState.getSerializable(NotesDbAdapter.KEY_ROWID);
-        if (mRowId == null) {
-            Bundle extras = getIntent().getExtras();
-            mRowId = extras != null ? extras.getLong(NotesDbAdapter.KEY_ROWID)
-                                    : null;
+        Bundle extras = getIntent().getExtras();
+        loadspinner();
+        if(extras!=null)
+        {	mRowId=extras.getLong(NotesDbAdapter.KEY_ROWID);
+        	populateFields();
         }
 
-        populateFields();
-    
-    
-	
-
-	loadspinner();
+       
 	
 	}	
+	
+	
+	
 	
 	
 	private void loadspinner(){
@@ -115,6 +100,8 @@ public class NoteEdit extends Activity{
                 android.R.layout.simple_spinner_item, list);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spin.setAdapter(dataAdapter);
+                
+
 	}
 
 	
@@ -165,17 +152,7 @@ public class NoteEdit extends Activity{
 	        outState.putSerializable(NotesDbAdapter.KEY_ROWID, mRowId);
 	    }
 	    
-	    @Override
-	    protected void onPause() {
-	        super.onPause();
-	        saveState();
-	    }
-	    
-	    @Override
-	    protected void onResume() {
-	        super.onResume();
-	        populateFields();
-	    }
+
 	    
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
@@ -194,6 +171,7 @@ public class NoteEdit extends Activity{
 				  
 		        mBodyText = (EditText) findViewById(R.id.body);
 		        mDateText = (TextView) findViewById(R.id.notelist_date);
+		        
 		    	// check if any of the fields are vacant
 				if(mTitleText.equals("") )
 				{
@@ -242,13 +220,7 @@ public class NoteEdit extends Activity{
 		}
 	    
 		private void deletenote(){
-			  
-		        
-		        
-			
-			
-			//else{
-			
+			  		
 		    if(note != null){
 			note.close();
 			note = null;
@@ -261,8 +233,6 @@ public class NoteEdit extends Activity{
 			finish();
 			}	
 			
-			//finish();
-		//}
 	    private void saveState() {
 	        String title = mTitleText.getText().toString();
 	        //String subject = mSubjectText.getText().toString();
@@ -307,6 +277,19 @@ public class NoteEdit extends Activity{
 	                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_BODY)));
 	            curText = note.getString(
 	                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_BODY));
+	            curDate = note.getString(note.getColumnIndexOrThrow(NotesDbAdapter.KEY_DATE));
+	            mDateText.setText(curDate);
+	            Cursor ncursor =   mDbHelper.fetchNote(mRowId);
+	            
+	            Spinner spin =(Spinner)findViewById(R.id.subject_spinner);
+	    		
+	            String subject=ncursor.getString(2);
+	               ArrayAdapter myAdap = (ArrayAdapter) spin.getAdapter(); //cast to an ArrayAdapter
+	               int spinnerPosition = myAdap.getPosition(subject);
+
+	               
+	            //set the default according to value
+	            spin.setSelection(spinnerPosition);
 	        }
 	    }
 

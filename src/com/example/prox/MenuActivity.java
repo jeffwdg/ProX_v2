@@ -5,6 +5,7 @@ import com.example.prox.adapter.EbookDatabaseAdapter;
 import com.example.prox.adapter.NavDrawerListAdapter;
 import com.example.prox.model.NavDrawerItem;
 import com.example.prox.note.NotesDbAdapter;
+import com.example.prox.reminder.ReminderDatabaseAdapter;
 import com.parse.Parse;
 import com.parse.ParseUser;
 import com.radaee.reader.R;
@@ -78,6 +79,9 @@ public class MenuActivity extends Activity{
 		
 		NotesDbAdapter noteDatabaseAdapter = new NotesDbAdapter(MenuActivity.this);
 		noteDatabaseAdapter.open();
+		
+		ReminderDatabaseAdapter reminderDatabaseAdapter = new ReminderDatabaseAdapter(MenuActivity.this);
+		reminderDatabaseAdapter.open();
         
 		Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF"); 
 		
@@ -106,7 +110,8 @@ public class MenuActivity extends Activity{
 			// Home
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 			// Reminder
-			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1)));
+			String totalReminders = Integer.toString(reminderDatabaseAdapter.countReminders());
+			navDrawerItems.add(new NavDrawerItem(navMenuTitles[1], navMenuIcons.getResourceId(1, -1), true, totalReminders));
 			// Ereader
 			String totalBooks = Integer.toString(ebookDatabaseAdapter.countEbooks());
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1), true, totalBooks));

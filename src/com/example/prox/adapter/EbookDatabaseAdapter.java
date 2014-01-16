@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -39,6 +40,10 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		// SQL Statement to create a new database.
 		static final String DATABASE_CREATE = "create table "+" userebooks"+ "( " +"_id"+" integer primary key autoincrement,"+ "objectId text, title text, filename text, author text, ISBN text, category text, cover text, status integer); ";
 		// Variable to hold the database instance
+		
+		static final String DATABASE_CREATE_REMINDER = "create table "+" userreminders"+ "( " +"_id"+" integer primary key autoincrement,"+ "title text, date text, time text, description text); ";
+		// Variable to hold the database instance
+		
 		public  SQLiteDatabase db;
 		// Context of the application using the database.
 		public Context context;
@@ -56,6 +61,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		public void onCreate(SQLiteDatabase db) {
 			// TODO Auto-generated method stub
 			db.execSQL(DATABASE_CREATE);
+			db.execSQL(DATABASE_CREATE_REMINDER);
 			
 		}
 		
@@ -82,6 +88,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		public  SQLiteDatabase getDatabaseInstance()
 		{	
 			db.execSQL(DATABASE_CREATE);
+			db.execSQL(DATABASE_CREATE_REMINDER);
 			return db;
 		}
 
@@ -102,7 +109,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 			// Insert the row into your table
 			db.insert("userebooks", null, newValues);
 			//db.close();
-			//Toast.makeText(context, "Ebook added successfully", Toast.LENGTH_LONG).show();
+ 
 		}
 		
 		
@@ -119,11 +126,28 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		public Cursor getSingleEntry(String objectId)
 		{
 			SQLiteDatabase db=this.getReadableDatabase();
-			String [] columns=new String[]{"id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS};
+			String [] columns=new String[]{"_id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS};
 			Cursor cur = db.query(DATABASE_TABLE, columns, objectId +"=?", new String[]{objectId}, null, null, null);
 			
 			return cur;		
 		}
+		
+		public Cursor searchBook(String query)
+		{
+			/* 
+			String [] columns=new String[]{"_id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS,KEY_CATEGORY};
+			String [] selectionArgs=new String[]{"%"+query+"%", "%"+query+"%"};
+			Cursor cur = db.query(DATABASE_TABLE, columns, "title LIKE '% "+ query +" %' or author LIKE '% "+ query +" %' ", null, null, null, KEY_ROWID +" DESC"); 
+			*/
+			SQLiteDatabase db=this.getReadableDatabase();
+			String [] selectionArgs=new String[]{"%"+query+"%", "%"+query+"%", "%"+query+"%"};
+			String [] columns=new String[]{"_id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS,KEY_CATEGORY,KEY_ISBN};
+			Cursor cur = db.query(DATABASE_TABLE, columns,"title LIKE ? OR author LIKE ? OR ISBN = ?",  selectionArgs, null, null, null);
+			
+			Log.d("Search ebook", ""+cur.getCount());
+			return cur;		
+		}
+		
 		
 		@SuppressLint("NewApi")
 		public ArrayList<Ebook> fetchAllUserEbooks() {

@@ -1,7 +1,6 @@
 package com.example.prox.note;
 
  
-
 import com.radaee.reader.R;
 
 import android.app.ActionBar;
@@ -83,8 +82,19 @@ public class NoteList extends ListActivity {
 	}
 	
 	private void createNote() {
-		Intent i = new Intent(this, NoteEdit.class);
-        startActivityForResult(i, ACTIVITY_CREATE);    	
+		SubjectDbAdapter subDb=new SubjectDbAdapter(this);
+		subDb.open();
+		Intent i;
+		if(subDb.fetchAllSubject().getCount()<1)
+		{	Toast.makeText(getApplicationContext(), "ERROR! No subjects exist. Add subject first", Toast.LENGTH_LONG).show();
+			i=new Intent(this,SubjectList.class);
+		}
+		else
+		{	i = new Intent(this, NoteEdit.class);
+		
+		}
+		subDb.close();
+         startActivityForResult(i, ACTIVITY_CREATE);    	
     }
 	
     @Override
@@ -92,6 +102,7 @@ public class NoteList extends ListActivity {
         super.onListItemClick(l, v, position, id);
         Intent i = new Intent(this, NoteEdit.class);
         i.putExtra(NotesDbAdapter.KEY_ROWID, id);
+        //i.putExtra("subject", )
         startActivityForResult(i, ACTIVITY_EDIT);
     }
 
@@ -101,7 +112,7 @@ public class NoteList extends ListActivity {
         startManagingCursor(notesCursor);
         
 
-        String[] from = new String[] { NotesDbAdapter.KEY_TITLE ,NotesDbAdapter.KEY_SUBJECT, NotesDbAdapter.KEY_DATE};
+        String[] from = new String[] { NotesDbAdapter.KEY_TITLE ,  NotesDbAdapter.KEY_SUBJECT, NotesDbAdapter.KEY_DATE};
         int[] to = new int[] { R.id.text1 ,R.id.text2, R.id.date_row};
         
         // Now create an array adapter and set it to display using our row

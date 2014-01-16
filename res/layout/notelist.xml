@@ -2,14 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/notelist">
-   
-    <TextView
-        android:id="@+id/textViewTop"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:paddingBottom="35dp" />
+    android:background="@drawable/notelist2">
 
     <ListView
         android:id="@android:id/list"
@@ -18,8 +11,8 @@
         android:layout_above="@+id/btmLayout"
         android:layout_below="@+id/textViewTop"
         android:background="#FFF9C8"
-        android:divider="#D3D3D3"
-        android:dividerHeight="1sp" 
+        android:divider="#ffe000"
+        android:dividerHeight="1sp"
         android:footerDividersEnabled="true" />
 
     <LinearLayout
@@ -40,12 +33,28 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_subjects"
+    <TextView
+        android:id="@+id/textViewTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@android:id/list"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="20dp"
+        android:paddingTop="10dp"
+        android:text="Notes"
+        android:textColor="#ffffff"
+        android:textSize="23dp" />
+
+    <Button
+        android:id="@+id/button_subjects"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_alignBaseline="@+id/textViewTop"
+        android:layout_alignBottom="@+id/textViewTop"
         android:layout_alignParentRight="true"
-        android:text="Subjects" />
+        android:layout_marginRight="15dp"
+        android:background="@drawable/button_yellow"
+        android:text="Subjects"
+        android:textColor="#ffffff" />
     	
 </RelativeLayout> 
