@@ -31,6 +31,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
@@ -105,18 +107,18 @@ public class UserEbookList extends Activity {
 	{    
 	     switch (item.getItemId()) 
 	     {        
-	        case R.id.view_list: changeViewToList();     
-	        	return true;        
-	        default:            
-	           return super.onOptionsItemSelected(item);    
+	        case R.id.view_list: changeViewToList();   break;
+	       
+         
 	     }
+	     return super.onOptionsItemSelected(item);  
 	}
 	
 	public void changeViewToList(){
 		Intent intent=new Intent(this, UserBookListView.class);
 		startActivity(intent);
 	}
-	
+ 
   
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -126,7 +128,7 @@ public class UserEbookList extends Activity {
 	actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setTitle("My Books");
     actionBar.setIcon(R.drawable.books);
-    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+    //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 	
  
 	// initialize parse

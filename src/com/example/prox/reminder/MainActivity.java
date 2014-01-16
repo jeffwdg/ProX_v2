@@ -18,8 +18,10 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -29,6 +31,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +39,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -265,7 +270,7 @@ public class MainActivity extends Activity implements OnClickListener
 	}
 
 	// Inner Class
-	public class GridCellAdapter extends BaseAdapter implements OnClickListener {
+	public class GridCellAdapter extends BaseAdapter implements OnClickListener, android.content.DialogInterface.OnClickListener {
 		private static final String tag = "GridCellAdapter";
 		private final Context _context;
 
@@ -588,10 +593,13 @@ public class MainActivity extends Activity implements OnClickListener
 			 return currentWeekDay;
 		 }
 			public void displayThisDayReminder(String date){
-				Dialog dialog = new Dialog(MainActivity.this);
-				dialog.setContentView(R.layout.todaycalendar);
-				
-		    	Toast.makeText(getApplicationContext(), "Displaying reminders", Toast.LENGTH_LONG).show();
+				AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+				//dialog.setContentView(R.layout.todaycalendar);
+				dialog.setCancelable(true);
+		    	dialog.setTitle("Today's Reminder");
+		    	
+		    	    
+		    	//Toast.makeText(getApplicationContext(), "Displaying reminders", Toast.LENGTH_LONG).show();
 		    	Cursor cursor = dataBase.fetchAllReminderByDate(date);
 		    	String[] columns = new String[] {"title", "date", "time", "description"};
 		    	
@@ -604,11 +612,26 @@ public class MainActivity extends Activity implements OnClickListener
 		    		if (cursor!=null){
 		    			startManagingCursor(cursor);
 		    			SimpleCursorAdapter newAdapter = new SimpleCursorAdapter(MainActivity.this, R.layout.thisdayreminder_row, cursor, columns, to);
-		    			thisDayReminderList.setAdapter(newAdapter);
+		    			//thisDayReminderList.setAdapter(newAdapter);
+		    			dialog.setAdapter(newAdapter, this);
 		    		}
-		    	
-		    		dialog.show();		
+		    		
+		    		if(cursor.getCount() > 0){
+		    			AlertDialog datePicker = dialog.create();
+		    			WindowManager.LayoutParams wmlp = datePicker.getWindow().getAttributes();
+
+				    	wmlp.gravity = Gravity.TOP;
+		    			datePicker.show();
+		    		}else{
+		    			Toast.makeText(getApplicationContext(), "No reminders for this day.", Toast.LENGTH_SHORT).show();
+		    		}	
 		   }
+
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), ""+arg1, Toast.LENGTH_SHORT).show();
+			}
 	}
 
 	        

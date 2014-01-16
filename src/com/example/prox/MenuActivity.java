@@ -261,8 +261,7 @@ public class MenuActivity extends Activity{
 		if (fragment != null) {
 			 
 			android.app.FragmentManager fragmentManager = getFragmentManager();
-			fragmentManager.beginTransaction()
-					.replace(R.id.frame_container, fragment).commit();
+			fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
  
 			// update selected item and title, then close the drawer
 			mDrawerList.setItemChecked(position, true);

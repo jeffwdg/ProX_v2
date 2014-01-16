@@ -56,7 +56,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	private PDFView m_viewer = null;
 	
     private Button btn_prev;
-    private Button btn_next;
+    private Button btn_next, btn_hide;
     private Button btn_gotoPage;
     private EditText txt_find;
     
@@ -103,6 +103,13 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 		btn_next.setVisibility(1);
 		btn_prev.setEnabled(true);
         btn_next.setEnabled(true); 
+	}
+	
+	public void hideArrows(){
+		
+		bar_find.setVisibility(-1);
+ 
+	  
 	}
 	
 	
@@ -155,6 +162,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         txt_find = (EditText)bar_find.findViewById(R.id.txt_find);
         btn_prev = (Button)bar_find.findViewById(R.id.btn_prev);
         btn_next = (Button)bar_find.findViewById(R.id.btn_next);
+        btn_hide = (Button)bar_find.findViewById(R.id.btn_hide);
         //btn_gotoPage = (Button)bar_find.findViewById(R.id.btn_goToPage);
         
         //TextView pageNumcont = (TextView) bar_cmd.findViewById(R.id.pageNum);
@@ -163,7 +171,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         
         btn_prev.setOnClickListener(this);
         btn_next.setOnClickListener(this);
-        //btn_gotoPage.setOnClickListener(this);
+        btn_hide.setOnClickListener(this);
 
   
     }
@@ -354,6 +362,9 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 			break;
 		case R.id.btn_next:
 			onFindNext();
+			break;
+		case R.id.btn_hide:
+			hideArrows();
 			break;
 		/*case R.id.btn_goToPage:
 			onGoToPage();

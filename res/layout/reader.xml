@@ -31,18 +31,28 @@
         <Button
             android:id="@+id/btn_prev"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="20dp"
             android:background="@drawable/cal_left_arrow_on"
-            android:title="Previous" />
+            android:title="Previo" />
 
         <Button
             android:id="@+id/btn_next"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="40dp"
+            android:layout_width="20dp"
+             android:layout_marginRight="15dp"
             android:background="@drawable/cal_right_arrow_on"
-            android:layout_height="wrap_content"
-            android:text="Next" />
+            android:layout_height="20dp"
+            android:title="Next" />
+        
+        <Button
+            android:id="@+id/btn_hide"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="20dp"
+            android:background="@drawable/ic_action_collapse"
+            android:layout_height="20dp"
+            android:title="Hide" />
  
         </LinearLayout>
         <LinearLayout

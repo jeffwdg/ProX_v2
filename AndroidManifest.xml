@@ -59,7 +59,7 @@
                 android:resource="@xml/bookstore_searchable" />
 		</activity>
 		<activity android:name="com.example.prox.UserBookListView"
-		    	android:parentActivityName=".UserEbookList">
+		    	android:parentActivityName="com.example.prox.UserEbookList">
             
         </activity>
 		<activity android:name="com.example.prox.ProxReader"

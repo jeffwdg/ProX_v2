@@ -111,7 +111,7 @@ public class UserBookListView extends ListActivity {
 	actionBar.setDisplayHomeAsUpEnabled(true);
 	actionBar.setTitle("My Books");
 	actionBar.setIcon(R.drawable.books);
-	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+	//actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 	
 	internetdetected = new InternetDetector(this.getApplicationContext());
 	
