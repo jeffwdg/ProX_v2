@@ -114,7 +114,7 @@ public class MainActivity extends Activity {
 						
 					}else{
 						Log.d("ProX App","No Internet connection detected.");
-						showAlertDialog(MainActivity.this, "No Internet Connection", "You don't have internet connection.", false);
+						util.showAlertDialog(MainActivity.this, "No Internet Connection", "You don't have internet connection.", false);
 						
 					}
 				}
@@ -185,49 +185,12 @@ public class MainActivity extends Activity {
                 cancel = true;
 			}
 			
-			
 			if(cancel == true){
 				 focusView.requestFocus();
 			}
 			else{
 				signInNow(email, password);
 			}
-			
-			    /*
-				Button btnSignIn=(Button)findViewById(R.id.buttonSignIn);
-					
-				// Set On ClickListener
-				btnSignIn.setOnClickListener(new View.OnClickListener() {
-					
-					public void onClick(View v) {
-						// get The User name and Password
-
-						
-						// fetch the Password form database for respective user name
-						String storedPassword=loginDataBaseAdapter.getSingleEntry(email);
-						
-						if(util.isValidEmail(email)){
-							// check if the Stored password matches with  Password entered by user
-							if(password.equals(storedPassword))
-							{
-								Toast.makeText(MainActivity.this, "Congrats. You are logged in.", Toast.LENGTH_LONG).show();
-								//dialog.dismiss();
-								
-								/// Create Intent for MenuActivity  and Start The Activity
-								Intent menuActivity=new Intent(getApplicationContext(),MenuActivity.class);
-								startActivity(menuActivity);
-							}
-							else
-							{
-								Toast.makeText(MainActivity.this, "Email address or Password does not match.", Toast.LENGTH_LONG).show();
-							}
-						}else{
-							Toast.makeText(MainActivity.this, "Email address is invalid.", Toast.LENGTH_LONG).show();
-						}
-						
-					}
-				});
-				*/
  
 		}
 		
@@ -268,7 +231,7 @@ public class MainActivity extends Activity {
 					}
 					else{
 						Log.d("ProX Sign In","Error signing in.");
-						 showAlertDialog(MainActivity.this,"Login", "Username or Password is invalid.", false);
+						 util.showAlertDialog(MainActivity.this,"Login", "Username or Password is invalid.", false);
 					}
 				}
 
@@ -276,57 +239,25 @@ public class MainActivity extends Activity {
 
 	     }
 		
-		
 		 private void clearErrors(){
              editTextEmail.setError(null);
              editTextPassword.setError(null);
 		 }
 		 
-		@SuppressWarnings("deprecation")
-        public void showAlertDialog(Context context, String title, String message, Boolean status) {
-                AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-
-                // Setting Dialog Title
-                alertDialog.setTitle(title);
-
-                // Setting Dialog Message
-                alertDialog.setMessage(message);
-
-                // Setting alert dialog icon
-                alertDialog.setIcon(R.drawable.ic_action_network_wifi);
-
-                // Setting OK Button
-                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                });
-
-                // Showing Alert Message
-                alertDialog.show();
-        }
-
-		
 		public boolean isLoggedIn(){
 			
 		     SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
 		     Editor editor = pref.edit();
 		     
-		     pref.getString("email", null); // getting email
-		     //pref.getBoolean("isLoggedIn", null); // getting Boolean
-		     
+		     pref.getString("email", null); 
 		     String email = pref.getString("email", null);
-		     //Toast.makeText(MainActivity.this, email, Toast.LENGTH_LONG).show();  
-		     
+ 
 		     if(email != null){
-		           //Intent intentMenu = new Intent(getApplicationContext(),MenuActivity.class);
-		           //startActivity(intentMenu);
+		    	 Log.d("LoggedIn", "true");
 		    	 return true;
 		     }       
 		    return false;
 		}
-		
-
- 
 		 
 		@Override
 		protected void onDestroy() {

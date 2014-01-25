@@ -34,6 +34,8 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
@@ -51,6 +53,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,6 +67,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -78,6 +82,7 @@ public class UserEbookList extends Activity {
   ArrayList<Ebook> data = new ArrayList<Ebook>();
   TextView mTitle;
   private ProgressDialog pDialog;
+	ProgressBar progressBar;
   Boolean isInternetPresent = false;
   // Connection detector class
   InternetDetector internetdetected;
@@ -86,6 +91,8 @@ public class UserEbookList extends Activity {
   Cursor  ebookCursor;
   // Progress dialog type (0 - for Horizontal progress bar)
   public final int progress_bar_type = 0; 
+  NotificationCompat.Builder mBuilder;
+  NotificationManager mNotificationManager;
   
   @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,6 +122,14 @@ public class UserEbookList extends Activity {
 	}
 	
 	public void changeViewToList(){
+		//Save view preference
+		SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
+		Editor editor = pref.edit();
+		editor.putString("view", "list"); 
+		editor.commit();
+		Log.d("SetView","List");
+		
+		
 		Intent intent=new Intent(this, UserBookListView.class);
 		startActivity(intent);
 	}
@@ -204,7 +219,7 @@ public class UserEbookList extends Activity {
         	 grv.setOnItemClickListener(new OnItemClickListener(){
         		 
 		        	@SuppressLint("NewApi")
-					public void onItemClick(AdapterView parent,View v, final int position, final long id){	
+					public void onItemClick(AdapterView parent,final View v, final int position, final long id){	
 		        		ebookCursor.moveToPosition(position);
         	    		final String objectId = ebookCursor.getString(ebookCursor.getColumnIndex("objectId"));
         	    		final String title = ebookCursor.getString(ebookCursor.getColumnIndex("title"));
@@ -215,6 +230,9 @@ public class UserEbookList extends Activity {
         	    		String status =  ebookCursor.getString(ebookCursor.getColumnIndex("status"));
         	    		final String category =  ebookCursor.getString(ebookCursor.getColumnIndex("category"));
         	    		
+        	    		
+        	        	
+        	        	
         	    		Log.d("Ebook Details", "Details " + status+filename+cover);
         	    		 
         	    		CharSequence[] items = {"View","Delete","Download"};
@@ -245,7 +263,7 @@ public class UserEbookList extends Activity {
 	        	    				break;
 	        	    			case 2:
 	        	    				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_LONG).show(); 
-        	    					boolean downloadedFile = downloadEbook(objectId, filename);
+        	    					boolean downloadedFile = downloadEbook(objectId, filename,v);
         	    					String downloadedStatus = "1";
         	    					if(downloadedFile == true){ 
         	    						datasource.updateEntry(objectId, title,filename,author, ISBN, cover, downloadedStatus, category); 
@@ -371,7 +389,7 @@ public class UserEbookList extends Activity {
 	 * This method is called when the user click download ebook after purchasing it 
 	 * 
 	 */
-	public boolean downloadEbook(String objectId, String filename){
+	public boolean downloadEbook(String objectId, String filename, View v){
 		boolean downloaded =false;
 		
 		internetdetected = new InternetDetector(this.getApplicationContext());
@@ -398,10 +416,15 @@ public class UserEbookList extends Activity {
 				Toast.makeText(getApplicationContext(), "An error occured.", Toast.LENGTH_LONG).show();
             }
 			
-			Toast.makeText(getApplicationContext(), "Ebook downloaded?" +file_size, Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Downloading ebook...", Toast.LENGTH_LONG).show();
 			Log.d("File ", "Size:" + file_size + " Free: "+ freememory);
 			
 			if(freememory > file_size){
+				
+				progressBar = (ProgressBar) v.findViewById(R.id.progressbar1);
+				progressBar.setVisibility(0);
+				progressBar.setProgress(0);
+				
 				new DownloadFileFromURL().execute(filename,objectId);
 				downloaded =true;
 			}else{
@@ -429,7 +452,7 @@ public class UserEbookList extends Activity {
             pDialog.setIndeterminate(false);
             pDialog.setMax(100);
             pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            pDialog.setCancelable(false);
+            pDialog.setCancelable(true);
             pDialog.show();
             return pDialog;
         default:
@@ -448,7 +471,7 @@ public class UserEbookList extends Activity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showDialog(progress_bar_type);
+           // showDialog(progress_bar_type);
         }
  
         /**
@@ -456,6 +479,20 @@ public class UserEbookList extends Activity {
          * */
         @Override
         protected String doInBackground(String... f_url) {
+        	
+        	 mBuilder =new NotificationCompat.Builder(UserEbookList.this)
+				    .setSmallIcon(R.drawable.ic_event)
+				    .setContentTitle("Prox Ebook Download")
+				    .setContentText("Download in progress...");
+			
+			Intent intent = new Intent(UserEbookList.this, MainActivity.class);
+			PendingIntent pi = PendingIntent.getActivity(UserEbookList.this,0,intent,Intent.FLAG_ACTIVITY_NEW_TASK);
+			mBuilder.setContentIntent(pi);
+			 mNotificationManager =
+			                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			mNotificationManager.notify(0, mBuilder.build());
+			
+			
             int count;
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
 		    Editor editor = pref.edit();
@@ -510,8 +547,9 @@ public class UserEbookList extends Activity {
                 output.flush();
  
                 // closing streams
-                Log.d("Ebook Download", "Download completed");
-                dismissDialog(progress_bar_type);
+                
+               // dismissDialog(progress_bar_type);
+               // Toast.makeText(getApplicationContext(), "Download completed.", Toast.LENGTH_LONG).show();
                 output.close();
                 input.close();
  
@@ -528,7 +566,10 @@ public class UserEbookList extends Activity {
          * */
         protected void onProgressUpdate(String... progress) {
             // setting progress percentage
-            pDialog.setProgress(Integer.parseInt(progress[0]));
+            //pDialog.setProgress(Integer.parseInt(progress[0]));
+			progressBar.setProgress(Integer.parseInt(progress[0]));
+            mBuilder.setProgress(100, Integer.parseInt(progress[0]), false);
+            //Toast.makeText(getApplicationContext(), "Download completed.", Toast.LENGTH_LONG).show();
        }
         
         
@@ -539,33 +580,17 @@ public class UserEbookList extends Activity {
          * **/
         protected void onPostExecute(String file_url, String objectId) {
             // dismiss the dialog after the file was downloaded
-            dismissDialog(progress_bar_type);
-            Log.d("Ebook Download", "Completed" + objectId);
-           /* 
-            File file = new File("data/data/com.example.prox/proxbooks/book.pdf"); 
-
-            if (file.exists()) { 
-                Uri path = Uri.fromFile(file); 
-                Intent intent = new Intent(Intent.ACTION_VIEW); 
-                intent.setDataAndType(path, "application/pdf"); 
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
-
-                try { 
-                    startActivity(intent); 
-                }  
-                catch (ActivityNotFoundException e) { 
-                   // Toast.makeText(this,  "No Application Available to View PDF",  Toast.LENGTH_SHORT).show(); 
-                }  
-            }
-            */
-            // Displaying downloaded image into image view
-            // Reading image path from sdcard
-            //String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.pdf";
-            // setting downloaded into image view
-            //my_image.setImageDrawable(Drawable.createFromPath(imagePath));
+            //dismissDialog(progress_bar_type);
+            mBuilder.setContentText("Download complete")
+            		.setProgress(0,0,false);
+            mNotificationManager.notify(0, mBuilder.build());
+            
+            Log.d("Ebook Download", "Download completed");
+            //Log.d("Ebook Download", "Completed" + objectId);
         }
  
     }
+    
     
     /**EBOOK Search**/
     
@@ -628,7 +653,7 @@ public class UserEbookList extends Activity {
             	 grv.setOnItemClickListener(new OnItemClickListener(){
             		 
  		        	@SuppressLint("NewApi")
- 					public void onItemClick(AdapterView parent,View v, final int position, final long id){	
+ 					public void onItemClick(AdapterView parent,final View v, final int position, final long id){	
  		        		ebookCursor.moveToPosition(position);
          	    		final String objectId = ebookCursor.getString(ebookCursor.getColumnIndex("objectId"));
          	    		final String title = ebookCursor.getString(ebookCursor.getColumnIndex("title"));
@@ -669,7 +694,7 @@ public class UserEbookList extends Activity {
  	        	    				break;
  	        	    			case 2:
  	        	    				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_LONG).show(); 
-         	    					boolean downloadedFile = downloadEbook(objectId, filename);
+         	    					boolean downloadedFile = downloadEbook(objectId, filename, v);
          	    					String downloadedStatus = "1";
          	    					if(downloadedFile == true){ 
          	    						datasource.updateEntry(objectId, title,filename,author, ISBN, cover, downloadedStatus, category); 
@@ -703,10 +728,10 @@ public class UserEbookList extends Activity {
 		ebookCursor.requery();
 	}
 
-  @Override
-  protected void onPause() {
-    datasource.close();
-    super.onPause();
+	@Override
+	protected void onPause() {
+		datasource.close();
+		super.onPause();
   }
  
 

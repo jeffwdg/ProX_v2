@@ -55,16 +55,13 @@ public class LoginDataBaseAdapter
 			
 			// Insert the row into your table
 			db.insert("LOGIN", null, newValues);
-			//Toast.makeText(context, "User added successfully", Toast.LENGTH_LONG).show();
 		}
 		
 		
 		public int deleteEntry(String email)
 		{
-			//String id=String.valueOf(ID);
 		    String where="EMAIL=?";
 		    int numberOFEntriesDeleted= db.delete("LOGIN", where, new String[]{email}) ;
-	       // Toast.makeText(context, "Number for Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_LONG).show();
 	        return numberOFEntriesDeleted;
 		}	
 		
@@ -83,7 +80,8 @@ public class LoginDataBaseAdapter
 		public String getSingleEntry(String email)
 		{
 			Cursor cursor=db.query("LOGIN", null, " EMAIL=?", new String[]{email}, null, null, null);
-	        if(cursor.getCount()<1) // Email Not Exist
+			
+	        if(cursor.getCount() < 1) 
 	        {
 	        	cursor.close();
 	        	return "NOT EXIST";
@@ -96,12 +94,9 @@ public class LoginDataBaseAdapter
 		
 		public void  updateEntry(String email,String password)
 		{
-			// Define the updated row content.
 			ContentValues updatedValues = new ContentValues();
-			// Assign values for each row.
 			updatedValues.put("EMAIL", email);
 			updatedValues.put("PASSWORD",password);
-			
 	        String where="EMAIL = ?";
 		    db.update("LOGIN",updatedValues, where, new String[]{email});			   
 		}	

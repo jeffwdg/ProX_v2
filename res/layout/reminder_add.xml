@@ -2,17 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightgray" 
+    android:background="@color/pastel_green" 
     android:orientation="vertical"
     >
-//title    
+    
     <TextView 
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content"
         android:text="@string/title" 
         android:paddingTop="15dip"
         android:layout_marginLeft="20dip"
-        android:textColor="@color/green"
+        android:textColor="@color/pine_green"
         android:textAppearance="?android:attr/textAppearanceLarge"
        />
 	
@@ -25,6 +25,7 @@
         android:layout_marginRight="20dip"
         android:ems="10"
         android:hint="Title"
+     
         android:textColor="@color/dark"
         
          >
@@ -51,7 +52,7 @@
           android:paddingTop="15dip"
           android:text="Date"
           android:textAppearance="?android:attr/textAppearanceLarge"
-          android:textColor="@color/green" />
+          android:textColor="@color/pine_green" />
 
       <EditText
           android:id="@+id/editText1"
@@ -60,10 +61,10 @@
           android:layout_marginBottom="10dip"
           android:layout_marginRight="20dip"
           android:layout_weight="0.50"
-          android:textColor="@color/dark"
-          android:ems="10" 
-           />
-      
+          android:ems="10"
+          android:focusable="false"
+          android:inputType="date"
+          android:textColor="@color/dark" />
 
         <ImageButton
           android:id="@+id/imageButton1"
@@ -98,7 +99,7 @@
           android:paddingTop="15dip"
           android:text="Time"
           android:textAppearance="?android:attr/textAppearanceLarge"
-          android:textColor="@color/green" />
+          android:textColor="@color/pine_green" />
 
       <EditText
           android:id="@+id/editText2"
@@ -107,10 +108,10 @@
           android:layout_marginBottom="10dip"
           android:layout_marginRight="20dip"
           android:layout_weight="0.50"
-          android:textColor="@color/dark"
-          android:ems="10" 
-           />
-      
+          android:ems="10"
+          android:focusable="false"
+          android:inputType="time"
+          android:textColor="@color/dark" />
 
        <ImageButton
           android:id="@+id/imageButton2"
@@ -135,14 +136,14 @@
         android:text="@string/desc" 
         android:paddingTop="15dip"
         android:layout_marginLeft="20dip"
-        android:textColor="@color/green"
+        android:textColor="@color/pine_green"
         android:textAppearance="?android:attr/textAppearanceLarge"
        />
 	
     <EditText
         android:id="@+id/editDesc"
         android:layout_width="fill_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dip"
         android:layout_marginLeft="20dip"
         android:layout_marginRight="20dip"

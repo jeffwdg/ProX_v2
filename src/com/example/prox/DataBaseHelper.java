@@ -12,15 +12,12 @@ public class DataBaseHelper extends SQLiteOpenHelper
     {
 	           super(context, name, factory, version);
 	}
-	
-	
-	// Called when no database exists in disk and the helper class needs
-	// to create a new one.
+
+	// Called when no database exists in disk and the helper class needs to create a new one.
 	@Override
 	public void onCreate(SQLiteDatabase _db) 
 	{
 			_db.execSQL(LoginDataBaseAdapter.DATABASE_CREATE);
-			
 	}
 	
 	// Called when there is a database version mismatch meaning that the version
@@ -31,7 +28,6 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			// Log the version upgrade.
 			Log.w("TaskDBAdapter", "Upgrading from version " +_oldVersion + " to " +_newVersion + ", which will destroy all old data");
 	
-	
 			// Upgrade the existing database to conform to the new version. Multiple
 			// previous versions can be handled by comparing _oldVersion and _newVersion
 			// values.
@@ -40,6 +36,5 @@ public class DataBaseHelper extends SQLiteOpenHelper
 			// Create a new one.
 			onCreate(_db);
 	}
-	
 
 }

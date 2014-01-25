@@ -15,6 +15,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -113,6 +115,7 @@ public class ReminderUpdate extends Activity implements OnClickListener{
  	         
  	        dataBase = new ReminderDatabaseAdapter(this);
  	        dataBase.open();
+ 	        registerViews();
     }
     
     @Override
@@ -128,6 +131,11 @@ public class ReminderUpdate extends Activity implements OnClickListener{
  
        switch (item.getItemId()) {
        case R.id.action_save:
+    	   if ( checkValidation () )
+               submitForm();
+           else
+               Toast.makeText(ReminderUpdate.this, "Form contains error", Toast.LENGTH_LONG).show();
+
             UpdateReminder();
            return true;
       
@@ -139,6 +147,12 @@ public class ReminderUpdate extends Activity implements OnClickListener{
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+    
+    private void submitForm() {
+        // Submit your form here. your form is valid
+        Toast.makeText(this, "Submitting form...", Toast.LENGTH_LONG).show();
+        UpdateReminder();
     }
     
     private void UpdateReminder() {
@@ -275,6 +289,28 @@ public class ReminderUpdate extends Activity implements OnClickListener{
     			// TODO Auto-generated method stub
     			
     		}
+    		
+     		private void registerViews() {
+    	        title = (EditText) findViewById(R.id.editTitle);
+    	        // TextWatcher would let us check validation error on the fly
+    	        title.addTextChangedListener(new TextWatcher() {
+    	            public void afterTextChanged(Editable s) {
+    	                ReminderValidation.TitleValid(title,true);
+    	            }
+    	            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+    	            public void onTextChanged(CharSequence s, int start, int before, int count){}
+    	        });
 
+    	      
+    	    }
+    		   private boolean checkValidation() {
+       	        boolean ret = true;
+
+       	        if (!ReminderValidation.TitleValid(title,true)) ret = false;
+         	        if (!ReminderValidation.DateValid(date, true)) ret = false;
+       	        if (!ReminderValidation.TimeValid(time, true)) ret = false;
+
+       	        return ret;
+       	    }
 
        }

@@ -152,8 +152,6 @@ public class SignUpActivity extends Activity implements OnClickListener
 			
 		}
 		
-		
-		
 		//check for a valid email
 		if(TextUtils.isEmpty(email)){
 			editTextEmail.setError(getString(R.string.required_field));
@@ -182,49 +180,7 @@ public class SignUpActivity extends Activity implements OnClickListener
 		} else{
 			signUp(email, password, fname, lname);
 		}
-		/*
-		// check if any of the fields are vacant
-		if(email.equals("") || password.equals("") || confirmPassword.equals("") || fname.equals("") || lname.equals(""))
-		{
-				Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_LONG).show();
-				return;
-		}
-		
-			//check if email already exist
-			if(loginDataBaseAdapter.isExisting(email) == 1){
-				
-				Toast.makeText(getApplicationContext(), "Email address already taken. Try another.", Toast.LENGTH_LONG).show();
-				
-			}else{
-				
-				if(util.isValidEmail(email) == true){
-					// check if both password matches
-					if(!password.equals(confirmPassword)){
-						Toast.makeText(getApplicationContext(), "Password does not match", Toast.LENGTH_LONG).show();
-						return;
-					}
-					else
-					{	
-						 
-						//Save in Shared Preferences
-						SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-						Editor editor = pref.edit();
-						editor.putString("email", email); // Storing email
-						editor.putString("fname", fname); // Storing first name
-						editor.putString("lname", lname); // Storing last name
-						//editor.putBoolean("isLoggedIn", true); // Storing boolean - true/false
-						editor.commit();
-						
-					    // Save the Data in Database
-					    loginDataBaseAdapter.insertEntry(email, password, fname, lname);
-					    Toast.makeText(getApplicationContext(), "Account Successfully Created ", Toast.LENGTH_LONG).show();
-					}
-				}else{
-					Toast.makeText(getApplicationContext(), "Email address is invalid. Try another.", Toast.LENGTH_LONG).show();
-				}
-				
-			}
-			*/
+ 
 	}
 	
 	private void signUp(final String email, String password, final String fname, final String lname){
@@ -254,14 +210,12 @@ public class SignUpActivity extends Activity implements OnClickListener
 				editor.putString("objectId",objectId); // Storing boolean - true/false
 				Log.d("ProX User Signup", currentUser.getObjectId());
 				editor.commit();
-					
-               signUpMsg("Account created successfully. Logging in...");
+				
+               Toast.makeText(getApplicationContext(), "Account created successfully. Logging in...", Toast.LENGTH_SHORT).show();
                Intent in = new Intent(getApplicationContext(), MenuActivity.class);
                startActivity(in);
              } else {
-               // Sign up didn't succeed. Look at the ParseException
-               // to figure out what went wrong
-                     signUpMsg("This email address is already taken.");
+                     Toast.makeText(getApplicationContext(), "This email address is already taken.", Toast.LENGTH_SHORT).show();
              }
            }
 

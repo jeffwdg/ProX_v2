@@ -26,36 +26,7 @@ public class NotesFragment extends Fragment {
         
         Intent intent = new Intent(getActivity(), NoteList.class);
 		startActivity(intent);
-        /*
-        mTabHost = (TabHost) rootView.findViewById(android.R.id.tabhost);
-        LocalActivityManager mLocalActivityManager = new LocalActivityManager(getActivity(), false);
-        mLocalActivityManager.dispatchCreate(savedInstanceState);
-        mTabHost.setup(mLocalActivityManager);//very important to call this
-        
- 
-        
-        TabHost.TabSpec free = mTabHost.newTabSpec("Free");
-        free.setIndicator("Free", getResources().getDrawable(R.drawable.free_tab));
-        Intent freeIntent = new Intent(getActivity(), FreeBookView.class);
-        free.setContent(freeIntent);
-        
-        TabHost.TabSpec latest = mTabHost.newTabSpec("Latest");
-        latest.setIndicator("Latest", getResources().getDrawable(R.drawable.new_tab));
-        Intent latestIntent = new Intent(getActivity(), BookView.class);
-        latest.setContent(latestIntent);
-        
-        TabHost.TabSpec best = mTabHost.newTabSpec("Best Seller");
-        best.setIndicator("Best Seller", getResources().getDrawable(R.drawable.best_tab));
-        Intent bestIntent = new Intent(getActivity(), BookView.class);
-        best.setContent(bestIntent);
-        
-        mTabHost.addTab(free);
-        mTabHost.addTab(latest);
-        mTabHost.addTab(best);
-		 
-        */
- 
-		
+
         return rootView;
     }
 }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -115,6 +116,11 @@ public class ImageDownloader extends AsyncTask<Void, Integer, Void> {
 	     *  then decodes and returns a Bitmap object
 	     ---*/
 	    try {
+	    	if (android.os.Build.VERSION.SDK_INT > 9) {
+	    	    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+	    	    StrictMode.setThreadPolicy(policy);
+	    	}
+	    	
 	        URL url = new URL(link);
 	        HttpURLConnection connection = (HttpURLConnection) url
 	                .openConnection();

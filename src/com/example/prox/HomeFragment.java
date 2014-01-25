@@ -45,8 +45,6 @@ public class HomeFragment extends Fragment {
 		    String fname = pref.getString("fname", null);
 		    String lname = pref.getString("lname", null);
 		    
-		    
-		    //Toast.makeText(getActivity(), email, Toast.LENGTH_LONG).show(); 
 		    TextView textView1 = (TextView) rootView.findViewById(R.id.textView1);
 		    TextView textView2 = (TextView) rootView.findViewById(R.id.textView2);
 		    TextView textView3 = (TextView) rootView.findViewById(R.id.textView3);
@@ -69,7 +67,6 @@ public class HomeFragment extends Fragment {
 			
 		    userName.setText(fname +" " + lname);
 		    userEmail.setText("" + email);
-		 
 		    
 	        return rootView;
 	    }

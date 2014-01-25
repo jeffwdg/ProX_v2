@@ -30,31 +30,30 @@ public class CustomGridViewAdapter extends ArrayAdapter<Item> {
 	 ArrayList<Item> data = new ArrayList<Item>();
 
 	 public CustomGridViewAdapter(Context context, int layoutResourceId, ArrayList<Item> data) {
-		  super(context, layoutResourceId, data);
-		  this.layoutResourceId = layoutResourceId;
-		  this.context = context;
-		  this.data = data;
+		 super(context, layoutResourceId, data);
+		 this.layoutResourceId = layoutResourceId;
+		 this.context = context;
+		 this.data = data;
 	}
 	 
-	 @Override
-	    public int getCount() {
-	        return data.size();
-	    }
-	 
-	 
-	 @Override
-	    public Item getItem(int position) {
-		 
-	        return data.get(position);
-	    }
-	 @Override
-	    public long getItemId(int position) {
-	        return position;
-	    }
-
-	 @SuppressLint({ "NewApi"})
 	@Override
-	 public View getView(int position, View convertView, ViewGroup parent) {
+	public int getCount() {
+		 return data.size();
+	}
+	 
+	@Override
+	public Item getItem(int position) {
+		return data.get(position);
+	}
+	
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@SuppressLint({ "NewApi"})
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
 		  View row = convertView;
 		  RecordHolder holder = null;
 		  ImageView imageView;
@@ -94,9 +93,10 @@ public class CustomGridViewAdapter extends ArrayAdapter<Item> {
 	
 	 };
 	 
-	 public Drawable LoadImageFromURL(String url){
-		 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		    StrictMode.setThreadPolicy(policy);
+	public Drawable LoadImageFromURL(String url){
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 	    try
 	    {
 		    InputStream is = (InputStream) new URL(url).getContent();

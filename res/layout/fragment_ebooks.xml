@@ -38,7 +38,7 @@
 	 android:verticalSpacing="10dp"
 	 android:horizontalSpacing="10dp"
 	 android:columnWidth="90dp"
-	 android:background="@drawable/row"
+	 android:background="@drawable/shelfbg"
 	 android:stretchMode="columnWidth"
 	 android:gravity="center" />
 		    

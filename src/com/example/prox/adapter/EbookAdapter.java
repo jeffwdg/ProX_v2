@@ -34,19 +34,10 @@ public class EbookAdapter extends ArrayAdapter{
 		this.objects = objects;
 	}
 
-
-
-
-	
-
-	 
-
-
 	public View getView(int position, View convertView, ViewGroup parent){
 
 		// assign the view we are converting to a local variable
 		View v = convertView;
-
 		// first check to see if the view is null. if so, we have to inflate it.
 		// to inflate it basically means to render, or show, the view.
 		if (v == null) {
@@ -76,11 +67,9 @@ public class EbookAdapter extends ArrayAdapter{
 			
 			Drawable bookcover1 = LoadImageFromURL(i.getCover());
 			cover.setImageDrawable(bookcover1);
-			 
 		}
 
 		return v;
-
 	}
 
 

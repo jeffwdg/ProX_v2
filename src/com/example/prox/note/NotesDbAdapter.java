@@ -94,6 +94,12 @@ public class NotesDbAdapter {
         mDbHelper.close();
     }
 
+    
+    
+    public int countNotes(){
+    	Cursor cur = mDb.rawQuery("select * from notes",  null);
+    	return cur.getCount();
+    }
 
     /**
      * Create a new note using the title and body provided. If the note is
@@ -132,12 +138,12 @@ public class NotesDbAdapter {
     		return false;
     	return true;
     }
-    
-    
-    public int countNotes(){
-    	Cursor cur = mDb.rawQuery("select * from notes",  null);
-    	return cur.getCount();
+    public Cursor fetchAllNotesUnderSubject(String subject)
+    {	return mDb.rawQuery("select * from notes where subject = ?", new String[] { subject });
+    	
     }
+    
+  //  public String returnSubjectValue(S)
 
     /**
      * Return a Cursor over the list of all notes in the database
@@ -147,7 +153,7 @@ public class NotesDbAdapter {
     public Cursor fetchAllNotes() {
 
         return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE, KEY_SUBJECT,
-                KEY_BODY,KEY_DATE}, null, null, null, null, null, null);
+                KEY_BODY,KEY_DATE}, null, null, null, null,"date DESC, subject ASC", null );
     }
 
     /**

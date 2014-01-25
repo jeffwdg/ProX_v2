@@ -9,7 +9,7 @@
          android:id="@+id/buttonlayout" 
          android:layout_width="fill_parent" 
          android:layout_height="40sp" 
-         android:background="@drawable/topbar2" 
+          
          android:gravity="left|top" 
          android:height="60sp" 
          android:layout_marginTop="3dp"
@@ -31,9 +31,10 @@
              android:layout_width="fill_parent"
              android:layout_height="60sp" 
              android:layout_weight="0.6" 
+             android:paddingBottom="20dp"
              android:gravity="center|fill_vertical" 
              android:textAppearance="?android:attr/textAppearanceMedium" 
-             android:textColor="#FFFFFF" > </TextView>
+             android:textColor="@color/pine_green" > </TextView>
 
          <ImageView 
              android:id="@+id/nextMonth"

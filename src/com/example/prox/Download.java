@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.example.prox.Grid.ImageAdapter;
 import com.radaee.reader.R;
  
 import android.app.Activity;
@@ -35,11 +34,8 @@ public class Download extends Activity {
  
     private ProgressDialog pDialog;
     ImageView my_image;
-    // Progress dialog type (0 - for Horizontal progress bar)
     public static final int progress_bar_type = 0; 
- 
-    //file url to download
-    //private static String file_url = "http://api.androidhive.info/progressdialog/hive.jpg";
+
     String file_url="";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,21 +51,8 @@ public class Download extends Activity {
         // Selected image id
         int position = i.getExtras().getInt("id");
         title = i.getExtras().getString("title");
-        //filename = i.getExtras().getString("filename");
-        
-        /*
-        String[] file1 = filename.split("/");
-        String[] file2 = file1[4].split("-");
-        String myfilename = file2[5];
-       */
-        //CustomGridViewAdapter adapter = new CustomGridViewAdapter(this, position, null);
-
         booktitle = (TextView) findViewById(R.id.bookTitle);
         booktitle.setText(title);
-        
-       // bookfilename = (TextView) findViewById(R.id.book_filelocation);
-        //bookfilename.setText(myfilename);
-        
         file_url = i.getExtras().getString("filename");
         Toast.makeText(this,"The ebook " +  title + " selected", Toast.LENGTH_SHORT).show();
  
@@ -77,9 +60,7 @@ public class Download extends Activity {
         
         //Image to show after downloading
         my_image = (ImageView) findViewById(R.id.my_image);
-        /**
-         * Show Progress bar click event
-         * */
+
         btnShowProgress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +124,7 @@ public class Download extends Activity {
                 URL url = new URL(f_url[0]);
                 URLConnection conection = url.openConnection();
                 conection.connect();
-                // this will be useful so that you can show a tipical 0-100% progress bar
+                // this will be useful so that you can show a typical 0-100% progress bar
                 int lenghtOfFile = conection.getContentLength();
  
                 
@@ -205,7 +186,6 @@ public class Download extends Activity {
         protected void onPostExecute(String file_url) {
             // dismiss the dialog after the file was downloaded
             dismissDialog(progress_bar_type);
-            
             
             File file = new File("data/data/com.example.prox/proxbooks/book.pdf"); 
 

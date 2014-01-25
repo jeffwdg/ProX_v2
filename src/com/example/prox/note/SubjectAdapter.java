@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.radaee.reader.R;
 
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class SubjectAdapter extends BaseAdapter{
-	  private final Context context;
+	 private final Context context;
 	  private ArrayList<Pair> pairs;
 	  public SubjectAdapter(ArrayList<Pair> pairs,Context context) {
 	    this.context = context;
@@ -31,8 +32,7 @@ public class SubjectAdapter extends BaseAdapter{
 	 
 	           Pair p = pairs.get(position);
 	           TextView name = (TextView)v.findViewById(R.id.subjtxt);
-	           v.setTag(p.getId());
-	           
+	           v.setTag(p);
 	           name.setText(p.getDesc());                             
 	                        
 	        return v;
@@ -56,6 +56,5 @@ public class SubjectAdapter extends BaseAdapter{
 		// TODO Auto-generated method stub
 		return arg0;
 	}
-	  
 	  
 	} 

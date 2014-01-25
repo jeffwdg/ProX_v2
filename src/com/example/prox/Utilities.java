@@ -36,7 +36,7 @@ public class Utilities extends Activity {
 		if(str.matches(pattern)){
 			ret =true;
 		}
-		Log.d("Util", "IsNumeric"+ret);
+		Log.d("Util", "IsNumeric "+ret);
 		return ret;
 	}
 	

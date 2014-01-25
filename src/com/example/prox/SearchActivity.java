@@ -60,7 +60,6 @@ public class SearchActivity extends Activity implements OnNavigationListener{
         ArrayList<String> categoryList = new ArrayList<String>();
         categoryList.add("By Title");
         categoryList.add("By Author");
-        categoryList.add("By Category");
         categoryList.add("By ISBN");
  
         ArrayAdapter<String> aAdpt = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, categoryList);

@@ -4,10 +4,12 @@
           android:icon="@drawable/ic_menu_save"
           android:alphabeticShortcut='s'
           android:title="@string/save_menu_noteedit"
-          android:showAsAction="ifRoom|withText" />    
+          android:showAsAction="ifRoom|withText" /> 
+    <!--    
     <item android:id="@+id/menu_delete"
           android:icon="@drawable/ic_menu_delete"
           android:title="@string/delete_menu_noteedit"
           android:showAsAction="ifRoom|withText" />
+    --> 
     
 </menu>

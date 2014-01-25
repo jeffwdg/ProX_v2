@@ -58,11 +58,9 @@ public class InternetDetector{
 	        			    	 x = true;
 	        			     }
 						} catch (MalformedURLException e) {
-							// TODO Auto-generated catch block
 							Log.e("Connection error", "Error checking internet connection", e);
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							Log.e("Connection error", "Error checking internet connection", e);
 							e.printStackTrace();
 						}

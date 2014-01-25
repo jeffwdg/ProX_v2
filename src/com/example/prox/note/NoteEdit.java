@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,11 +22,16 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
+
 
 
 
@@ -69,7 +75,7 @@ public class NoteEdit extends Activity{
         long msTime = System.currentTimeMillis();  
         Date curDateTime = new Date(msTime);
  	
-        SimpleDateFormat formatter = new SimpleDateFormat("d'/'M'/'y");  
+        SimpleDateFormat formatter = new SimpleDateFormat("M'/'d'/'y");  
         curDate = formatter.format(curDateTime);        
         
         mDateText.setText(""+curDate);
@@ -81,13 +87,7 @@ public class NoteEdit extends Activity{
         	populateFields();
         }
 
-       
-	
 	}	
-	
-	
-	
-	
 	
 	private void loadspinner(){
 		
@@ -98,10 +98,9 @@ public class NoteEdit extends Activity{
 		list = mDbHelper.getAllLabels();
 		ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
                 spin.setAdapter(dataAdapter);
-                
-
+     
 	}
 
 	
@@ -152,7 +151,24 @@ public class NoteEdit extends Activity{
 	        outState.putSerializable(NotesDbAdapter.KEY_ROWID, mRowId);
 	    }
 	    
-
+    
+	  
+	     
+//		ListView list = getListView();
+//		
+//		
+//	    list.setOnItemLongClickListener(new OnItemLongClickListener() {
+//
+//	    @Override
+//		public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
+//				long arg3) {
+//	    	Pair temp=(Pair) arg1.getTag();
+//	    	delete_id=temp.getId();
+//	    	showDeleteDialog();
+//			// TODO Auto-generated method stub
+//			return false;
+//		}
+//	    });
 	    
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,82 +181,79 @@ public class NoteEdit extends Activity{
 		public boolean onOptionsItemSelected(MenuItem item) {
 		    switch (item.getItemId()) {
 		
-		    case R.id.menu_delete:
-		    	
-		    	mTitleText = (EditText) findViewById(R.id.title);
-				  
-		        mBodyText = (EditText) findViewById(R.id.body);
-		        mDateText = (TextView) findViewById(R.id.notelist_date);
-		        
-		    	// check if any of the fields are vacant
-				if(mTitleText.equals("") )
-				{
-						Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_LONG).show();
-						
-				}
-				
-				else{
-		    	
-		    	AlertDialog.Builder dialog1 = new AlertDialog.Builder(NoteEdit.this);
-		    	dialog1.setTitle("Delete Confirmation");
-		    	dialog1.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						deletenote();
-						finish();
-
-					}
-		    		
-		    	});
-		    	
-		    	dialog1.setNegativeButton("No", new DialogInterface.OnClickListener(){
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					dialog.cancel();
-						
-					}
-		    		
-		    	});
-		    	
-		    	dialog1.show();
-		    	
-		    	return true;
-		    	
-				}
+//		    case R.id.menu_delete:
+//		    	
+//		    	
+//		    	deletenote();
 		    	
 		    case R.id.menu_save:
 	    		saveState();
-	    		//finish();	    	
+	       	
 		    default:
 		    	return super.onOptionsItemSelected(item);
 		    }
 		}
 	    
-		private void deletenote(){
-			  		
-		    if(note != null){
-			note.close();
-			note = null;
-			}
-			
-			if(mRowId != null){
-			mDbHelper.deleteNote(mRowId);
-			}
-			
-			finish();
-			}	
-			
+//		private void deletenote(){
+//			  		
+//		 
+//	        if(mRowId == null)
+//			{
+//				
+//				Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
+//					
+//			}
+//			
+//			else{
+//
+//				
+//		    	AlertDialog.Builder dialog1 = new AlertDialog.Builder(NoteEdit.this);
+//		    	dialog1.setTitle("Delete Confirmation");
+//		    	dialog1.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+//
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//						dialog.dismiss();
+//
+//						if(note != null){
+//							note.close();
+//							note = null;
+//							}
+//							
+//							if(mRowId != null){
+//							mDbHelper.deleteNote(mRowId);
+//							}
+//							
+//					finish();
+//
+//					}
+//		    		
+//		    	});
+//		    	
+//		    	dialog1.setNegativeButton("No", new DialogInterface.OnClickListener(){
+//
+//					@Override
+//					public void onClick(DialogInterface dialog, int which) {
+//					dialog.cancel();
+//						
+//					}
+//		    		
+//		    	});
+//		    	
+//		    	dialog1.show();
+//		    									
+//			}
+//
+//			
+//		}
 	    private void saveState() {
 	        String title = mTitleText.getText().toString();
 	        //String subject = mSubjectText.getText().toString();
 	        String body = mBodyText.getText().toString();
 	        
-	        if(title.equals("") /*|| subject.equals("") || body.equals("")*/ )
+	        if(title.equals("") )
 			{
-					Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
 					return;
 			}
 			
@@ -259,7 +272,14 @@ public class NoteEdit extends Activity{
 	        	if(!mDbHelper.updateNote(mRowId, title, subject, body, curDate)){
 	        		Log.e("saveState","failed to update note");
 	        	}
+	        	else
+	        	{	Intent i=new Intent();
+	        		i.putExtra("subject", subject);
+	        		setResult(RESULT_OK, i);
+	        		
+	        	}
 	        }
+	        
 	        finish();
 	        }
 	    }

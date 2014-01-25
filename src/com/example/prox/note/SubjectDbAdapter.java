@@ -80,7 +80,9 @@ public class SubjectDbAdapter {
 
 	        public long createSubject(String subjectname) {
 	            ContentValues initialValues = new ContentValues();
+	            subjectname=subjectname.toLowerCase();
 	            initialValues.put(KEY_SUBJECTNAME, subjectname);
+	            
 	            return mDb.insert(DATABASE_TABLE, null, initialValues);
 	        }
 
@@ -89,18 +91,16 @@ public class SubjectDbAdapter {
 
 	            return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	        }
-	        
-	        public int countSubjects(){
-	        	Cursor cur = mDb.rawQuery("select * from Subject",  null);
-	        	return cur.getCount();
-	        }
+
 	     
 	        public Cursor fetchAllSubject() {
 
 	            return mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
 	        }
+	        
 	        public Boolean findSubjectIfExist(String name)
-	        {
+	        {   
+	        	name=name.toLowerCase();
 	        	Cursor cursor = mDb.rawQuery("select * from Subject where subjectname = ?", new String[] { name });
 	        	if(cursor.getCount()<1)
 	        		return false;
@@ -108,10 +108,7 @@ public class SubjectDbAdapter {
 	        }
 	        
 	       
-	        
-	      
-
-
+	       
 	        public Cursor fetchSubject(String rowId) throws SQLException {
 
 	            Cursor mCursor =

@@ -77,7 +77,6 @@ public class Ebook {
         this.filename = filename;
     }
     
-
 	public CharSequence getText() {
 		// TODO Auto-generated method stub
 		return null;

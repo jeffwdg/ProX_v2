@@ -25,30 +25,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-		<activity android:name="com.example.prox.SignUpActivity"
-		    android:parentActivityName="com.example.prox.MainActivity"/>
-		<activity android:name="com.example.prox.MenuActivity"/>
-		<activity android:name="com.example.prox.ForgotPassword"
-		    android:parentActivityName="com.example.prox.MainActivity"/>
-		<activity android:name="com.example.prox.StoreActivity"/>
-		<activity android:name="com.example.prox.Download"/>
-		<activity android:name="com.example.prox.BookView"/>
-		<activity android:name="com.example.prox.Utilities"/>
-		<activity android:name="com.example.prox.Grid"/>
+        <activity android:name="com.example.prox.Utilities"/>
 		<activity android:name="com.example.prox.BookReader"/>
 		<activity android:name="com.example.prox.FreeBookView"/>
 		<activity android:name="com.example.prox.LatestBookView"/>
 		<activity android:name="com.example.prox.BestBookView"/>
-		<activity android:name="com.radaee.reader.MyPDFOpen"
-		    android:parentActivityName="com.example.prox.UserEbookList"/>  
-		<activity android:name="com.example.prox.StoreBookDetails"
-		    	android:parentActivityName="com.example.prox.SearchActivity">
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="com.example.prox.BookSearch" />
-		</activity>
+		<activity android:name="com.example.prox.MenuActivity"/>
 		<activity android:name="com.example.prox.InternetDetector"/>
+		<activity android:name="com.example.prox.MultipleDownload"/>
+		
+		<activity android:name="com.example.prox.SignUpActivity"
+		    android:parentActivityName="com.example.prox.MainActivity"/>
+		
+		<activity android:name="com.example.prox.ForgotPassword"
+		    android:parentActivityName="com.example.prox.MainActivity"/>
+
 		<activity android:name="com.example.prox.UserEbookList"
 		    	android:parentActivityName="com.example.prox.MenuActivity">
             <intent-filter>
@@ -58,19 +49,33 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/bookstore_searchable" />
 		</activity>
+		<activity android:name="com.radaee.reader.MyPDFOpen"
+		    android:parentActivityName="com.example.prox.UserEbookList"/> 
+		    
 		<activity android:name="com.example.prox.UserBookListView"
-		    	android:parentActivityName="com.example.prox.UserEbookList">
-            
+		    	android:parentActivityName="com.example.prox.MenuActivity">
+			<intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+			<meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/bookstore_searchable" />
         </activity>
-		<activity android:name="com.example.prox.ProxReader"
-				android:uiOptions="splitActionBarWhenNarrow"
-		    	android:parentActivityName="com.example.prox.UserEbookList"/>
+        
 		<activity android:name="com.example.prox.SearchActivity"
 		    	android:parentActivityName="com.example.prox.StoreFragment">
 			<meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.example.prox.BookSearch" />
 		</activity>
+		
+		<activity android:name="com.example.prox.StoreBookDetails"
+		    	android:parentActivityName="com.example.prox.SearchActivity">
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="com.example.prox.BookSearch" />
+		</activity>
+		
 		<activity android:name="com.example.prox.BookSearch"
 		    	android:parentActivityName="com.example.prox.SearchActivity">
  			<intent-filter>

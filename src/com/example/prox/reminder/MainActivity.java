@@ -14,6 +14,10 @@ import com.radaee.reader.R;
 
  
 
+
+
+
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
@@ -620,21 +624,94 @@ public class MainActivity extends Activity implements OnClickListener
 		    			AlertDialog datePicker = dialog.create();
 		    			WindowManager.LayoutParams wmlp = datePicker.getWindow().getAttributes();
 
-				    	wmlp.gravity = Gravity.TOP;
+				    	wmlp.gravity = Gravity.CENTER_VERTICAL;
 		    			datePicker.show();
 		    		}else{
 		    			Toast.makeText(getApplicationContext(), "No reminders for this day.", Toast.LENGTH_SHORT).show();
 		    		}	
 		   }
+			public void updateReminder(int reminderId, String title, String date, String time, String desc){
+				
+				Intent i = new Intent(MainActivity.this, ReminderUpdate.class);
+				i.putExtra("id", reminderId);
+				i.putExtra("title", title);
+				i.putExtra("date", date);
+				i.putExtra("time", time);
+				i.putExtra("desc", desc);
+				
+				startActivity(i);
+			}
+			public void attemptDelete(final int reminderId){
+				
+				Toast.makeText(getBaseContext(), "ReminderID: "+ reminderId, Toast.LENGTH_LONG).show();
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		        builder.setTitle("Delete reminder");
+		        builder.setMessage("Are you sure you want to delete this reminder " + reminderId +" in your account?");
+		        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		                   public void onClick(DialogInterface dialog, int id) {
+		                	   	   reminderadapter.deleteEntry(reminderId);
+		                		   Toast.makeText(getApplicationContext(), "Successfully deleted " + reminderId, Toast.LENGTH_LONG).show();
+		                		   finish();
+		                   }
+		               });
+		        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		                   public void onClick(DialogInterface dialog, int id) {
+		                   }
+		               });
+		        
+		        AlertDialog dialog = builder.create();
+		        dialog.show();
+		        
+			}	
+			
+		 
+			protected void onListItemClick(ListView l, View v, int position, long id) {
+				// TODO Auto-generated method stub
+				Cursor listCursor = reminderadapter.fetchAllReminder();
+
+				listCursor.moveToPosition(position);
+				
+				final int item_id = listCursor.getInt(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_ID));
+		        final String title = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_TITLE));
+		        final String date = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_DATE));
+		        final String time = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_TIME));
+		        final String desc = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_DESCRIPTION));
+		        
+		        CharSequence[] items = {"View","Delete"};
+
+				AlertDialog.Builder builder3 =new AlertDialog.Builder(MainActivity.this);
+				builder3.setTitle("Select an action").setItems(items, new DialogInterface.OnClickListener() {
+
+		    	@Override
+		    	public void onClick(DialogInterface dialog, int which) {
+		    		
+		    		switch(which){
+					case 0: 
+						updateReminder(item_id, title, date, time, desc);
+						break;
+					case 1:
+						attemptDelete(item_id);
+						break;
+					}
+		    	}
+		    	});
+		    	
+		    	builder3.show();
+		        
+		      
+			}
 
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), ""+arg1, Toast.LENGTH_SHORT).show();
+				
 			}
+			
+
+		};
+//			
+
 	}
 
 	        
-
-
-}

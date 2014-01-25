@@ -122,7 +122,15 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		    return numberOFEntriesDeleted;
 		}	
 		
- 
+		public int isEbookExist(String objectId)
+		{
+			SQLiteDatabase db=this.getReadableDatabase();
+			String [] columns=new String[]{"_id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS};
+			Cursor cur = db.query(DATABASE_TABLE, columns,   "objectId =?", new String[]{objectId}, null, null, null);
+			
+			return cur.getCount();		
+		}
+		
 		public Cursor getSingleEntry(String objectId)
 		{
 			SQLiteDatabase db=this.getReadableDatabase();
@@ -134,13 +142,8 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		
 		public Cursor searchBook(String query)
 		{
-			/* 
-			String [] columns=new String[]{"_id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS,KEY_CATEGORY};
-			String [] selectionArgs=new String[]{"%"+query+"%", "%"+query+"%"};
-			Cursor cur = db.query(DATABASE_TABLE, columns, "title LIKE '% "+ query +" %' or author LIKE '% "+ query +" %' ", null, null, null, KEY_ROWID +" DESC"); 
-			*/
 			SQLiteDatabase db=this.getReadableDatabase();
-			String [] selectionArgs=new String[]{"%"+query+"%", "%"+query+"%", "%"+query+"%"};
+			String [] selectionArgs=new String[]{"%"+query+"%", "%"+query+"%",  query+"%"};
 			String [] columns=new String[]{"_id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS,KEY_CATEGORY,KEY_ISBN};
 			Cursor cur = db.query(DATABASE_TABLE, columns,"title LIKE ? OR author LIKE ? OR ISBN = ?",  selectionArgs, null, null, null);
 			
@@ -181,14 +184,12 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 			ebook.setTitle(cursor.getString(1));
 			
 			return ebook;
-			
 		}
 		  
 		public int updateEntry(String objectId, String title, String filename, String author, String ISBN, String cover, String status, String category)
 		{
 			// Define the updated row content.
 			ContentValues updatedValues = new ContentValues();
-			// Assign values for each row.
 			updatedValues.put("filename", filename);
 			updatedValues.put("title",title);
 			updatedValues.put("author", author);
@@ -200,11 +201,7 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 	        String where="objectId = ?";
 		    return db.update("userebooks",updatedValues, where, new String[]{objectId});			   
 		}
-
-
-
-		
-
+ 
 }
 
 

@@ -109,7 +109,6 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 		
 		bar_find.setVisibility(-1);
  
-	  
 	}
 	
 	
@@ -163,11 +162,6 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         btn_prev = (Button)bar_find.findViewById(R.id.btn_prev);
         btn_next = (Button)bar_find.findViewById(R.id.btn_next);
         btn_hide = (Button)bar_find.findViewById(R.id.btn_hide);
-        //btn_gotoPage = (Button)bar_find.findViewById(R.id.btn_goToPage);
-        
-        //TextView pageNumcont = (TextView) bar_cmd.findViewById(R.id.pageNum);
-        //String tpage = "/"+totalpage;
-		//pageNumcont.setText(tpage);
         
         btn_prev.setOnClickListener(this);
         btn_next.setOnClickListener(this);
@@ -194,6 +188,8 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
     	if( m_doc != null )
     		m_doc.Close();
     	Global.RemoveTmp();
+    	
+    	
     	super.onDestroy();
     }
     
@@ -324,12 +320,19 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 				
 				
 				String thisPage = thispagenum.getText().toString();
-				 
-				if(util.isNumeric(thisPage) == true ||Integer.parseInt(thisPage) > totalpage+1 ||  Integer.parseInt(thisPage) <= 0){
-					Toast.makeText(getApplicationContext(), "Searching page...", Toast.LENGTH_LONG).show();
-					int p = Integer.parseInt(thisPage);
-					m_reader.PDFGotoPage(p);
-					dialog.dismiss();
+				
+
+				if(util.isNumeric(thisPage) == true || TextUtils.isDigitsOnly(thisPage) == true ){
+					Log.d("page",""+totalpage);
+					if(Integer.parseInt(thisPage) > (totalpage+1) ||  Integer.parseInt(thisPage) <= 0){
+						Toast.makeText(getApplicationContext(), "Please enter a valid page number.", Toast.LENGTH_LONG).show();
+						
+					}else{
+						Toast.makeText(getApplicationContext(), "Searching page..." +  thisPage, Toast.LENGTH_LONG).show();
+						int p = Integer.parseInt(thisPage);
+						m_reader.PDFGotoPage(p);
+						dialog.dismiss();
+					}
 				}
 				else{
 					Toast.makeText(getApplicationContext(), "Please enter a valid page number.", Toast.LENGTH_LONG).show();
@@ -471,4 +474,6 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         btn_next.setEnabled(annot == null);
         txt_find.setEnabled(annot == null);
 	}
+	
+ 
 }

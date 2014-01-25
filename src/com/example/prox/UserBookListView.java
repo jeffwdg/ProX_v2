@@ -10,6 +10,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Delayed;
 
 import net.sf.andpdf.pdfviewer.PdfViewerActivity;
 
@@ -29,6 +30,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,6 +59,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
@@ -82,7 +85,15 @@ public class UserBookListView extends ListActivity {
   @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.ebook_grid, menu);
-		return true;
+		
+		// Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+ 
+        return super.onCreateOptionsMenu(menu);
 	}
   
   @Override
@@ -97,7 +108,13 @@ public class UserBookListView extends ListActivity {
      }
   }
 	public void changeViewToGrid(){
-		
+		//Save view preference
+		SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
+		Editor editor = pref.edit();
+		editor.putString("view", "grid"); 
+		editor.commit();
+		Log.d("SetView","Grid");
+		 
 		Intent intent=new Intent(this, UserEbookList.class);
 		startActivity(intent);
 	}
@@ -123,7 +140,7 @@ public class UserBookListView extends ListActivity {
     datasource.open();
     
     fillData();
-    
+    handleIntent(getIntent());
   }
   
   /*
@@ -174,10 +191,6 @@ public class UserBookListView extends ListActivity {
              	            if(bookcover == null){
              	            	bookCover.setImageResource(R.drawable.nocover);
              	            }
-             	            
-             	            
-             	            
-             	            //Toast.makeText(getApplicationContext(), "Local Cover " + categoryIndex+columnIndex, Toast.LENGTH_LONG).show();
              	            return true;
         	        	}
         	       
@@ -220,9 +233,7 @@ public class UserBookListView extends ListActivity {
 			 Log.d("Ebook Details", "Downloaded" + status);
 		} 
 		
-		
-		
-		
+
 		AlertDialog.Builder builder3 =new AlertDialog.Builder(UserBookListView.this);
 		builder3.setTitle("Select an action").setItems(items, new DialogInterface.OnClickListener() {
 
@@ -245,14 +256,12 @@ public class UserBookListView extends ListActivity {
 					datasource.updateEntry(objectId, title,filename,author, ISBN, cover, downloadedStatus, category); 
 				}
 				break;
-				
 			}
     	}
     	});
     	
     	builder3.show();
 	}
-	
 	
 	
 	/*
@@ -283,7 +292,6 @@ public class UserBookListView extends ListActivity {
 	        
 	        AlertDialog dialog = builder.create();
 	        dialog.show();
-		
 	}
 	
 	/*
@@ -336,7 +344,6 @@ public class UserBookListView extends ListActivity {
 	}
 	
 	
-	
 	/*
 	 *  This method opens the ebook
 	 */
@@ -365,7 +372,6 @@ public class UserBookListView extends ListActivity {
 		
 	}
 	
-	
 	/*
 	 * This method is called when the user click download ebook after purchasing it 
 	 * 
@@ -386,10 +392,9 @@ public class UserBookListView extends ListActivity {
 			util.showAlertDialog(this, "Network Error", "Please check your internet connection.", false);
 		}
 		
-		
-		
 		return downloaded;
 	}
+	
 	
 	/**
      * Background Async Task to download file
@@ -430,7 +435,6 @@ public class UserBookListView extends ListActivity {
                 
                 // this will be useful so that you can show a tipical 0-100% progress bar
                 int lenghtOfFile = conection.getContentLength();
- 
                 
                 // download the file
                 InputStream input = new BufferedInputStream(url.openStream(), 8192);
@@ -476,7 +480,6 @@ public class UserBookListView extends ListActivity {
             return null;
         }
         
-        
         /**
          * Updating progress bar
          * */
@@ -484,9 +487,7 @@ public class UserBookListView extends ListActivity {
             // setting progress percentage
             pDialog.setProgress(Integer.parseInt(progress[0]));
        }
-        
-        
-        
+       
         /**
          * After completing background task
          * Dismiss the progress dialog
@@ -495,34 +496,88 @@ public class UserBookListView extends ListActivity {
             // dismiss the dialog after the file was downloaded
             dismissDialog(progress_bar_type);
             Log.d("Ebook Download", "Completed" + objectId);
-           /* 
-            File file = new File("data/data/com.example.prox/proxbooks/book.pdf"); 
-
-            if (file.exists()) { 
-                Uri path = Uri.fromFile(file); 
-                Intent intent = new Intent(Intent.ACTION_VIEW); 
-                intent.setDataAndType(path, "application/pdf"); 
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); 
-
-                try { 
-                    startActivity(intent); 
-                }  
-                catch (ActivityNotFoundException e) { 
-                   // Toast.makeText(this,  "No Application Available to View PDF",  Toast.LENGTH_SHORT).show(); 
-                }  
-            }
-            */
-            // Displaying downloaded image into image view
-            // Reading image path from sdcard
-            //String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.pdf";
-            // setting downloaded into image view
-            //my_image.setImageDrawable(Drawable.createFromPath(imagePath));
         }
  
     }
- 
-
 	
+/**EBOOK Search**/
+    
+    protected void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+ 
+    /**
+     * Handling intent data
+     */
+    private void handleIntent(Intent intent) {
+    	 
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            final String searchquery = intent.getStringExtra(SearchManager.QUERY);
+            
+            Log.d("Searching",""+searchquery);
+ 
+            ebookCursor = datasource.searchBook(searchquery);
+            
+
+            String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};
+            int[] to = new int[] { R.id.mTitle ,R.id.mFilename, R.id.mCover,R.id.mAuthor, R.id.mObjectId, R.id.mObjectId};
+            
+            
+            // Now create an array adapter and set it to display using our row
+            @SuppressWarnings("deprecation")
+    		SimpleCursorAdapter ebooks=new SimpleCursorAdapter(this, R.layout.ebooks_row, ebookCursor, from, to);
+          
+            
+            	if (ebookCursor != null) {
+            	    startManagingCursor(ebookCursor);
+            	    Ebook ebook = new Ebook();
+            	    SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,R.layout.ebooks_row, ebookCursor, from, to);
+            	    
+            	 
+            	    SimpleCursorAdapter.ViewBinder binder = new SimpleCursorAdapter.ViewBinder() {
+            	        @Override
+            	        public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+            	        	int viewId = view.getId();
+            	        	int categoryIndex = cursor.getColumnIndex("cover");
+            	        	if(categoryIndex == columnIndex){
+            	        	     String coverString = cursor.getString(ebookCursor.getColumnIndex("objectId"));
+                 	            ImageView bookCover = (ImageView) view;
+                 	            
+                 	            Drawable bookcover;
+                 	  		  	SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
+                 	  		  	Editor editor = pref.edit();
+
+                 	            String userFolderName = pref.getString("email", null);
+                 	            
+                 	  		   
+                 	  		  	String bitmapPath = "data/data/com.radaee.reader/proxbooks/" + userFolderName +"/" + coverString + ".jpg";
+                 	            Bitmap bitmap = BitmapFactory.decodeFile(bitmapPath);
+                 	            bookcover = new BitmapDrawable(bitmap);
+                 	            bookCover.setImageDrawable(bookcover);
+                 	            
+                 	            if(bookcover == null){
+                 	            	bookCover.setImageResource(R.drawable.nocover);
+                 	            }
+                 	            return true;
+            	        	}
+            	       
+            	            return false;
+            	        }
+            	    };
+            	    
+            	    adapter.setViewBinder(binder);
+            	    setListAdapter(adapter);
+            	    
+            	}
+            	
+            	 stopManagingCursor(ebookCursor);
+            	    
+        }
+ 
+    }
+	
+    
 	@Override
 	protected void onResume() {
 		datasource.open();

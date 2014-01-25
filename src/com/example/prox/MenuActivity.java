@@ -163,15 +163,9 @@ public class MenuActivity extends Activity{
 			}
 			
 		} else {
-			Intent mainactIntent=new Intent(getApplicationContext(),MainActivity.class);
+			Intent mainactIntent = new Intent(getApplicationContext(),MainActivity.class);
 			startActivity(mainactIntent);
 		}
-		
-		
-
-		
-		
-		
 	}
 
 	/**
@@ -195,9 +189,6 @@ public class MenuActivity extends Activity{
 		return true;
 	}
  
- 
-
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// toggle nav drawer on selecting action bar app icon/title
@@ -206,7 +197,6 @@ public class MenuActivity extends Activity{
 		}
 		// Handle action bar actions click
 		switch (item.getItemId()) {
- 
 		 case R.id.action_ebookstore:  
 	    	  	Intent i = new Intent(this, SearchActivity.class);
 	    	  	startActivity(i);
@@ -299,93 +289,10 @@ public class MenuActivity extends Activity{
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 	
-	public void logOut(){
-		//SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-		
-		Toast.makeText(MenuActivity.this, "Logging out..", Toast.LENGTH_LONG).show(); 
-		
-		
-		//pref.edit().remove("email").commit();
-		
-		/// Create Intent for SignUpActivity  and Start The Activity
-		Intent mainactIntent=new Intent(getApplicationContext(),MainActivity.class);
-		startActivity(mainactIntent);
-	}
-	
-	    
-	/*
-    public void onClick(View v){
-        // Take appropriate action for each action item click
-        switch (v.getId()) {
-        case R.id.btnNote:
-            // search action
-        	Download();
-        	break;
-        case R.id.buttonStore:
-            // store
-        	//goToBookShelf();
-        	//goToStore();
-        	goToGrid();
-        	//forgotPassword();
-        	break;
-        case R.id.buttonLogOut:
-            // location found
-        	logOut();
-        	break;
-        }
-    }
-	
-	public void goToStore(){
-		/// Create Intent for StoreActivity  
-		Intent gotostoreIntent=new Intent(getApplicationContext(),StoreActivity.class);
-		startActivity(gotostoreIntent);
-	}
-	
-	public void goToBookShelf(){
-		/// Create Intent for StoreActivity  
-		Intent bookviewIntent=new Intent(getApplicationContext(),BookView.class);
-		startActivity(bookviewIntent);
-	}
-	
-	public void forgotPassword(){
-		/// Create Intent for StoreActivity  
-		Intent forgotPasswordIntent=new Intent(getApplicationContext(),ForgotPassword.class);
-		startActivity(forgotPasswordIntent);
-	}
-	
-	public void goToGrid(){
-		/// Create Intent for Grid Activity  
-		Intent gridIntent=new Intent(getApplicationContext(),Grid.class);
-		startActivity(gridIntent);
-	}
-	
-	public void Download(){
-		/// Create Intent for StoreActivity  
-		Intent dIntent=new Intent(getApplicationContext(),Download.class);
-		startActivity(dIntent);
-	}
-	
-	
-	public void logOut(){
-		SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-		
-		Toast.makeText(MenuActivity.this, "Logging out..", Toast.LENGTH_LONG).show(); 
-		
-		
-		pref.edit().remove("email").commit();
-		
-		/// Create Intent for SignUpActivity  and Start The Activity
-		Intent mainactIntent=new Intent(getApplicationContext(),MainActivity.class);
-		startActivity(mainactIntent);
-	}
-	
-
-	
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
 	
-	*/
 }

@@ -47,7 +47,6 @@ public class LogoutFragment extends Fragment {
 			
 			Intent intent = new Intent(getActivity(), MainActivity.class);
 			startActivity(intent);
-			//logOut();
 			}
 		});
 	    

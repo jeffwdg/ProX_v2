@@ -67,16 +67,11 @@ import android.widget.AdapterView.OnItemClickListener;
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			
-			//sLayoutInflater inflater = (LayoutInflater)FreeBookView.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			//View rootView = inflater.inflate(R.layout.storeview, null);
-	 
 			setContentView(R.layout.storeview);
 			Bitmap userIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.bookcover);
 
-		        //Get data from parse.com  
-			 
+			//Get data from parse.com  
 			internetdetected = new InternetDetector(this.getApplicationContext());
-			
 			isInternetPresent = internetdetected.isNetworkAvailable();
 			
 			if(isInternetPresent == true){
@@ -125,19 +120,14 @@ import android.widget.AdapterView.OnItemClickListener;
 				  	        customGridAdapter = new MyGridViewAdapter(FreeBookView.this, R.layout.row_grid, gridArray);
 				  	        gridView.setAdapter(customGridAdapter); 
 				    	      
-			    	    } else {
-			    	      // something went wrong
-			    	    	//Toast.makeText(this,"Not connected to a newtwork. Please check your internet connection.", Toast.LENGTH_LONG).show(); 
-			    	    	Log.d("ebooks error", "Error");
-			    	    }
+			    	    } else {Log.d("ebooks error", "Error");}
 					}
 		    	});
+		    	
 			}else{
 				util.showAlertDialog(getApplicationContext(), "Network Error", "Please check your internet connection", false);
 			}
-		    	
-
-		    	
+ 
 		        GridView gridView = (GridView) findViewById(R.id.newstoregridview);
 		        customGridAdapter = new MyGridViewAdapter(this, R.layout.row_grid, gridArray);
 		        gridView.setAdapter(customGridAdapter);
@@ -162,18 +152,10 @@ import android.widget.AdapterView.OnItemClickListener;
 		    	    	bookdetails.putExtra("category", ebook.getCategory());
 		    	    	
 		        		bookdetails.putExtra("id",position);
-		        		//Log.d("ebooks", "Retrieved bookcover " +ebook.getCover());
-		        		//Toast.makeText(this,"Ebook " +  position + " selected", Toast.LENGTH_SHORT).show();
-		                startActivity(bookdetails);
-		                
-			 			
+		        		startActivity(bookdetails);
+ 
 				 	}
 				 });
-		       
-	 
-		        //return rootView;
-		        
+ 
 		    }
-	    
-	    
-	}
+}

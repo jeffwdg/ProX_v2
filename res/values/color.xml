@@ -26,5 +26,7 @@
     <color name="holo_green_12">#75A800</color>
     <color name="holo_green_13">#6DA000</color>
     <color name="holo_green_14">#669900</color>
+    <color name="pine_green">#01796F</color>
+    <color name="pastel_green">#E7FEFF</color>
     
 </resources>

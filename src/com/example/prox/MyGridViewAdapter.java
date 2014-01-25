@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.prox.model.DrawableLoader;
 import com.radaee.reader.R;
 
 import android.annotation.SuppressLint;
@@ -83,10 +84,13 @@ public class MyGridViewAdapter extends ArrayAdapter<Item> {
 		  String thisurl = item.getCover();
 		  Log.d("Ebook", "Cover " + thisurl);
 		  //if(TextUtils.isEmpty(thisurl)){thisurl="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSMeKS7nHHfbiw08SQ4Z7jQh6Vzji36dOzWENTmXEn74Fp_tCM3";}
-		  Drawable bookcover1 = LoadImageFromURL(thisurl);
+		  //Drawable bookcover1 = LoadImageFromURL(thisurl);
+
 		  
+		  DrawableLoader dl = new DrawableLoader();
+		  dl.fetchDrawableOnThread(thisurl,holder.imageItem);
 		  
-		  holder.imageItem.setImageDrawable(bookcover1);
+		  //holder.imageItem.setImageDrawable(bookcover1);
 		  holder.ebookID.setText(item.getID());
 		  holder.ebookLocation.setText(item.getFilename());
 		  return row;

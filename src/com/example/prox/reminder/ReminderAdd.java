@@ -15,6 +15,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -92,28 +94,13 @@ public class ReminderAdd extends Activity implements OnClickListener{
               date = (EditText) findViewById(R.id.editText1);
               time = (EditText) findViewById(R.id.editText2);
               desc = (EditText) findViewById(R.id.editDesc);
-//    		
-//    	//database	
 
-// 	         
-// 	       isUpdate=getIntent().getExtras().getBoolean("update");
-// 	        if(isUpdate)
-// 	        {
-// 	            stitle=getIntent().getExtras().getString("Title");
-// 	            sdate=getIntent().getExtras().getString("Sdate");
-// 	            stime=getIntent().getExtras().getString("Stime");
-// 	            sdesc=getIntent().getExtras().getString("Sdesc");
-// 	            title.setText(stitle);
-// 	            date.setText(sdate);
-// 	            time.setText(stime);
-// 	            desc.setText(sdesc);
-// 	            
-// 	        }
  	         
  	        
  	         
  	        dataBase = new ReminderDatabaseAdapter(this);
  	        dataBase.open();
+ 	        registerViews();
     }
     
     @Override
@@ -128,9 +115,13 @@ public class ReminderAdd extends Activity implements OnClickListener{
         // Take appropriate action for each action item click
        switch (item.getItemId()) {
        case R.id.action_save:
-            SaveReminder();
+    	   if ( checkValidation () )
+               submitForm();
+           else
+               Toast.makeText(ReminderAdd.this, "Form contains error", Toast.LENGTH_LONG).show();
+
            return true;
-      
+     
         case R.id.action_cancel:
            GoToMain();
     
@@ -141,6 +132,11 @@ public class ReminderAdd extends Activity implements OnClickListener{
         }
     }
     
+    private void submitForm() {
+        // Submit your form here. your form is valid
+        Toast.makeText(this, "Submitting form...", Toast.LENGTH_LONG).show();
+        SaveReminder();
+    }
     private void SaveReminder() {
  
     	 String rTitle =title.getText().toString();
@@ -158,7 +154,7 @@ public class ReminderAdd extends Activity implements OnClickListener{
     }
     
     private void GoToMain() {
-        Intent i = new Intent(this, Tablayout.class);
+        Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
     }
     
@@ -268,6 +264,31 @@ public class ReminderAdd extends Activity implements OnClickListener{
     			// TODO Auto-generated method stub
     			
     		}
+//
+    		private void registerViews() {
+    	        title = (EditText) findViewById(R.id.editTitle);
+    	        // TextWatcher would let us check validation error on the fly
+    	        title.addTextChangedListener(new TextWatcher() {
+    	            public void afterTextChanged(Editable s) {
+    	                ReminderValidation.TitleValid(title,true);
+    	            }
+    	            public void beforeTextChanged(CharSequence s, int start, int count, int after){}
+    	            public void onTextChanged(CharSequence s, int start, int before, int count){}
+    	        });
 
 
+    	      
+    	    }
+
+    	   
+
+    	    private boolean checkValidation() {
+    	        boolean ret = true;
+
+    	        if (!ReminderValidation.TitleValid(title,true)) ret = false;
+      	        if (!ReminderValidation.DateValid(date, true)) ret = false;
+    	        if (!ReminderValidation.TimeValid(time, true)) ret = false;
+
+    	        return ret;
+    	    }
        }

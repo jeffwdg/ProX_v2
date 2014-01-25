@@ -12,8 +12,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import com.example.prox.Grid.ImageAdapter;
 import com.example.prox.adapter.EbookDatabaseAdapter;
+import com.example.prox.model.DrawableLoader;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -49,7 +49,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class StoreBookDetails extends Activity {
-	 
+	 	
+	private EbookDatabaseAdapter datasource;
 	    Button btnShowProgress;
 	    TextView booktitle, bookfilename, bookauthor, bookisbn;
 	    private ProgressDialog pDialog;
@@ -70,7 +71,6 @@ public class StoreBookDetails extends Activity {
         String category="";
 
 	    //file url to download
-	    //private static String file_url = "http://api.androidhive.info/progressdialog/hive.jpg";
 	    String file_url="";
 	    
 	    @Override
@@ -123,14 +123,11 @@ public class StoreBookDetails extends Activity {
 	        
 	        if(TextUtils.isEmpty(cover)){cover="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSMeKS7nHHfbiw08SQ4Z7jQh6Vzji36dOzWENTmXEn74Fp_tCM3";}
 	        
-	       
 	       //Set View with ebook details 
 	        booktitle = (TextView) findViewById(R.id.bookTitle);
 	        booktitle.setText(title);
-	        
 	        bookauthor= (TextView) findViewById(R.id.bookAuthor);
 	        bookauthor.setText("By: " +author);
-	        
 	        bookisbn= (TextView) findViewById(R.id.bookISBN);
 	        bookisbn.setText(ISBN);
 	        
@@ -139,69 +136,84 @@ public class StoreBookDetails extends Activity {
 	 
 	        btnShowProgress = (Button) findViewById(R.id.btnProgressBar);
 	        
-	        //Image to show  
+	      
 	        my_image = (ImageView) findViewById(R.id.book_cover);
-	        Drawable bookcover1 = LoadImageFromURL(cover);
-	        my_image.setImageDrawable(bookcover1);
-	   
+	        DrawableLoader dl = new DrawableLoader();
+			dl.fetchDrawableOnThread(cover,my_image);
+			  
+	        //Drawable bookcover1 = LoadImageFromURL(cover);
+	        //my_image.setImageDrawable(bookcover1);
 	        
+	        datasource = new EbookDatabaseAdapter(this);
+	        datasource.open();
 	        
 	        btnShowProgress.setOnClickListener(new View.OnClickListener() {
 	            @Override
 	            public void onClick(View v) {
 	                // starting new Async Task
 	               
+	            	
+	            	
 	            	ParseObject userEbooks = new ParseObject("userEbooks");
 	            	userEbooks.put("userID", userId);
 	            	userEbooks.put("ebookID", objectId);
-	    
-	            	userEbooks.saveInBackground();
-	            	Toast.makeText(getApplicationContext(), "Ebook purchased successfully.", Toast.LENGTH_LONG).show();
-	                Log.d("Ebook Purchase", "Adding ebook to user account..");
-	                
-	                // Save to local DB
-	                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-	   		     	Editor editor = pref.edit();
-		
-	                String userFolderName = pref.getString("email", null);
-	                File folder = new File("data/data/com.radaee.reader/proxbooks");
-	                boolean success = true;
-	                
-	                if(!folder.exists()) {
-	                    success = folder.mkdir(); // create proxbooks folder
-	                    Log.d("Ebook Folder Creation", "Created main folder.");
-	                }else{
-	                	Log.d("Ebook Folder Creation", "Failed to create main folder.");
-	                }
-	                
-	                if(folder.exists()){
-                    	boolean userfoldersuccess = true;
-                    	File userFolder = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName);
-                    	userfoldersuccess= userFolder.mkdir(); // create user folder
-                    	Log.d("Ebook Folder Creation", "Created user folder.");
-                    	
-                    	//download books & bookcover here & save to localdb
-                    	if(userFolder.exists()){
-                    		EbookDatabaseAdapter ebookDatabaseAdapter = new EbookDatabaseAdapter(StoreBookDetails.this);
-                    		ebookDatabaseAdapter.open();
-                    		String category = "3";
-                    		
-                    		 if (cover.toString().trim().length() > 0) {
-                    	            bmp = ImageDownloader.getBitmapFromURL(cover.toString().trim());
-                    	            //img.setImageBitmap(bmp);
-                    	            //save.setEnabled(true);
-                    	        }
-                    		 
-                    		 saveImageToSD(userFolderName,objectId);
-                    		String ebookStatus = "0"; //not downloaded
-                     		ebookDatabaseAdapter.insertEntry(objectId, title, filename, author, ISBN, cover, ebookStatus, category);
-                    		
-                    		Log.d("Ebook Local Storage", "Added userebook to local db.");
-                    	}
-	                }
-	                
-	                Intent i = new Intent(StoreBookDetails.this, UserEbookList.class);
-		    	  	startActivity(i);
+	            	
+	            	
+	            	int isEbookExist = datasource.isEbookExist(objectId); 
+	            	
+	            	if(isEbookExist > 0 ){
+	            		Toast.makeText(getApplicationContext(), "You already have this book.", Toast.LENGTH_LONG).show();
+	            	}else{
+	            		userEbooks.saveInBackground();
+		            	Toast.makeText(getApplicationContext(), "Ebook purchased successfully.", Toast.LENGTH_LONG).show();
+		                Log.d("Ebook Purchase", "Adding ebook to user account..");
+		                
+		                // Save to local DB
+		                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
+		   		     	Editor editor = pref.edit();
+			
+		                String userFolderName = pref.getString("email", null);
+		                File folder = new File("data/data/com.radaee.reader/proxbooks");
+		                boolean success = true;
+		                
+		                if(!folder.exists()) {
+		                    success = folder.mkdir(); // create proxbooks folder
+		                    Log.d("Ebook Folder Creation", "Created main folder.");
+		                }else{
+		                	Log.d("Ebook Folder Creation", "Failed to create main folder.");
+		                }
+		                
+		                if(folder.exists()){
+	                    	boolean userfoldersuccess = true;
+	                    	File userFolder = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName);
+	                    	userfoldersuccess= userFolder.mkdir(); // create user folder
+	                    	Log.d("Ebook Folder Creation", "Created user folder.");
+	                    	
+	                    	//download books & bookcover here & save to localdb
+	                    	if(userFolder.exists()){
+	                    		EbookDatabaseAdapter ebookDatabaseAdapter = new EbookDatabaseAdapter(StoreBookDetails.this);
+	                    		ebookDatabaseAdapter.open();
+	                    		String category = "3";
+	                    		
+	                    		 if (cover.toString().trim().length() > 0) {
+	                    	            bmp = ImageDownloader.getBitmapFromURL(cover.toString().trim());
+	                    	            //img.setImageBitmap(bmp);
+	                    	            //save.setEnabled(true);
+	                    	        }
+	                    		 
+	                    		 saveImageToSD(userFolderName,objectId);
+	                    		String ebookStatus = "0"; //not downloaded
+	                     		ebookDatabaseAdapter.insertEntry(objectId, title, filename, author, ISBN, cover, ebookStatus, category);
+	                    		
+	                    		Log.d("Ebook Local Storage", "Added userebook to local db.");
+	                    	}
+		                }
+		                
+		                Intent i = new Intent(StoreBookDetails.this, UserEbookList.class);
+			    	  	startActivity(i);
+	            	}
+	            	
+	            	
 	                
 	            }
 	        });
@@ -270,12 +282,15 @@ public class StoreBookDetails extends Activity {
 	                Log.e("Error: ", e.getMessage());
 	            }
 		 }
+		 
+		 
+		 
 		 /*
 		  * This methods saves the downloaded image to sdcard
 		  */
 		 private void saveImageToSD(String userFolderName, String objectId) {
 			 	
-			 Log.d("Ebook Save Cover", "Saving cover...");
+			 	Log.d("Ebook Save Cover", "Saving cover...");
 			 
 			    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 			    //you can select your preferred CompressFormat and quality.
@@ -301,7 +316,7 @@ public class StoreBookDetails extends Activity {
 			        fos.write(bytes.toByteArray());
 			        fos.close();
 			        Log.d("Ebook Local Storage", "Cover saved..");
-			        Toast.makeText(this, "Image saved", Toast.LENGTH_SHORT).show();
+			        //Toast.makeText(this, "Image saved", Toast.LENGTH_SHORT).show();
 			    } catch (IOException e) {
 			    	Log.d("Ebook Local Storage", "Cover not saved.");
 			        e.printStackTrace();

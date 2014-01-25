@@ -950,7 +950,8 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 		int screen_h = m_view.vGetWinH();
 		int screen_w = m_view.vGetWinW();
 		int sh =  (int) ((int) screen_h / 1.25);
-		canvas.drawText( String.valueOf(m_pageno) + "/" + m_doc.GetPageCount() , screen_w/2, sh, paint);
+		
+		canvas.drawText( String.valueOf(m_pageno+1) + "/" + m_doc.GetPageCount() , screen_w/2, sh, paint);
 	}
 	@Override
 	protected void onSizeChanged( int w, int h, int oldw, int oldh )
