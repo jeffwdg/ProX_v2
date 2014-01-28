@@ -1,5 +1,7 @@
 package com.example.prox;
 
+import android.content.Context;
+
 public class Ebook {
 	
 	private String id;
@@ -81,6 +83,8 @@ public class Ebook {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+
  
  
  

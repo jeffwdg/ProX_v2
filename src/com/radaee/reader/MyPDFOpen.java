@@ -3,11 +3,15 @@ package com.radaee.reader;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,26 +34,36 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.prox.Utilities;
+import com.parse.ParseUser;
 import com.radaee.pdf.Document;
 import com.radaee.pdf.Global;
+import com.radaee.pdf.Ink;
 import com.radaee.pdf.Page;
 import com.radaee.pdf.Page.Annotation;
-import com.radaee.pdfex.PDFView;
-import com.radaee.pdfex.PDFView.PDFPosition;
+//import com.radaee.pdfex.PDFView;
+//import com.radaee.pdfex.PDFView.PDFPosition;
+import com.radaee.view.PDFView.PDFPos;
 import com.radaee.reader.PDFReader.PDFReaderListener;
 import com.radaee.util.PDFGridItem;
 import com.radaee.util.PDFGridView;
 import com.radaee.util.PDFThumbView;
 import com.radaee.view.PDFVPage;
-import com.radaee.view.PDFView.PDFPos;
 import com.radaee.view.PDFView.PDFViewListener;
 import com.radaee.view.PDFViewThumb.PDFThumbListener;
+import com.radaee.view.PDFView;
+import com.radaee.view.PDFViewCurl;
+import com.radaee.view.PDFViewDual;
+import com.radaee.view.PDFViewHorz;
+import com.radaee.view.PDFViewVert;
+ 
 
-public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickListener, PDFReaderListener, PDFThumbListener{
+
+
+public class MyPDFOpen extends Activity implements   OnItemClickListener, OnClickListener, PDFReaderListener, PDFThumbListener{
 	
 	Utilities util = new Utilities();
 	private PDFGridView m_vFiles = null;
-	private PDFReader m_reader = null;
+	private PDFReader m_reader =  null;
 	private PDFThumbView m_thumb = null;
 	private RelativeLayout m_layout;
 	private Document m_doc = new Document();
@@ -64,9 +78,11 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
     private boolean m_set = false;
     private PDFVPage m_annot_vpage;
     private Annotation m_annot;
+    int cpageno;
     
     LinearLayout bar_find;
     int totalpage;
+    String objectId;
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -130,16 +146,30 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         
         // Get ebook details
         String pdfpath = i.getExtras().getString("ebookFile");
+        objectId =  i.getExtras().getString("objectId");
         //Log.d("File", "Loc"+pdfpath);
         
         
 		m_doc = new Document();
 		String pdf_path = pdfpath;
 		String password = "";
+ 
 		m_doc.Open( pdf_path, password );
 		m_reader.PDFOpen(m_doc, false, this);
 		m_thumb.thumbOpen(m_doc, this);
 		
+		
+		 SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
+	     Editor editor = pref.edit();
+
+	     String  lastpagenum = pref.getString(objectId, null);
+	     Log.d("Readingnow"," Page: "+lastpagenum );
+	     
+	     if(!TextUtils.isEmpty(lastpagenum) || !TextUtils.equals(lastpagenum, null) ){
+	    	 int  dlastpagenum = Integer.parseInt( lastpagenum);
+	    	 m_reader.PDFGotoPage(dlastpagenum);
+	     }       
+	     
 		totalpage = m_doc.GetPageCount();
 	 
 		
@@ -184,12 +214,22 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
     		m_thumb = null;
     	}
     	if( m_reader != null )
-    		m_reader.PDFClose();
+    		m_reader.PDFClose(objectId);
     	if( m_doc != null )
     		m_doc.Close();
     	Global.RemoveTmp();
     	
     	
+    	Log.d("PDF Close","Closed");
+    	//SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
+		//Editor editor = pref.edit();
+    	
+		
+		//editor.putString(objectId, ""+cpageno);  
+		//PDFPos pos = ((com.radaee.view.PDFView) m_viewer).vGetPos(0, 0);
+		//m_reader.OnPDFPosChanged(pos);
+		//editor.commit();
+		
     	super.onDestroy();
     }
     
@@ -239,7 +279,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 					m_reader.PDFOpen(m_doc, false, this);
 					//m_reader.PDFGotoPage(10);
 					break;
-				default://unknown error
+				default: 
 					finish();
 					break;
 				}
@@ -329,7 +369,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 						
 					}else{
 						Toast.makeText(getApplicationContext(), "Searching page..." +  thisPage, Toast.LENGTH_LONG).show();
-						int p = Integer.parseInt(thisPage);
+						int p = Integer.parseInt(thisPage) - 1;
 						m_reader.PDFGotoPage(p);
 						dialog.dismiss();
 					}
@@ -384,11 +424,12 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	public void OnPageClicked(int pageno)
 	{
 		m_reader.PDFGotoPage(pageno);
+
 	}
 	public void OnPageChanged(int pageno)
 	{
 		m_thumb.thumbGotoPage(pageno);
-		//Log.d("Page", ""+pageno);
+		
 	}
 	 
 	public void OnOpenURI(String uri)
@@ -462,6 +503,7 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
 	public void OnPageModified(int pageno)
 	{
 		m_thumb.thumbUpdatePage(pageno);
+		 
 	}
 
 	public void OnAnnotClicked(PDFVPage vpage, Annotation annot)
@@ -474,6 +516,11 @@ public class MyPDFOpen extends Activity implements OnItemClickListener, OnClickL
         btn_next.setEnabled(annot == null);
         txt_find.setEnabled(annot == null);
 	}
+
+ 
+
 	
+	
+	 
  
 }

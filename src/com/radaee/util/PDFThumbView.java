@@ -13,6 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -94,6 +95,7 @@ public class PDFThumbView extends View implements PDFViewListener
 	public void thumbGotoPage( int pageno )
 	{
 		m_thumb.vSetSel(pageno);
+	
 	}
 	/**
 	 * render a page again, after page is edited.

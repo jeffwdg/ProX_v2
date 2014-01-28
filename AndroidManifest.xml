@@ -63,7 +63,7 @@
         </activity>
         
 		<activity android:name="com.example.prox.SearchActivity"
-		    	android:parentActivityName="com.example.prox.StoreFragment">
+		    	android:parentActivityName="com.example.prox.MenuActivity">
 			<meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.example.prox.BookSearch" />

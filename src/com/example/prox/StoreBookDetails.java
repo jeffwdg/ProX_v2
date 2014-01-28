@@ -60,6 +60,7 @@ public class StoreBookDetails extends Activity {
 	    private ImageDownloader mDownloader;
 	    private static Bitmap bmp;
 	    private FileOutputStream fos;
+	    Utilities util = new Utilities();
 	    
         String title = "";
         String author = "";
@@ -195,13 +196,13 @@ public class StoreBookDetails extends Activity {
 	                    		ebookDatabaseAdapter.open();
 	                    		String category = "3";
 	                    		
-	                    		 if (cover.toString().trim().length() > 0) {
+	                    		if(cover.toString().trim().length() > 0) {
 	                    	            bmp = ImageDownloader.getBitmapFromURL(cover.toString().trim());
 	                    	            //img.setImageBitmap(bmp);
 	                    	            //save.setEnabled(true);
-	                    	        }
-	                    		 
-	                    		 saveImageToSD(userFolderName,objectId);
+	                    	    }
+	                    		util.saveImageToSD2(userFolderName,objectId,bmp);
+	                    		//saveImageToSD(userFolderName,objectId);
 	                    		String ebookStatus = "0"; //not downloaded
 	                     		ebookDatabaseAdapter.insertEntry(objectId, title, filename, author, ISBN, cover, ebookStatus, category);
 	                    		
@@ -218,6 +219,7 @@ public class StoreBookDetails extends Activity {
 	            }
 	        });
 	    }
+	    
 		 public Drawable LoadImageFromURL(String url){
 			 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 			    StrictMode.setThreadPolicy(policy);

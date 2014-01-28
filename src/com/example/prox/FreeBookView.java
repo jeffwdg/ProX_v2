@@ -40,7 +40,7 @@ import android.widget.AdapterView.OnItemClickListener;
 		GridView gridView;
 		ArrayList<Ebook> gridArray = new ArrayList<Ebook>();
 		MyGridViewAdapter customGridAdapter;
-		Boolean isInternetPresent = false;
+		boolean isInternetPresent = false;
 		InternetDetector internetdetected;
 		Utilities util = new Utilities();  
 		

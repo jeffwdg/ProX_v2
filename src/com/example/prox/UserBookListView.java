@@ -73,12 +73,14 @@ public class UserBookListView extends ListActivity {
   ArrayList<Ebook> data = new ArrayList<Ebook>();
   TextView mTitle; 
   private ProgressDialog pDialog;
-  Boolean isInternetPresent = false;
+  boolean isInternetPresent = false;
   InternetDetector internetdetected;
   Utilities util = new Utilities();
   String[] ebookViewCategory;
   Cursor ebookCursor;
-  
+  SharedPreferences pref;
+  Editor editor;
+	
   // Progress dialog type (0 - for Horizontal progress bar)
   public static final int progress_bar_type = 0; 
   
@@ -101,11 +103,12 @@ public class UserBookListView extends ListActivity {
   {    
      switch (item.getItemId()) 
      {        
-        case R.id.view_grid: changeViewToGrid();     
-        	return true;        
-        default:            
-           return super.onOptionsItemSelected(item);    
-     }
+        case R.id.view_grid: changeViewToGrid();  break;   
+        case R.id.prox_sync: syncLibrary();	break;
+        case R.id.reading_now: readingNow(); break;
+        default:        
+     } 
+     return super.onOptionsItemSelected(item);    
   }
 	public void changeViewToGrid(){
 		//Save view preference
@@ -119,7 +122,29 @@ public class UserBookListView extends ListActivity {
 		startActivity(intent);
 	}
 	
-  
+	public void syncLibrary(){
+		
+		util.showAlertDialog(this, "Library Sync", "Synchronizing library. Please wait...", false);
+	}
+	
+
+	public void readingNow(){
+		
+		String userFolderName = pref.getString("email", null);
+		String readingnow = pref.getString("readingnow", null);
+		String curpage = pref.getString(readingnow, null);
+		String title="";
+		Log.d("Reading now book",""+readingnow);
+		
+		if(!TextUtils.isEmpty(readingnow) || !TextUtils.equals(readingnow, null))
+		{
+			openEbook(readingnow,title);
+		}else{
+			Toast.makeText(getApplicationContext(), "Sorry, the book you last read does not exist. Please redownload it.", Toast.LENGTH_LONG).show();
+		}
+ 
+	}
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -131,10 +156,10 @@ public class UserBookListView extends ListActivity {
 	//actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 	
 	internetdetected = new InternetDetector(this.getApplicationContext());
-	
 	isInternetPresent = internetdetected.isNetworkAvailable();
 	
-	 
+	pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
+    editor = pref.edit(); 
 	    
     datasource = new EbookDatabaseAdapter(this);
     datasource.open();
@@ -275,7 +300,7 @@ public class UserBookListView extends ListActivity {
 	        builder.setMessage("Are you sure you want to delete this book " + title +" in your account?");
 	        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 	                   public void onClick(DialogInterface dialog, int id) {
-	                	   if(true == deleteEbook(objectId,title,filelocation)){
+	                	   if(deleteEbook(objectId,title,filelocation) == true){
 	                		   Intent intent = getIntent();
 	                		    finish();
 	                		    startActivity(intent);
@@ -305,26 +330,37 @@ public class UserBookListView extends ListActivity {
 		if(d > 0 ){
 			
 			// get user folder path
-			SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-		    Editor editor = pref.edit();
+			pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
+		    editor = pref.edit();
             String userFolderName = pref.getString("email", null);
+            String userObjectID = pref.getString("objectId", null);
             // delete the ebook file and cover
 			File file = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName+"/"+objectId+".jpg");
+			File efile = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName+"/"+objectId+".pdf");
+			
 			boolean filedeleted = file.delete();
-			deleted = true;
+			boolean efiledeleted = efile.delete();
+			 
+			Toast.makeText(getApplicationContext(), "Deleting book... " + efiledeleted+filedeleted, Toast.LENGTH_LONG).show();
 			
-			
-			if(deleted == true){
+			if(filedeleted == true || efiledeleted == true){
+				deleted = true;
 				
 				if(isInternetPresent == true){
 					ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
 					// Retrieve the object by id
-					query.getInBackground(objectId, new GetCallback<ParseObject>() {
+					query.whereStartsWith("ebookID",  objectId);
+					query.whereEqualTo("userID", userObjectID);
+					query.getFirstInBackground( new GetCallback<ParseObject>() {
 						  public void done(ParseObject userebooks, ParseException e) {  
+							  if(e == null){
 							  userebooks.deleteInBackground();
-							  Log.d("Ebook Deletion", "Ebook deleted.");   
+							  Log.d("Ebook Deletion", "Ebook deleted.");  
+							  }
+							  else{Log.d("Ebook Deletion", "An error occured."+ e.getCode() );  }
 						  }
 					 });
+					  
 					
 				}else{
 					ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
@@ -332,9 +368,9 @@ public class UserBookListView extends ListActivity {
 					query.getInBackground(objectId, new GetCallback<ParseObject>() {
 						  public void done(ParseObject userebooks, ParseException e) {  
 							  userebooks.deleteEventually();
-							  Log.d("Ebook Deletion", "Ebook will be deleted when connection is detected.");   
 						  }
 					 });
+					Log.d("Ebook Deletion", "Ebook will be deleted when connection is detected."); 
 				}
 				
 				Toast.makeText(getApplicationContext(), "Deleted book " + title, Toast.LENGTH_LONG).show();
@@ -364,6 +400,7 @@ public class UserBookListView extends ListActivity {
 			// Redirect screen to pdf viewer
 			Intent intent = new Intent(UserBookListView.this, MyPDFOpen.class);
 			intent.putExtra("ebookFile", ebookLocation+ebookFile);
+			intent.putExtra("objectId", objectId);
 			//intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME,ebookLocation+ebookFile);
 			startActivity(intent);
 		}else{

@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 	TextView linktosignup, linktoforgetPassword;
 	Utilities util = new Utilities();
 	EditText editTextEmail, editTextPassword;
-    Boolean isInternetPresent = false;
+    boolean isInternetPresent = false;
     // Connection detector class
     InternetDetector internetdetected;
     

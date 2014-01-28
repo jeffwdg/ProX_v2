@@ -77,7 +77,7 @@
         <item>@drawable/books</item>
         <item>@drawable/notes</item>
         <item>@drawable/ebookstore</item>
-        <item>@drawable/ic_action_refresh</item>
+        <item>@drawable/logout</item>
     </array>
      
     <!-- Content Description -->

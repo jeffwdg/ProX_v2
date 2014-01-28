@@ -127,7 +127,7 @@ public class PDFReaderAct extends Activity implements OnItemClickListener, OnCli
     		m_thumb = null;
     	}
     	if( m_reader != null )
-    		m_reader.PDFClose();
+    		m_reader.PDFClose(null);
     	if( m_doc != null )
     		m_doc.Close();
     	Global.RemoveTmp();

@@ -1,13 +1,15 @@
 package com.radaee.reader;
 
 import java.io.File;
+
+import com.parse.ParseUser;
 import com.radaee.pdf.Document;
 import com.radaee.pdf.Global;
 import com.radaee.pdf.Ink;
 import com.radaee.pdf.Matrix;
 import com.radaee.pdf.Page;
 import com.radaee.pdf.Page.Annotation;
-import com.radaee.pdfex.PDFView.PDFPosition;
+//import com.radaee.pdfex.PDFView.PDFPosition;
 import com.radaee.util.ComboList;
 import com.radaee.util.PDFThumbView;
 import com.radaee.view.PDFVPage;
@@ -22,6 +24,8 @@ import com.radaee.view.PDFView.PDFViewListener;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -125,14 +129,17 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 		m_pCombo.setTouchable(true);
 		m_pCombo.setBackgroundDrawable(bitmap);
 	}
-	public void PDFOpen( Document doc, boolean rtol, PDFReaderListener listener )
-	{
-		PDFClose();
+	public void PDFOpen( Document doc, boolean rtol, PDFReaderListener listener)
+	{	
+		
+		//PDFClose();
 		m_listener = listener;
 		m_doc = doc;
 		m_rtol = rtol;
 		int back_color = 0xFFCCCCCC;
-        switch( Global.def_view )
+		//Global.def_view 
+		int viewstyle = 2;
+        switch(viewstyle)
         {
         case 1:
         {
@@ -178,7 +185,7 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 	{
 		return m_doc.Save();
 	}
-	public void PDFClose()
+	public void PDFClose(String objectId)
 	{
 		PDFCancel();
 		if( m_ink != null )
@@ -200,15 +207,31 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 		m_annot_rect = null;
 		m_ink_page = null;
 		m_rects = null;
+		
+		Log.d("OBJECTID","page:" +m_pageno + " - "+objectId);
+		
+		SharedPreferences pref = getContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
+		Editor editor = pref.edit();
+		int lastpage = m_pageno-1;
+		
+		editor.putString(objectId, ""+lastpage); // Storing last page
+		editor.putString("readingnow", objectId); // Storing last read
+		editor.commit();
+		
 		m_pageno = 0;
+		
+		
 	}
 	public boolean PDFCanSave()
 	{
 		if( m_doc == null ) return false;
 		return m_doc.CanSave();
 	}
+	
+ 
 	public void OnPDFPosChanged(PDFPos pos)
-	{
+	{	
+ 
 		if( m_listener != null && pos != null )
 		{
 			//PDFVPage vpage = m_view.vGetPage(pos.pageno);
@@ -222,18 +245,16 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 				m_pageno = pageno;
 				m_listener.OnPageChanged(pageno);
 			}
-			Log.d("Page",""+m_pageno);
+			
+			Log.d("Page",""+m_pageno);		
+
 		}
 		
-		Canvas canvas = new Canvas();
-		  
-		Paint paint = new Paint();
-		paint.setARGB(255, 255, 0, 0);
-		paint.setTextSize(20);
-		canvas.drawText( "Page:" + String.valueOf(m_pageno), 230, 160, paint);
-		//super.onDraw(canvas);
+ 
+	 
 	}
 	
+ 
 
 	public boolean OnPDFDoubleTapped(float x, float y)
 	{
@@ -243,6 +264,7 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 	}
 	public boolean OnPDFSingleTapped(float x, float y)
 	{
+
 		if( m_status == STA_NORMAL || m_status == STA_ANNOT )
 		{
 			m_annot_pos = m_view.vGetPos((int)x, (int)y);
@@ -947,9 +969,11 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 		paint.setTextSize(18);
 		//canvas.drawText( "AvailMem:" + info.availMem/(1024*1024) + " MB", 20, 150, paint);
 		//Log.d("TotalPage",""+m_doc.GetPageCount());
+	 
 		int screen_h = m_view.vGetWinH();
 		int screen_w = m_view.vGetWinW();
 		int sh =  (int) ((int) screen_h / 1.25);
+ 
 		
 		canvas.drawText( String.valueOf(m_pageno+1) + "/" + m_doc.GetPageCount() , screen_w/2, sh, paint);
 	}
@@ -1220,17 +1244,18 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 	}
 	
 	public void PDFGotoPage(int pageno)
-	{	pageno -= 1;
+	{	
 		if( m_view == null ) return;
+		
 		if( m_view.vGetWinH() <= 0 || m_view.vGetWinW() <= 0 ){
 			m_goto_pageno = pageno+1;
-			Toast.makeText(getContext(), "Page " + pageno + "not found.", Toast.LENGTH_LONG).show();
+			//Toast.makeText(getContext(), "Page " + pageno + " not found.", Toast.LENGTH_LONG).show();
 		}
 		else
-		{
+		{	
 			m_view.vGotoPage(pageno);
 			pageno+=1;
-			Toast.makeText(getContext(), "Page " + pageno, Toast.LENGTH_LONG).show();
+			//Toast.makeText(getContext(), "Page " + pageno, Toast.LENGTH_LONG).show();
 			invalidate();
 		}
 	}
@@ -1241,7 +1266,7 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 	public void PDFSetView(int style)
 	{
 		Document doc = m_doc;
-		PDFClose();
+		//PDFClose();
 		m_doc = doc;
 		int back_color = 0xFFCCCCCC;
         switch( style )

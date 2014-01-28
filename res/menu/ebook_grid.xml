@@ -9,6 +9,17 @@
           android:actionViewClass="android.widget.SearchView" />
     
     <!-- Refresh -->
+    <item android:id="@+id/prox_sync"
+          android:icon="@drawable/ic_action_cloud"
+          android:showAsAction="always" 
+          android:title="Sync"/>
+    
+        
+    <item android:id="@+id/reading_now"
+          android:icon="@drawable/readingnow"
+          android:showAsAction="always" 
+          android:title="Reading Now"/>
+    
     <item android:id="@+id/view_grid"
           android:icon="@drawable/ic_view_grid"
           android:showAsAction="always"

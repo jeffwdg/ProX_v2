@@ -143,9 +143,9 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		public Cursor searchBook(String query)
 		{
 			SQLiteDatabase db=this.getReadableDatabase();
-			String [] selectionArgs=new String[]{"%"+query+"%", "%"+query+"%",  query+"%"};
+			String [] selectionArgs=new String[]{"%"+query+"%", "%"+query+"%",  "%"+query+"%"};
 			String [] columns=new String[]{"_id",KEY_OBJECTID,KEY_AUTHOR,KEY_CATEGORY,KEY_COVER,KEY_FILENAME,KEY_TITLE,KEY_STATUS,KEY_CATEGORY,KEY_ISBN};
-			Cursor cur = db.query(DATABASE_TABLE, columns,"title LIKE ? OR author LIKE ? OR ISBN = ?",  selectionArgs, null, null, null);
+			Cursor cur = db.query(DATABASE_TABLE, columns,"title LIKE ? OR author LIKE ? OR ISBN LIKE ?",  selectionArgs, null, null, null);
 			
 			Log.d("Search ebook", ""+cur.getCount());
 			return cur;		

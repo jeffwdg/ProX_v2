@@ -143,82 +143,83 @@ public class BookSearch extends Activity implements OnNavigationListener{
 						@Override
 						public void done(List<ParseObject> ebookslist, ParseException e) {
 							// TODO Auto-generated method stub
-							res =  ebookslist.size();
-							
-							Log.d("ebooks", "Found " + res + " ebooks");
-							txtQuery.setText( res +" result(s) found for " + searchquery);
-							
-							
-							if (e == null) {
-				    	    	
-				    	    	if(res > 0)
-				    	    	{
-				    	    		Toast.makeText(getApplicationContext(), "Displaying..", Toast.LENGTH_LONG).show();
-				    	    		int i=0;
-				    	    		String mybooktitle, myebookID = null, cover, filename, author,ISBN, category,bookstatus, ebookID;
-				    	    		
-				    	    		for(ParseObject userbooks : ebookslist) {
-					    	    	 
-					    	    	  mybooktitle=(String) userbooks.get("title");
-					    	    	  filename = (String) userbooks.get("filename");
-					    	    	  cover =  (String) userbooks.get("cover");
-					    	    	  author = (String) userbooks.get("author");	
-					    	    	  ISBN =  (String) userbooks.get("ISBN");
-					    	    	  bookstatus =  (String) userbooks.get("status");
-					    	    	  ebookID =  userbooks.getObjectId();
-					    	    	  category = (String) userbooks.get("category");
-					    	    	 
-					    	    	  ebooks = new Ebook();
-					    	    	  ebooks.setFilename(filename);
-					    	    	  ebooks.setAuthor(author);
-					    	    	  ebooks.setCover(cover);
-					    	    	  ebooks.setID(ebookID);
-					    	    	  ebooks.setISBN(ISBN);
-					    	    	  ebooks.setTitle(mybooktitle);
-					    	    	  ebooks.setStatus(bookstatus);
-					    	    	  ebooks.setCategory(category);
-					    	    	  
-					    	    	  resBook.add(i, ebooks);
-					    	    	  TextView mTitle = (TextView) findViewById(R.id.mTitle);
-					    	    	  TextView mAuthor = (TextView) findViewById(R.id.mAuthor);
-					    	    	  i++;
-					    	    	  userbooks.put("ebookID", ebookID);
-					    	    	  Log.d("Parse Data", "Retrieved ebook details " + cover + filename +author +mybooktitle+ ISBN +bookstatus);
-					              }
-					    	      
-					    	      ListView listview = (ListView) findViewById(R.id.listresults);
-					    	      final EbookAdapter  adapter = new EbookAdapter(BookSearch.this, R.layout.ebooks_row, R.id.mTitle, resBook);
-		
-					              listview.setAdapter(adapter); 
-					              
-					              // And if you want selection feedback:
-					              listview.setOnItemClickListener(new OnItemClickListener() {
-					                  @Override
-					                  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-					                	  	Ebook storeebook = new Ebook();
-					                	  	storeebook = resBook.get(position);
-							        		Intent bookdetails = new Intent(getApplicationContext(), StoreBookDetails.class);
-		
-							        		bookdetails.putExtra("title", storeebook.getTitle());
-							        		bookdetails.putExtra("filename", storeebook.getFilename());
-							        		bookdetails.putExtra("author", storeebook.getAuthor());
-							        		bookdetails.putExtra("cover", storeebook.getCover());
-							    	    	bookdetails.putExtra("ebookID", storeebook.getID());
-							    	    	bookdetails.putExtra("status", storeebook.getStatus());
-							    	    	bookdetails.putExtra("ISBN", storeebook.getISBN());
-							    	    	bookdetails.putExtra("category", storeebook.getCategory());
+ 
+								res =  ebookslist.size();
+								
+								Log.d("ebooks", "Found " + res + " ebooks");
+								txtQuery.setText( res +" result(s) found for " + searchquery);
+								
+								
+								if (e == null) {
+					    	    	
+					    	    	if(res > 0)
+					    	    	{
+					    	    		Toast.makeText(getApplicationContext(), "Displaying..", Toast.LENGTH_LONG).show();
+					    	    		int i=0;
+					    	    		String mybooktitle, myebookID = null, cover, filename, author,ISBN, category,bookstatus, ebookID;
+					    	    		
+					    	    		for(ParseObject userbooks : ebookslist) {
+						    	    	 
+						    	    	  mybooktitle=(String) userbooks.get("title");
+						    	    	  filename = (String) userbooks.get("filename");
+						    	    	  cover =  (String) userbooks.get("cover");
+						    	    	  author = (String) userbooks.get("author");	
+						    	    	  ISBN =  (String) userbooks.get("ISBN");
+						    	    	  bookstatus =  (String) userbooks.get("status");
+						    	    	  ebookID =  userbooks.getObjectId();
+						    	    	  category = (String) userbooks.get("category");
+						    	    	 
+						    	    	  ebooks = new Ebook();
+						    	    	  ebooks.setFilename(filename);
+						    	    	  ebooks.setAuthor(author);
+						    	    	  ebooks.setCover(cover);
+						    	    	  ebooks.setID(ebookID);
+						    	    	  ebooks.setISBN(ISBN);
+						    	    	  ebooks.setTitle(mybooktitle);
+						    	    	  ebooks.setStatus(bookstatus);
+						    	    	  ebooks.setCategory(category);
+						    	    	  
+						    	    	  resBook.add(i, ebooks);
+						    	    	  TextView mTitle = (TextView) findViewById(R.id.mTitle);
+						    	    	  TextView mAuthor = (TextView) findViewById(R.id.mAuthor);
+						    	    	  i++;
+						    	    	  userbooks.put("ebookID", ebookID);
+						    	    	  Log.d("Parse Data", "Retrieved ebook details " + cover + filename +author +mybooktitle+ ISBN +bookstatus);
+						              }
+						    	      
+						    	      ListView listview = (ListView) findViewById(R.id.listresults);
+						    	      final EbookAdapter  adapter = new EbookAdapter(BookSearch.this, R.layout.ebooks_row, R.id.mTitle, resBook);
 			
-							        		bookdetails.putExtra("id",position);
-							                startActivity(bookdetails);
-							                
-					                      Log.d("Test", storeebook.getTitle() + " has been selected!");
-					                  }
-					              });
-					              
-				    	    	}else{txtQuery.setText("No results found for " + searchquery); }	
-				    	    	
-				    	    }else {Log.d("ebooks error", "Error");}
+						              listview.setAdapter(adapter); 
+						              
+						              // And if you want selection feedback:
+						              listview.setOnItemClickListener(new OnItemClickListener() {
+						                  @Override
+						                  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	
+						                	  	Ebook storeebook = new Ebook();
+						                	  	storeebook = resBook.get(position);
+								        		Intent bookdetails = new Intent(getApplicationContext(), StoreBookDetails.class);
+			
+								        		bookdetails.putExtra("title", storeebook.getTitle());
+								        		bookdetails.putExtra("filename", storeebook.getFilename());
+								        		bookdetails.putExtra("author", storeebook.getAuthor());
+								        		bookdetails.putExtra("cover", storeebook.getCover());
+								    	    	bookdetails.putExtra("ebookID", storeebook.getID());
+								    	    	bookdetails.putExtra("status", storeebook.getStatus());
+								    	    	bookdetails.putExtra("ISBN", storeebook.getISBN());
+								    	    	bookdetails.putExtra("category", storeebook.getCategory());
+				
+								        		bookdetails.putExtra("id",position);
+								                startActivity(bookdetails);
+								                
+						                      Log.d("Test", storeebook.getTitle() + " has been selected!");
+						                  }
+						              });
+						              
+					    	    	}else{txtQuery.setText("No results found for " + searchquery); }	
+					    	    	
+					    	    }else {Log.d("ebooks error", "Error");}
 							 
 						}
 			    	});
