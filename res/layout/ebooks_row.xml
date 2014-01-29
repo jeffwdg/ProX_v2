@@ -55,5 +55,15 @@
 		    android:layout_toRightOf="@+id/mCover"
 		    android:text="Title"
 		    android:textSize="14dp" />
+		
+		<ProgressBar android:id="@+id/dlprogressbar"
+			 android:layout_width="wrap_content" 
+			 android:layout_height="wrap_content"
+			 android:layout_gravity="center"
+			 android:visibility="invisible"
+			 android:layout_marginTop="25dp"
+			 android:layout_marginLeft="33dp"
+			 android:layout_toRightOf="@+id/mTitle"
+			 style="@android:style/Widget.ProgressBar.Horizontal" />
 
 </RelativeLayout>

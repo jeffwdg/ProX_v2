@@ -545,7 +545,7 @@ public class UserEbookList extends Activity {
 			boolean filedeleted = file.delete();
 			boolean efiledeleted = efile.delete();
  
-			Toast.makeText(getApplicationContext(), "Deleting book... " + title+efiledeleted+filedeleted, Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Deleting book... " + title, Toast.LENGTH_LONG).show();
 			
 			if(filedeleted == true || efiledeleted == true){
 				deleted = true;
@@ -775,6 +775,8 @@ public class UserEbookList extends Activity {
             mBuilder.setProgress(100, Integer.parseInt(progress[0]), false);
             if(Integer.parseInt(progress[0]) == 100){
             	progressBar.getProgressDrawable().setColorFilter(Color.argb(1, 0, 233, 0), Mode.SRC_IN);
+            	 
+            	progressBar.setVisibility(4);
             }
        }
         

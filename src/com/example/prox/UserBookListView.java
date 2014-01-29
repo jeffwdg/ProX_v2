@@ -16,6 +16,7 @@ import net.sf.andpdf.pdfviewer.PdfViewerActivity;
 
 import com.example.prox.UserEbookList.DownloadFileFromURL;
 import com.example.prox.adapter.EbookDatabaseAdapter;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -39,6 +40,8 @@ import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -59,6 +62,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -73,6 +77,7 @@ public class UserBookListView extends ListActivity {
   ArrayList<Ebook> data = new ArrayList<Ebook>();
   TextView mTitle; 
   private ProgressDialog pDialog;
+  ProgressBar progressBar;
   boolean isInternetPresent = false;
   InternetDetector internetdetected;
   Utilities util = new Utilities();
@@ -80,7 +85,8 @@ public class UserBookListView extends ListActivity {
   Cursor ebookCursor;
   SharedPreferences pref;
   Editor editor;
-	
+  Bitmap bmp;
+  
   // Progress dialog type (0 - for Horizontal progress bar)
   public static final int progress_bar_type = 0; 
   
@@ -114,6 +120,7 @@ public class UserBookListView extends ListActivity {
 		//Save view preference
 		SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
 		Editor editor = pref.edit();
+		
 		editor.putString("view", "grid"); 
 		editor.commit();
 		Log.d("SetView","Grid");
@@ -122,28 +129,7 @@ public class UserBookListView extends ListActivity {
 		startActivity(intent);
 	}
 	
-	public void syncLibrary(){
-		
-		util.showAlertDialog(this, "Library Sync", "Synchronizing library. Please wait...", false);
-	}
 	
-
-	public void readingNow(){
-		
-		String userFolderName = pref.getString("email", null);
-		String readingnow = pref.getString("readingnow", null);
-		String curpage = pref.getString(readingnow, null);
-		String title="";
-		Log.d("Reading now book",""+readingnow);
-		
-		if(!TextUtils.isEmpty(readingnow) || !TextUtils.equals(readingnow, null))
-		{
-			openEbook(readingnow,title);
-		}else{
-			Toast.makeText(getApplicationContext(), "Sorry, the book you last read does not exist. Please redownload it.", Toast.LENGTH_LONG).show();
-		}
- 
-	}
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -168,6 +154,171 @@ public class UserBookListView extends ListActivity {
     handleIntent(getIntent());
   }
   
+  
+  /*
+	 * This function synchronizes the local library with the user online library
+	 */
+	public void syncLibrary( ){
+
+		String userobjectId = pref.getString("objectId", null);
+		final String userFolderName = pref.getString("email", null);
+		//util.showAlertDialog(this, "Library Sync", "Synchronizing library. Please wait...", false);
+		final ProgressDialog pd = new ProgressDialog(UserBookListView.this);
+		pd.setMessage("Library Sync... Please wait.");
+		pd.setIndeterminate(true);
+		pd.show();
+		final ArrayList<String> bookstobedownload = new ArrayList<String>(); 
+		
+		
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
+		query.whereEqualTo("userID", userobjectId);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			
+			public void done(List<ParseObject> userebooks, ParseException e) {  
+				Log.d("Sync", "Retrieved " + userebooks.size() + " ebooks");
+				String[] onlinebooks = new String[userebooks.size()];
+		        int i=0;
+		         
+				  if (e == null) {
+				            // get the list of online user books and store the objectId in a string array, SET A
+				            for(ParseObject userbook : userebooks) {
+				    	    	  onlinebooks[i] = userbook.getString("ebookID");
+				    	    	  //Log.d("Online", "" + userbook.getString("ebookID"));
+				    	    i++;
+				            }
+				            
+				            //get the list of local user books and store the object ID in a string array, SET B
+				            Cursor eebookCursor = datasource.fetchAllEbooks();
+				            String[] eebookCursorlist = new String[eebookCursor.getCount()];
+				            
+				            if (eebookCursor != null) {
+				        	    startManagingCursor(eebookCursor);
+				        	    int b = 0;
+				        	    while (eebookCursor.moveToNext()) {
+				        	        eebookCursorlist[b]  = eebookCursor.getString(eebookCursor.getColumnIndex("objectId"));
+					    	    	//Log.d("Local", "" +eebookCursorlist[b]);
+					    	    	b++;
+				        	    }
+				            }
+				        	    
+				        	//select a book from online that is not on local and add to bookstobedownload 
+				            //String[] bookstobedownload=new String[onlinebooks.length1];
+				           
+				            
+				            
+				            if(onlinebooks.length > 0){
+				            	for(int j = 0; j<onlinebooks.length; j++ ){
+				            		//Log.d("SetA", "" + onlinebooks[j]);
+				            		int isfound = 0;
+				            		for(int k=0; k<eebookCursor.getCount(); k++){
+				            			//Log.d("SetB", "" + eebookCursorlist[k]);
+				            			if(TextUtils.equals(onlinebooks[j], eebookCursorlist[k]))
+				            			{	
+				            				isfound += 1;
+				            		 
+					            		}
+				            		}
+				            		
+				            		if(isfound == 0){
+				            			bookstobedownload.add(onlinebooks[j]);  
+				            			Log.d("Add to Queue",""+onlinebooks[j]+bookstobedownload.size());
+				            		}
+				            		
+				            	}
+				            	
+				            	
+				            	if(bookstobedownload.size() > 0){
+				        			String nebookId;
+				        			
+				        			for(int y=0; y<bookstobedownload.size(); y++){
+				        			nebookId = bookstobedownload.get(y);
+				        			
+				        				//Download covers and save to local db
+				        				ParseQuery<ParseObject> nquery = ParseQuery.getQuery("ebook");
+				        		    	nquery.whereEqualTo("objectId", nebookId);
+				        		    	nquery.findInBackground(new FindCallback<ParseObject>() {
+				        					@SuppressLint("NewApi")
+				        					@Override
+				        					public void done(List<ParseObject> lebookslist, ParseException e){
+				        					 
+				        						if (e == null) {
+				        			    	    	Log.d("Added", "Found " + lebookslist.size() + " ebooks");
+				        			    	    	 
+				        				    	      String lmybooktitle, lmyebookID = null, lcover, lfilename, lauthor,lISBN, lcategory,lbookstatus, lebookID;
+				        				    	      for(ParseObject luserbooks : lebookslist) {
+				        				    	    	  
+				        				    	    	  lmybooktitle=(String) luserbooks.get("title");
+				        				    	    	  lfilename = (String) luserbooks.get("filename");
+				        				    	    	  lcover =  (String) luserbooks.get("cover");
+				        				    	    	  lauthor = (String) luserbooks.get("author");	
+				        				    	    	  lISBN =  (String) luserbooks.get("ISBN");
+				        				    	    	  lbookstatus =  (String) luserbooks.get("status");
+				        				    	    	  lebookID =  luserbooks.getObjectId();
+				        				    	    	  lcategory = (String) luserbooks.get("category");
+				        		 
+				        				    	    	  Log.d("Parse Data", "Retrieved ebook details " + lcover + lfilename +lauthor +lmybooktitle+ lISBN + lbookstatus);
+				        				    	    	  //Save bookcover to SD
+				        				    	    	  
+				        				    	    	  if(lcover.toString().trim().length() > 0) {
+				      	                    	            bmp = ImageDownloader.getBitmapFromURL(lcover.toString().trim());
+				        				    	    	  }
+				        				    	    	  
+				        				    	    	  util.saveImageToSD2(userFolderName,lebookID,bmp);
+				        				    	    	  String ebookStatus = "0"; //not downloaded
+				        				    	     	  datasource.insertEntry(lebookID, lmybooktitle, lfilename, lauthor, lISBN, lcover, ebookStatus, lcategory);
+				        				    	     	  
+				        				    	     	  pd.dismiss(); 
+				        				    	     	 
+				        				    	     	  Intent intent = getIntent();
+				        		                		  finish();
+				        		                		  startActivity(intent);
+				        				    	      }
+				        				    	      
+				        			    	    } else {Log.d("Sync", "Error");}
+				        					}
+				        		    	});
+				        		    	
+				        		    	
+				        			}
+				        			
+				        		}else{
+				        			Log.d("Sync", "Library is currently updated.");
+				        			pd.dismiss(); 
+				        		}
+				            	
+				            	
+				            	
+				            }
+				            
+			        } else {
+			            Log.d("Sync", "Error: " + e.getMessage());
+			        }
+			  }
+
+		 });
+
+	}
+	
+	
+
+	public void readingNow(){
+		
+		String userFolderName = pref.getString("email", null);
+		String readingnow = pref.getString("readingnow", null);
+		String curpage = pref.getString(readingnow, null);
+		String title="";
+		Log.d("Reading now book",""+readingnow);
+		
+		if(!TextUtils.isEmpty(readingnow) || !TextUtils.equals(readingnow, null))
+		{
+			openEbook(readingnow,title);
+		}else{
+			Toast.makeText(getApplicationContext(), "Sorry, the book you last read does not exist. Please redownload it.", Toast.LENGTH_LONG).show();
+		}
+
+	}
+	
+	
   /*
    * Displays user ebook from local sqlite in a listview
    */
@@ -234,7 +385,7 @@ public class UserBookListView extends ListActivity {
  
 	
 	@SuppressLint("NewApi")
-	public void onListItemClick(ListView parent, View v, final int position, final long id){	
+	public void onListItemClick(ListView parent, final View v, final int position, final long id){	
 		final Cursor ebookCursor = datasource.fetchAllEbooks();
 		ebookCursor.moveToPosition(position);
 		final String objectId = ebookCursor.getString(ebookCursor.getColumnIndex("objectId"));
@@ -275,7 +426,7 @@ public class UserBookListView extends ListActivity {
 				break;
 			case 2:
 				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_LONG).show(); 
-				boolean downloadedFile = downloadEbook(objectId, filename);
+				boolean downloadedFile = downloadEbook(objectId, filename, v);
 				String downloadedStatus = "1";
 				if(downloadedFile == true){ 
 					datasource.updateEntry(objectId, title,filename,author, ISBN, cover, downloadedStatus, category); 
@@ -341,7 +492,7 @@ public class UserBookListView extends ListActivity {
 			boolean filedeleted = file.delete();
 			boolean efiledeleted = efile.delete();
 			 
-			Toast.makeText(getApplicationContext(), "Deleting book... " + efiledeleted+filedeleted, Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Deleting book " + title, Toast.LENGTH_LONG).show();
 			
 			if(filedeleted == true || efiledeleted == true){
 				deleted = true;
@@ -413,7 +564,7 @@ public class UserBookListView extends ListActivity {
 	 * This method is called when the user click download ebook after purchasing it 
 	 * 
 	 */
-	public boolean downloadEbook(String objectId, String filename){
+	public boolean downloadEbook(String objectId, String filename, View v){
 		boolean downloaded =false;
 		
 		internetdetected = new InternetDetector(this.getApplicationContext());
@@ -421,9 +572,14 @@ public class UserBookListView extends ListActivity {
 		isInternetPresent = internetdetected.isNetworkAvailable();
 		
 		if(isInternetPresent == true){
-			Toast.makeText(getApplicationContext(), "Ebook downloaded?" +filename, Toast.LENGTH_LONG).show();
+			//Toast.makeText(getApplicationContext(), "Ebook downloaded?" +filename, Toast.LENGTH_LONG).show();
 			
 			new DownloadFileFromURL().execute(filename,objectId);
+			
+			progressBar = (ProgressBar) v.findViewById(R.id.dlprogressbar);
+			progressBar.setVisibility(0);
+			progressBar.setProgress(0);
+			
 			
 		}else{
 			util.showAlertDialog(this, "Network Error", "Please check your internet connection.", false);
@@ -522,7 +678,14 @@ public class UserBookListView extends ListActivity {
          * */
         protected void onProgressUpdate(String... progress) {
             // setting progress percentage
-            pDialog.setProgress(Integer.parseInt(progress[0]));
+            //pDialog.setProgress(Integer.parseInt(progress[0]));
+        	progressBar.setProgress(Integer.parseInt(progress[0]));
+            //mBuilder.setProgress(100, Integer.parseInt(progress[0]), false);
+            if(Integer.parseInt(progress[0]) == 100){
+            	progressBar.getProgressDrawable().setColorFilter(Color.argb(1, 0, 233, 0), Mode.SRC_IN);
+            	 
+            	progressBar.setVisibility(4);
+            }
        }
        
         /**
