@@ -14,11 +14,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.StatFs;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class Utilities extends Activity {
@@ -45,6 +48,37 @@ public class Utilities extends Activity {
 		Log.d("Util", "IsNumeric "+ret);
 		return ret;
 	}
+	
+	public boolean isLoggedIn(Context context){
+		boolean x = false;
+	     SharedPreferences pref = context.getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
+	     Editor editor = pref.edit();
+	     
+	     pref.getString("email", null); 
+	     String email = pref.getString("email", null);
+
+	     if(email != null || !TextUtils.isEmpty(email)){
+	    	 Log.d("LoggedIn", "true" +email);
+	    	 x= true;
+	     }       
+	    return x;
+	}
+	
+	public static boolean deleteDirectory(File path) {
+
+        if( path.exists() ) {
+            File[] files = path.listFiles();
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                }
+                else {
+                    files[i].delete();
+                }
+            }
+        }
+        return(path.delete());
+    }
 	
 	@SuppressWarnings("deprecation")
     public void showAlertDialog(Context context, String title, String message, Boolean status) {

@@ -122,6 +122,10 @@ public class MainActivity extends Activity implements OnClickListener
 					Intent ia = new Intent(MainActivity.this, Tablayout.class);
 					startActivity(ia);
 					break;
+				case 3:
+					Intent iz = new Intent(MainActivity.this, Tablayout.class);
+					startActivity(iz);
+					break;
 				default:
 					break;
 				}

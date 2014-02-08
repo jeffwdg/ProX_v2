@@ -189,6 +189,7 @@ public class MainActivity extends Activity {
 				 focusView.requestFocus();
 			}
 			else{
+				Toast.makeText(getApplicationContext(), "Signing in...", Toast.LENGTH_LONG).show();
 				signInNow(email, password);
 			}
  
@@ -231,7 +232,7 @@ public class MainActivity extends Activity {
 					}
 					else{
 						Log.d("ProX Sign In","Error signing in.");
-						 util.showAlertDialog(MainActivity.this,"Login", "Username or Password is invalid.", false);
+						util.showAlertDialog(MainActivity.this,"Login", "Email address or password is incorrect. Please try again.", false);
 					}
 				}
 

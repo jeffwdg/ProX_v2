@@ -164,7 +164,7 @@ public class UserBookListView extends ListActivity {
 		final String userFolderName = pref.getString("email", null);
 		//util.showAlertDialog(this, "Library Sync", "Synchronizing library. Please wait...", false);
 		final ProgressDialog pd = new ProgressDialog(UserBookListView.this);
-		pd.setMessage("Library Sync... Please wait.");
+		pd.setMessage("Library Synchronizing...");
 		pd.setIndeterminate(true);
 		pd.show();
 		final ArrayList<String> bookstobedownload = new ArrayList<String>(); 
@@ -354,7 +354,7 @@ public class UserBookListView extends ListActivity {
              	            
              	            Drawable bookcover;
              	  		  	SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
-             	  		  	Editor editor = pref.edit();
+             	  		  	//Editor editor = pref.edit();
 
              	            String userFolderName = pref.getString("email", null);
              	            
@@ -425,12 +425,15 @@ public class UserBookListView extends ListActivity {
 				attemptDeleteMyEbook(objectId, title, filename);
 				break;
 			case 2:
-				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_LONG).show(); 
+				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show(); 
 				boolean downloadedFile = downloadEbook(objectId, filename, v);
 				String downloadedStatus = "1";
 				if(downloadedFile == true){ 
 					datasource.updateEntry(objectId, title,filename,author, ISBN, cover, downloadedStatus, category); 
 				}
+				//Intent intent = getIntent();
+    		    //finish();
+    		    //startActivity(intent);
 				break;
 			}
     	}
@@ -493,9 +496,8 @@ public class UserBookListView extends ListActivity {
 			boolean efiledeleted = efile.delete();
 			 
 			Toast.makeText(getApplicationContext(), "Deleting book " + title, Toast.LENGTH_LONG).show();
-			
+			Log.d("Ebook Deletion", "Ebook internet."+isInternetPresent+filedeleted+efiledeleted);  
 			if(filedeleted == true || efiledeleted == true){
-				deleted = true;
 				
 				if(isInternetPresent == true){
 					ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
@@ -523,7 +525,7 @@ public class UserBookListView extends ListActivity {
 					 });
 					Log.d("Ebook Deletion", "Ebook will be deleted when connection is detected."); 
 				}
-				
+				deleted = true;
 				Toast.makeText(getApplicationContext(), "Deleted book " + title, Toast.LENGTH_LONG).show();
 			}
 		}
@@ -538,7 +540,7 @@ public class UserBookListView extends ListActivity {
 	public void openEbook(String objectId, String title){
 		
 		SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-	    Editor editor = pref.edit();
+	    //Editor editor = pref.edit();
         String userFolderName = pref.getString("email", null);
         
 		String ebookLocation = "data/data/com.radaee.reader/proxbooks/"+ userFolderName +"/";
@@ -573,11 +575,11 @@ public class UserBookListView extends ListActivity {
 		
 		if(isInternetPresent == true){
 			//Toast.makeText(getApplicationContext(), "Ebook downloaded?" +filename, Toast.LENGTH_LONG).show();
-			
+			downloaded = true;
 			new DownloadFileFromURL().execute(filename,objectId);
 			
 			progressBar = (ProgressBar) v.findViewById(R.id.dlprogressbar);
-			progressBar.setVisibility(0);
+			progressBar.setVisibility(View.VISIBLE);
 			progressBar.setProgress(0);
 			
 			
@@ -600,7 +602,7 @@ public class UserBookListView extends ListActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showDialog(progress_bar_type);
+            //showDialog(progress_bar_type);
         }
  
         /**
@@ -610,7 +612,7 @@ public class UserBookListView extends ListActivity {
         protected String doInBackground(String... f_url) {
             int count;
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-		    Editor editor = pref.edit();
+		    //Editor editor = pref.edit();
             String userFolderName = pref.getString("email", null);
             
             File folder = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName);
@@ -680,11 +682,11 @@ public class UserBookListView extends ListActivity {
             // setting progress percentage
             //pDialog.setProgress(Integer.parseInt(progress[0]));
         	progressBar.setProgress(Integer.parseInt(progress[0]));
-            //mBuilder.setProgress(100, Integer.parseInt(progress[0]), false);
+ 
             if(Integer.parseInt(progress[0]) == 100){
             	progressBar.getProgressDrawable().setColorFilter(Color.argb(1, 0, 233, 0), Mode.SRC_IN);
-            	 
-            	progressBar.setVisibility(4);
+            	progressBar.setVisibility(View.INVISIBLE);
+            	Toast.makeText(getApplicationContext(), "Download completed.", Toast.LENGTH_SHORT).show();
             }
        }
        
@@ -695,7 +697,7 @@ public class UserBookListView extends ListActivity {
         protected void onPostExecute(String file_url, String objectId) {
             // dismiss the dialog after the file was downloaded
             dismissDialog(progress_bar_type);
-            Log.d("Ebook Download", "Completed" + objectId);
+            //Log.d("Ebook Download", "Completed" + objectId);
         }
  
     }
@@ -719,6 +721,10 @@ public class UserBookListView extends ListActivity {
  
             ebookCursor = datasource.searchBook(searchquery);
             
+            if(ebookCursor.getCount() <=0 )
+            {
+            	Toast.makeText(getApplicationContext(), "Sorry. No results found for query "+ searchquery +"." , Toast.LENGTH_LONG).show();
+            }
 
             String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};
             int[] to = new int[] { R.id.mTitle ,R.id.mFilename, R.id.mCover,R.id.mAuthor, R.id.mObjectId, R.id.mObjectId};
@@ -746,7 +752,7 @@ public class UserBookListView extends ListActivity {
                  	            
                  	            Drawable bookcover;
                  	  		  	SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 1); // 0 - for private mode
-                 	  		  	Editor editor = pref.edit();
+                 	  		  	//Editor editor = pref.edit();
 
                  	            String userFolderName = pref.getString("email", null);
                  	            

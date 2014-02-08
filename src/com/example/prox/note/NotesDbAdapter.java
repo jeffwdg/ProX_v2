@@ -37,7 +37,8 @@ public class NotesDbAdapter {
     private static final String DATABASE_CREATE =
         "create table notes (_id integer primary key autoincrement, "
         + "title text not null, subject text not null, body text not null, date text not null);";
-
+    
+    static final String DATABASE_DELETE = "Delete from notes";
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "notes";
     private static final int DATABASE_VERSION = 2;
@@ -95,7 +96,9 @@ public class NotesDbAdapter {
     }
 
     
-    
+    public void emptyUserNotes(){
+    	mDb.execSQL(DATABASE_DELETE);
+	}
     public int countNotes(){
     	Cursor cur = mDb.rawQuery("select * from notes",  null);
     	return cur.getCount();

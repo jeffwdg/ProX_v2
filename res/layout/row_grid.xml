@@ -10,6 +10,7 @@
 
     <ImageView
         android:id="@+id/book_image"
+        android:contentDescription="Book cover"
         android:layout_width="50dp"
         android:layout_height="70dp"
         android:layout_marginTop="-5dp"
@@ -39,7 +40,7 @@
         android:radius="5dp"
         android:shadowColor="#aaa"
         android:textColor="#ffffff"
-        android:textSize="8dp"
+        android:textSize="12sp"
         android:textStyle="italic"
         android:typeface="monospace" />
 
@@ -58,7 +59,7 @@
         android:typeface="monospace"
         android:radius="5dp" 
         android:visibility="gone"
-        android:textSize="10sp" >
+        android:textSize="12sp" >
         
     </TextView>
     <TextView

@@ -6,16 +6,20 @@ import com.radaee.reader.R;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
@@ -25,6 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,6 +39,7 @@ import android.widget.Toast;
 public class ReminderUpdate extends Activity implements OnClickListener{
 	ImageButton dateButton,timeButton;
 	EditText dateText1,dateText2;
+	CheckBox setAlarm;
 	 static final int DATE_DIALOG_ID = 0;
 	 static final int TIME_DIALOG_ID=1;
 	 public  int year,month,day,hour,minute; 
@@ -75,6 +81,8 @@ public class ReminderUpdate extends Activity implements OnClickListener{
     		timeButton=(ImageButton)findViewById(R.id.imageButton2);
     		dateText1 = (EditText)findViewById(R.id.editText1);
     		dateText2 = (EditText)findViewById(R.id.editText2);
+    		setAlarm = (CheckBox)findViewById(R.id.setAlarm);
+    		
     		dateButton.setOnClickListener(new View.OnClickListener() {
     			@Override
     			public void onClick(View v) {
@@ -132,7 +140,7 @@ public class ReminderUpdate extends Activity implements OnClickListener{
        switch (item.getItemId()) {
        case R.id.action_save:
     	   if ( checkValidation () )
-               submitForm();
+    		   UpdateReminder();
            else
                Toast.makeText(ReminderUpdate.this, "Form contains error", Toast.LENGTH_LONG).show();
 
@@ -148,13 +156,7 @@ public class ReminderUpdate extends Activity implements OnClickListener{
             return super.onOptionsItemSelected(item);
         }
     }
-    
-    private void submitForm() {
-        // Submit your form here. your form is valid
-        Toast.makeText(this, "Submitting form...", Toast.LENGTH_LONG).show();
-        UpdateReminder();
-    }
-    
+ 
     private void UpdateReminder() {
     	 Intent i = getIntent();
       
@@ -166,16 +168,107 @@ public class ReminderUpdate extends Activity implements OnClickListener{
          String rDate =date.getText().toString();
          String rTime =time.getText().toString();
          String rDesc =desc.getText().toString();
+         boolean Alarmcheck = setAlarm.isChecked();
+         
          rDate = rDate.trim();
          rTime = rTime.trim();
-         
+         scheduleAlarm(rDate,rTime,rTitle,Alarmcheck);
  
          dataBase.updateEntry(rID, rTitle, rDate, rTime, rDesc);
          Toast.makeText(getApplicationContext(), "Reminder updated successfully." + rTitle, Toast.LENGTH_LONG).show();
- 
-         finish();
-         Intent ix = new Intent(this, MainActivity.class);
-         startActivity(ix);
+         
+         //finish();
+         //Intent ix = new Intent(this, MainActivity.class);
+         //startActivity(ix);
+    }
+    
+    public void scheduleAlarm(String alarmdate, String alarmtime, String etitle, boolean Alarmcheck)
+    {
+    		Context context;
+    		Calendar thatDay = Calendar.getInstance();
+    		String[] tdate = alarmdate.split("-");
+    		String[] ttime = alarmtime.split(":");
+    		String[] ttimes = ttime[1].split(" ");
+    		 
+    		thatDay.clear(); 
+    		thatDay.set(Calendar.MONTH,Integer.parseInt(tdate[0]) - 1); //0-11 so 1 less
+    		thatDay.set(Calendar.YEAR, Integer.parseInt(tdate[2]));
+    		thatDay.set(Calendar.DATE,Integer.parseInt(tdate[1]));
+    		
+    		int ampm = 0;
+    		
+    		Log.d("",""+ttimes[1]);
+    		
+            if(TextUtils.equals(ttimes[1], "AM")){
+            	Log.d("Morning",""+ttimes[1]+ampm);
+            	ampm = 0;
+    		}
+            else if(TextUtils.equals(ttimes[1], "PM")){
+    			ampm = 1;
+    			Log.d("Afternoon",""+ttimes[1]+ampm);
+    		}
+            
+            thatDay.set(Calendar.AM_PM, ampm);
+			thatDay.set(Calendar.HOUR,Integer.parseInt(ttime[0]));
+			thatDay.set(Calendar.MINUTE,Integer.parseInt(ttimes[0]));
+			thatDay.set(Calendar.SECOND, 2);
+			thatDay.set(Calendar.MILLISECOND, 5);
+			 
+			
+    		Calendar today = Calendar.getInstance();
+    		
+    		String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+    		String thatdate = java.text.DateFormat.getDateTimeInstance().format(thatDay.getTime());
+            long time = thatDay.getTimeInMillis() - System.currentTimeMillis();
+            Log.d("Time",""+ thatDay.get(Calendar.MONTH) +thatDay.get(Calendar.DATE)+thatDay.get(Calendar.HOUR)+" "+thatDay.get(Calendar.MINUTE) );
+            Log.d("Time",""+ today.get(Calendar.MONTH) +today.get(Calendar.DATE)+today.get(Calendar.HOUR)+" "+today.get(Calendar.MINUTE) );
+            Log.d("Today",""+mydate);
+    		Log.d("Thatday",""+thatdate);
+    		
+            if(Alarmcheck == true){
+            	
+            	long xtime = (time / 1000 );
+            	Log.d("Day",""+thatDay.getTimeInMillis()+"- "+System.currentTimeMillis());
+            	
+                if(thatDay.getTimeInMillis() > today.getTimeInMillis()){
+                
+                	Intent intent = new Intent(this, AlarmReceiver.class);
+                	intent .putExtra("title", etitle);
+                	intent .putExtra("ringtone",  "android.resource://com.radaee.reader/raw/ribs");
+                	
+            		PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 234324243, intent, 0);
+            		
+            		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            		alarmManager.set(AlarmManager.RTC_WAKEUP,  System.currentTimeMillis()+  (xtime * 1000), pendingIntent);
+            		
+            		String alarm;
+            		if(xtime < 60){
+            			alarm = xtime + " seconds";
+            		}else{
+            			xtime = xtime/60;
+            			if(xtime > 86400){
+            				 
+            				long xhour = xtime/60/24;
+            				alarm = xhour + " day(s)";
+            			}
+            			else if(xtime > 3600){
+            			
+            				long xhour = xtime/60;
+            				alarm = xhour + " hour(s)";
+            			}else{
+            				 
+            				alarm = xtime + " minute(s)";
+            			}
+            			
+            		}
+            		
+            		Toast.makeText(this, "Alarm set in " + alarm,Toast.LENGTH_LONG).show();
+                }else{
+                	Toast.makeText(this, "Date is in the past. Please select a date and time in the future to set an alarm. ", Toast.LENGTH_LONG).show();
+                }
+            }
+            
+            
     }
     
     private void GoToMain() {

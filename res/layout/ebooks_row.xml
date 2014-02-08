@@ -41,7 +41,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignLeft="@+id/mTitle"
 		    android:layout_below="@+id/mTitle"
-		    android:textColor="#444444"
+		    android:textColor="#dddddd"
 		    android:text="Author"
 		    android:textSize="12sp" />
 

@@ -61,7 +61,7 @@ public class MenuActivity extends Activity{
 
 	// used to store app title
 	private CharSequence mTitle;
-
+	Utilities util = new Utilities();
 	// slide menu items
 	private String[] navMenuTitles;
 	private TypedArray navMenuIcons;
@@ -72,6 +72,12 @@ public class MenuActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if(util.isLoggedIn(this) == false){
+        	Intent intent = new Intent(this, MainActivity.class);
+			startActivity(intent);
+        }
+		
 		setContentView(R.layout.menu);
 		
 		EbookDatabaseAdapter ebookDatabaseAdapter = new EbookDatabaseAdapter(MenuActivity.this);
@@ -90,23 +96,20 @@ public class MenuActivity extends Activity{
 		Log.d("ProX User", currentUser.getObjectId());
 		
 		if (currentUser != null) {
-		  // do stuff with the user
-			
+		   // do stuff with the user
 			mTitle = mDrawerTitle = getTitle();
 
 			// load slide menu items
 			navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
 
 			// nav drawer icons from resources
-			navMenuIcons = getResources()
-					.obtainTypedArray(R.array.nav_drawer_icons);
+			navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
 
 			mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 			mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 
 			navDrawerItems = new ArrayList<NavDrawerItem>();
-
-			// adding nav drawer items to array
+			
 			// Home
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[0], navMenuIcons.getResourceId(0, -1)));
 			// Reminder
@@ -124,14 +127,12 @@ public class MenuActivity extends Activity{
 			navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));
 			
 
-			// Recycle the typed array
 			navMenuIcons.recycle();
 
 			mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
 			// setting the nav drawer list adapter
-			adapter = new NavDrawerListAdapter(getApplicationContext(),
-					navDrawerItems);
+			adapter = new NavDrawerListAdapter(getApplicationContext(),navDrawerItems);
 			mDrawerList.setAdapter(adapter);
 
 			// enabling action bar app icon and behaving it as toggle button
@@ -167,6 +168,8 @@ public class MenuActivity extends Activity{
 			startActivity(mainactIntent);
 		}
 	}
+	
+	
 
 	/**
 	 * Slide menu item click listener

@@ -88,7 +88,7 @@ public class lastmonthcalendar extends ListActivity{
 		Calendar _calendar;
 		int month,year, day;
 		_calendar = Calendar.getInstance(Locale.getDefault());
-		month = _calendar.get(Calendar.MONTH) + 1;
+		month = _calendar.get(Calendar.MONTH) - 1;
 		year = _calendar.get(Calendar.YEAR);
 		day = _calendar.get(Calendar.DATE);
 		Log.d("Date",""+day+ "-"+month+"-"+year);

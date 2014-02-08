@@ -152,8 +152,9 @@ public class SignUpActivity extends Activity implements OnClickListener
 			
 		}
 		
+		email = email.trim();
 		//check for a valid email
-		if(TextUtils.isEmpty(email)){
+		if(TextUtils.isEmpty(email) ){
 			editTextEmail.setError(getString(R.string.required_field));
 			focusView = editTextEmail;
 			cancel =true;
@@ -163,12 +164,14 @@ public class SignUpActivity extends Activity implements OnClickListener
 			cancel =true;
 		}
 		
+		fname = fname.trim();
 		// check if first & last name are valid
 		if(TextUtils.isEmpty(fname)){
 			editTextFirstName.setError(getString(R.string.required_field));
 			focusView = editTextFirstName; 
 			cancel =true;
 		}
+		lname = lname.trim();
 		if(TextUtils.isEmpty(lname)){
 			editTextLastName.setError(getString(R.string.required_field));
 			focusView = editTextLastName;
@@ -184,7 +187,7 @@ public class SignUpActivity extends Activity implements OnClickListener
 	}
 	
 	private void signUp(final String email, String password, final String fname, final String lname){
-		Toast.makeText(getApplicationContext(), "Sign up.. Please wait for a moment.", Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), "Signing up.. Please wait for a moment.", Toast.LENGTH_LONG).show();
 		 Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
 		
 		 ParseUser user = new ParseUser();

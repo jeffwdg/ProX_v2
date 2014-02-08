@@ -41,6 +41,11 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 		static final String DATABASE_CREATE = "create table "+" userebooks"+ "( " +"_id"+" integer primary key autoincrement,"+ "objectId text, title text, filename text, author text, ISBN text, category text, cover text, status integer); ";
 		// Variable to hold the database instance
 		
+		
+		static final String DATABASE_DELETE = "Delete from userebooks";
+		// Variable to hold the database instance
+		
+		
 		static final String DATABASE_CREATE_REMINDER = "create table "+" userreminders"+ "( " +"_id"+" integer primary key autoincrement,"+ "title text, date text, time text, description text); ";
 		// Variable to hold the database instance
 		
@@ -91,7 +96,11 @@ public class EbookDatabaseAdapter extends SQLiteOpenHelper{
 			db.execSQL(DATABASE_CREATE_REMINDER);
 			return db;
 		}
-
+		
+		public void emptyUserEbooks(){
+			db.execSQL(DATABASE_DELETE);
+		}
+		
 		public void insertEntry(String objectId, String title, String filename, String author, String ISBN, String cover, String status, String category)
 		{
 		   SQLiteDatabase db=this.getWritableDatabase();

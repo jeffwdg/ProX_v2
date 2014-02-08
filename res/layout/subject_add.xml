@@ -14,7 +14,8 @@
        android:hint="Subject"
        android:inputType="textNoSuggestions"
        android:singleLine="true"
-       android:textColor="#1dae57" />
+       android:textColor="#1dae57" 
+       android:maxLength="16"/>
 
    <Button
        android:id="@+id/savebtn"

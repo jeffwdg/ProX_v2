@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import net.sf.andpdf.pdfviewer.PdfViewerActivity;
 
@@ -100,6 +101,7 @@ public class UserEbookList extends Activity {
   Bitmap bmp;
   SharedPreferences pref;
   Editor editor;
+  final int DOWNLOAD_NOTIFICATION_ID= 28;
   
   @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -266,6 +268,9 @@ public class UserEbookList extends Activity {
         	    					if(downloadedFile == true){ 
         	    						datasource.updateEntry(objectId, title,filename,author, ISBN, cover, downloadedStatus, category); 
         	    					}
+        	    					//Intent intent = getIntent();
+        	    	    		    //finish();
+        	    	    		    //startActivity(intent);
         	    					break;
 	        	    				
 	        	    			}
@@ -304,7 +309,7 @@ public class UserEbookList extends Activity {
 		final String userFolderName = pref.getString("email", null);
 		//util.showAlertDialog(this, "Library Sync", "Synchronizing library. Please wait...", false);
 		final ProgressDialog pd = new ProgressDialog(UserEbookList.this);
-		pd.setMessage("Library Sync... Please wait.");
+		pd.setMessage("Library Synchronizing...");
 		pd.setIndeterminate(true);
 		pd.show();
 		final ArrayList<String> bookstobedownload = new ArrayList<String>(); 
@@ -546,9 +551,10 @@ public class UserEbookList extends Activity {
 			boolean efiledeleted = efile.delete();
  
 			Toast.makeText(getApplicationContext(), "Deleting book... " + title, Toast.LENGTH_LONG).show();
-			
+			 Log.d("Ebook Deletion", "Ebook Internet."+isInternetPresent+filedeleted+efiledeleted); 
+			 
 			if(filedeleted == true || efiledeleted == true){
-				deleted = true;
+				
 				
 				if(isInternetPresent == true){
 					ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
@@ -578,7 +584,7 @@ public class UserEbookList extends Activity {
 					 });
 					Log.d("Ebook Deletion", "Ebook will be deleted when connection is detected."); 
 				}
-				
+				deleted = true;
  
 			}
 		}
@@ -599,7 +605,7 @@ public class UserEbookList extends Activity {
 		isInternetPresent = internetdetected.isNetworkAvailable();
 		
 		if(isInternetPresent == true){
-			long freememory = util.getAvailableInternalMemorySize();
+			/*long freememory = util.getAvailableInternalMemorySize();
 			// get filesize before download
 			int file_size = 0;
 			
@@ -612,8 +618,6 @@ public class UserEbookList extends Activity {
 				if (file_size >= 1024) {
 					file_size /= 1024;  
 		        }
-		        
-				
 			}catch (Exception e) {
 				Toast.makeText(getApplicationContext(), "An error occured.", Toast.LENGTH_LONG).show();
             }
@@ -622,18 +626,33 @@ public class UserEbookList extends Activity {
 			Log.d("File ", "Size:" + file_size + " Free: "+ freememory);
 			
 			if(freememory > file_size){
-				
+			*/	
 				progressBar = (ProgressBar) v.findViewById(R.id.progressbar1);
-				progressBar.setVisibility(0);
+				progressBar.setVisibility(View.VISIBLE);
 				progressBar.setProgress(0);
 				
 				new DownloadFileFromURL().execute(filename,objectId);
-				downloaded =true;
+				downloaded = true;
 				
+				/*String dl = "false";
+				try {
+					 dl = new DownloadFileFromURL().execute(filename,objectId).get();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
+				if(TextUtils.equals(dl,"true")){
+					downloaded =true;
+				}*/
+				
+			/*	
 			}else{
 				Toast.makeText(getApplicationContext(), "Memory not enough to store file.", Toast.LENGTH_LONG).show();
-			}
+			}*/
 			
 		}else{
 			util.showAlertDialog(this, "Network Error", "Please check your internet connection.", false);
@@ -664,6 +683,9 @@ public class UserEbookList extends Activity {
         }
     }
     
+    
+    
+    
     /**
      * Background Async Task to download file
      * */
@@ -680,11 +702,14 @@ public class UserEbookList extends Activity {
  
         /**
          * Downloading file in background thread
+         * @return 
          * */
         @Override
         protected String doInBackground(String... f_url) {
         	
-        	 mBuilder =new NotificationCompat.Builder(UserEbookList.this)
+        	String dl = "false";
+        	/*
+        	mBuilder =new NotificationCompat.Builder(UserEbookList.this)
 				    .setSmallIcon(R.drawable.ic_event)
 				    .setContentTitle("Prox Ebook Download")
 				    .setContentText("Download in progress...");
@@ -692,14 +717,15 @@ public class UserEbookList extends Activity {
 			Intent intent = new Intent(UserEbookList.this, MainActivity.class);
 			PendingIntent pi = PendingIntent.getActivity(UserEbookList.this,0,intent,Intent.FLAG_ACTIVITY_NEW_TASK);
 			mBuilder.setContentIntent(pi);
-			 mNotificationManager =
-			                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			mNotificationManager.notify(0, mBuilder.build());
+			
+			mNotificationManager =(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			mNotificationManager.notify(1, mBuilder.build());
+        	 */
 			
 			
             int count;
             SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", MODE_WORLD_READABLE); // 0 - for private mode
-		    Editor editor = pref.edit();
+		    //Editor editor = pref.edit();
             String userFolderName = pref.getString("email", null);
             
             File folder = new File("data/data/com.radaee.reader/proxbooks/"+userFolderName);
@@ -756,12 +782,13 @@ public class UserEbookList extends Activity {
                // Toast.makeText(getApplicationContext(), "Download completed.", Toast.LENGTH_LONG).show();
                 output.close();
                 input.close();
- 
+                
+                dl = "true";
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage());
             }
  
-            return null;
+            return dl;
         }
         
         
@@ -772,12 +799,15 @@ public class UserEbookList extends Activity {
             // setting progress percentage
             //pDialog.setProgress(Integer.parseInt(progress[0]));
 			progressBar.setProgress(Integer.parseInt(progress[0]));
-            mBuilder.setProgress(100, Integer.parseInt(progress[0]), false);
+			
             if(Integer.parseInt(progress[0]) == 100){
             	progressBar.getProgressDrawable().setColorFilter(Color.argb(1, 0, 233, 0), Mode.SRC_IN);
-            	 
-            	progressBar.setVisibility(4);
+            	//mBuilder.setContentTitle("Prox Ebook Download");
+			    //mBuilder.setContentText("Download completed...");
+            	progressBar.setVisibility(View.INVISIBLE);
+            	Toast.makeText(getApplicationContext(), "Download completed.", Toast.LENGTH_SHORT).show();
             }
+             
        }
         
         
@@ -795,7 +825,8 @@ public class UserEbookList extends Activity {
             Log.d("Ebook Download", "Download completed");
             //Log.d("Ebook Download", "Completed" + objectId);
         }
- 
+        
+  
     }
     
     
@@ -817,6 +848,11 @@ public class UserEbookList extends Activity {
             Log.d("Searching",""+searchquery);
  
             ebookCursor = datasource.searchBook(searchquery);
+            
+            if(ebookCursor.getCount() <=0 )
+            {
+            	Toast.makeText(getApplicationContext(), "Sorry. No results found for query "+ searchquery +"." , Toast.LENGTH_LONG).show();
+            }
             
             String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};
             int[] to = new int[] { R.id.mTitle ,R.id.mFilename, R.id.mCover,R.id.mAuthor, R.id.mObjectId};
@@ -900,7 +936,7 @@ public class UserEbookList extends Activity {
  	        	    				attemptDeleteMyEbook(objectId, title, filename);
  	        	    				break;
  	        	    			case 2:
- 	        	    				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_LONG).show(); 
+ 	        	    				Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_SHORT).show(); 
          	    					boolean downloadedFile = downloadEbook(objectId, filename, v);
          	    					String downloadedStatus = "1";
          	    					if(downloadedFile == true){ 

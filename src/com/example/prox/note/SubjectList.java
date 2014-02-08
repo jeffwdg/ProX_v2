@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -84,7 +85,7 @@ public class SubjectList extends ListActivity{
 		 Pair item=(Pair) v.getTag();
 		 
 		 Intent intent;
-		 intent= new Intent(this,NoteList.class);
+		 intent= new Intent(this,CategorizeNotes.class);
 		 intent.putExtra("subject", item.getDesc());
 		 
 		 startActivity(intent);
@@ -92,9 +93,6 @@ public class SubjectList extends ListActivity{
 		
    }
 	        
-	        
-	
-	 
 	
 	 
 public void showDeleteDialog()
@@ -177,7 +175,7 @@ public void showErrorDialog()
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if(s.length()==0)
+        if( s.length()==0)
         {
                            btnSave.setEnabled(false);
         }
@@ -199,9 +197,21 @@ public void showErrorDialog()
 		@Override
 		public void afterTextChanged(Editable arg0) {
 			// TODO Auto-generated method stub
-			if(arg0.length()!=0)
-				
+			if(arg0.toString().length()>0)
 			{
+			char char_check=arg0.charAt(0);
+			if(char_check==' ')
+			{
+				btnSave.setEnabled(false);
+			}	
+//			String result = arg0.toString().replaceAll(" ", "");
+//		    if (!arg0.toString().equals(result)) {
+//		    	btnSave.setEnabled(false);
+//		    }
+		
+			
+			else{
+				
 				btnSave.setEnabled(true);
 				btnSave.setOnClickListener(new View.OnClickListener() {
 
@@ -228,10 +238,10 @@ public void showErrorDialog()
 				});
 				
 			}
-					
+			}			
 		}
     });
-   
+    
 
 	
    	

@@ -23,7 +23,9 @@ public class ReminderDatabaseAdapter extends SQLiteOpenHelper {
 	public static final String KEY_DESCRIPTION ="description";
 	
 	
-	static final String DATABASE_CREATE = "create table "+"userreminders"+"("+ KEY_ID +" integer primary key autoincrement,"+"title,date,time,description);";
+	static final String DATABASE_CREATE = "create table "+" userreminders "+"("+ KEY_ID +" integer primary key autoincrement,"+"title,date,time,description);";
+	static final String DATABASE_DELETE = "Delete from userreminders";
+	
 	public SQLiteDatabase db;
 	public Context context;
  
@@ -89,6 +91,10 @@ public class ReminderDatabaseAdapter extends SQLiteOpenHelper {
 		
 		return numberOFEntriesDeleted;
 		
+	}
+	
+	public void emptyUserReminders(){
+		db.execSQL(DATABASE_DELETE);
 	}
     public int countReminders(){
     	Cursor cur = db.rawQuery("select * from userreminders",  null);

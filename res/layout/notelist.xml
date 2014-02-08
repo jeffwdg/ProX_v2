@@ -48,7 +48,7 @@
     <Button
         android:id="@+id/button_subjects"
         android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:layout_alignBaseline="@+id/textViewTop"
         android:layout_alignBottom="@+id/textViewTop"
         android:layout_alignParentRight="true"
@@ -56,5 +56,7 @@
         android:background="@drawable/button_yellow"
         android:text="Subjects"
         android:textColor="#ffffff" />
+
+   
     	
 </RelativeLayout> 

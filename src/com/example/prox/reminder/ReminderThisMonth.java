@@ -122,11 +122,11 @@ public class ReminderThisMonth extends ListActivity{
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(ReminderThisMonth.this);
         builder.setTitle("Delete reminder");
-        builder.setMessage("Are you sure you want to delete this reminder " + reminderId +" in your account?");
+        builder.setMessage("Are you sure you want to delete this reminder in your account?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                 	   	   reminderadapter.deleteEntry(reminderId);
-                		   Toast.makeText(getApplicationContext(), "Successfully deleted " + reminderId, Toast.LENGTH_LONG).show();
+                		   Toast.makeText(getApplicationContext(), "Reminder successfully deleted.", Toast.LENGTH_LONG).show();
                 		   finish();
                    }
                });
