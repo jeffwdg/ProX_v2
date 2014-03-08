@@ -17,18 +17,19 @@
 	
 		<TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="18sp" 
+			android:textSize="17sp" 
 			android:text="@string/title"
 			android:id="@+id/title_text1" />	
 							
 		<EditText android:id="@+id/title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="18sp"    
+			android:layout_marginTop="3dp"
+			android:textSize="13sp"    
 		    android:hint="@string/no_title"
 		    android:layout_toRightOf="@+id/title_text1" 
 		    android:background="@android:color/transparent" 	
-		    android:layout_marginLeft="5dp"	
+		    android:layout_marginLeft="5sp"	
 		    android:maxLength="16"
 			android:singleLine="true"
 			android:imeOptions="actionNext"/>
@@ -48,7 +49,7 @@
 		    android:layout_height="wrap_content"
 		    android:layout_alignParentRight="true"			    
 		    android:paddingRight="10sp"			    
-		    android:textSize="18sp" />
+		    android:textSize="11sp" />
 
 		<Spinner
 		    android:id="@+id/subject_spinner"

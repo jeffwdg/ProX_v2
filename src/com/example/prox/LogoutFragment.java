@@ -5,7 +5,10 @@ import java.io.File;
 
 import com.example.prox.adapter.EbookDatabaseAdapter;
 import com.example.prox.note.NotesDbAdapter;
+import com.example.prox.note.SubjectDbAdapter;
+import com.example.prox.reminder.ReminderAdd;
 import com.example.prox.reminder.ReminderDatabaseAdapter;
+import com.example.prox.reminder.ReminderThisMonth;
 import com.parse.ParseUser;
 import com.radaee.reader.R;
 
@@ -82,6 +85,9 @@ public class LogoutFragment extends Fragment {
 				ReminderDatabaseAdapter reminderDatabaseAdapter = new ReminderDatabaseAdapter(getActivity());
 				reminderDatabaseAdapter.open();
 				
+				SubjectDbAdapter subjectDatabaseAdapter = new SubjectDbAdapter(getActivity());
+				subjectDatabaseAdapter.open();
+				
 				pref.edit().remove("email").commit();
 				pref.edit().remove("objectId").commit();
 				pref.edit().remove("fname").commit();
@@ -94,12 +100,16 @@ public class LogoutFragment extends Fragment {
 				ebookDatabaseAdapter.emptyUserEbooks();
 				noteDatabaseAdapter.emptyUserNotes();
 				reminderDatabaseAdapter.emptyUserReminders();
-				
+				subjectDatabaseAdapter.emptyUserSubjects();
  
 				Intent intent = new Intent(Intent.ACTION_MAIN);
 				intent.addCategory(Intent.CATEGORY_HOME);
 				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				getActivity().finish();
+				
+				
+				Intent ix = new Intent(getActivity(), MainActivity.class);
+				startActivity(ix);
 		        System.exit(0);
 				//startActivity(intent);
 				

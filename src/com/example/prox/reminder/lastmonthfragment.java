@@ -4,11 +4,15 @@ import com.radaee.reader.R;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
 import com.radaee.reader.R;
 
  
@@ -89,8 +93,23 @@ public class lastmonthfragment extends ListActivity{
 
 	private void displaydata() 
 	{
+		
+		Calendar _calendar;
+		int month,year, day;
+		_calendar = Calendar.getInstance(Locale.getDefault());
+		month = _calendar.get(Calendar.MONTH);
+		year = _calendar.get(Calendar.YEAR);
+		day = _calendar.get(Calendar.DATE);
+		
+		Log.d("Date",""+day+ "-"+month+"-"+year);
+		if(month == 12){ month = 1;}
+		if(month == 0){month = 11; year -= 1;}
+		month += 1;
+		String tdate = "" + month;
+		
+		Log.d("Last",""+tdate);
 		// Get all of the notes from the database and create the item list
-		final Cursor reminderCursor = reminderadapter.fetchAllReminder();
+		final Cursor reminderCursor = reminderadapter.fetchAllReminderThisMonth(tdate);
 
 
 		String[] from = new String[] {ReminderDatabaseAdapter.KEY_TITLE,ReminderDatabaseAdapter.KEY_DATE,ReminderDatabaseAdapter.KEY_TIME};
@@ -114,15 +133,15 @@ public class lastmonthfragment extends ListActivity{
 	
 	public void attemptDelete(final int reminderId){
 		
-		Toast.makeText(getBaseContext(), "ReminderID: "+ reminderId, Toast.LENGTH_LONG).show();
+		//Toast.makeText(getBaseContext(), "ReminderID: "+ reminderId, Toast.LENGTH_LONG).show();
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(lastmonthfragment.this);
         builder.setTitle("Delete reminder");
-        builder.setMessage("Are you sure you want to delete this reminder " + reminderId +" in your account?");
+        builder.setMessage("Are you sure you want to delete this reminder  in your account?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                 	   	   reminderadapter.deleteEntry(reminderId);
-                		   Toast.makeText(getApplicationContext(), "Successfully deleted " + reminderId, Toast.LENGTH_LONG).show();
+                		   Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_LONG).show();
                 		   finish();
                    }
                });

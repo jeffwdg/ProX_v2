@@ -156,15 +156,21 @@ public class ReminderAdd extends Activity implements OnClickListener{
          rDate = rDate.trim();
          rTime = rTime.trim();
          Log.d("Test","Title" + rDate+rTime+Alarmcheck);
-         dataBase.insertEntry(rTitle,rDate,rTime,rDesc);
-         scheduleAlarm(rDate,rTime,rTitle,Alarmcheck);
-         Toast.makeText(getApplicationContext(), "Reminder added successfully.", Toast.LENGTH_LONG).show();
-         finish();
-         GoToMain();
+         
+         boolean isFuture = scheduleAlarm(rDate,rTime,rTitle,Alarmcheck);
+         
+         if((isFuture == true && Alarmcheck == true ) ||  (isFuture == false && Alarmcheck == false ) ){
+        	 dataBase.insertEntry(rTitle,rDate,rTime,rDesc);
+        	 Toast.makeText(getApplicationContext(), "Reminder added successfully.", Toast.LENGTH_LONG).show();
+             finish();
+             GoToMain();
+         }
+        
     }
     
-    public void scheduleAlarm(String alarmdate, String alarmtime, String etitle, boolean Alarmcheck)
-    {
+    public boolean scheduleAlarm(String alarmdate, String alarmtime, String etitle, boolean Alarmcheck)
+    {		boolean isFuture = false;
+    
     		Context context;
     		Calendar thatDay = Calendar.getInstance();
     		String[] tdate = alarmdate.split("-");
@@ -236,14 +242,14 @@ public class ReminderAdd extends Activity implements OnClickListener{
             			}
             			
             		}
-            		
+            		isFuture = true;
             		Toast.makeText(this, "Alarm set in " + alarm,Toast.LENGTH_LONG).show();
                 }else{
-                	Toast.makeText(this, "Date is in the past. Please select a date and time in the future to set an alarm. ", Toast.LENGTH_LONG).show();
+                	Toast.makeText(this, "Alarm can't be set because selected date is in the past. Select a future date and time.", Toast.LENGTH_LONG).show();
                 }
             }
             
-            
+            return isFuture;
     }
     
     private void GoToMain() {

@@ -84,11 +84,11 @@ public class StoreFragment extends Fragment{
         internetdetected = new InternetDetector(getActivity().getApplicationContext());
 	
 		isInternetPresent = internetdetected.isNetworkAvailable();
-		
-		if(isInternetPresent == true){
+	 
+		if(isInternetPresent == true ){
 			
 		}else{
-			util.showAlertDialog(getActivity(), "Network Error", "Please check your internet connection.", false);
+			util.showAlertDialog(getActivity().getApplicationContext(), "Network Error", "Please check your internet connection.", false);
 		}
       
         mTabHost = (TabHost) rootView.findViewById(android.R.id.tabhost);

@@ -43,7 +43,7 @@
 		    android:layout_below="@+id/mTitle"
 		    android:textColor="#dddddd"
 		    android:text="Author"
-		    android:textSize="12sp" />
+		    android:textSize="10sp" />
 
 		<TextView
 		    android:id="@+id/mTitle"
@@ -54,7 +54,7 @@
 		    android:textColor="#ffffff"
 		    android:layout_toRightOf="@+id/mCover"
 		    android:text="Title"
-		    android:textSize="14dp" />
+		    android:textSize="10dp" />
 		
 		<ProgressBar android:id="@+id/dlprogressbar"
 			 android:layout_width="wrap_content" 

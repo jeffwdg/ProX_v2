@@ -299,7 +299,7 @@ public class MyPDFOpen extends Activity implements   OnItemClickListener, OnClic
 		String str = txt_find.getText().toString();
 		
 		if(TextUtils.isEmpty(str)){
-        	Toast.makeText(getApplicationContext(), "Please enter a valid search query.", Toast.LENGTH_LONG).show();
+        	Toast.makeText(getApplicationContext(), "Enter search query first.", Toast.LENGTH_LONG).show();
         }else{
         	Toast.makeText(getApplicationContext(), "Searching ...", Toast.LENGTH_SHORT).show();
 			if( str_find != null )

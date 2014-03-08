@@ -79,22 +79,8 @@ public class SignUpActivity extends Activity implements OnClickListener
 	
 	public void onClick(View v) {
 		
-			switch(v.getId()){
-				case R.id.buttonCreateAccount:
-						isInternetPresent = internetdetected.isNetworkAvailable();
-						
-						if(isInternetPresent == true){
-							createAccount();
-							Log.d("ProX User Signup", "Connected to internet.." + isInternetPresent);
-						}else{
-							showAlertDialog(getApplicationContext(), "No Internet Connection",
-	                                "You don't have internet connection.", false);
-						}
-						break;
-
-                default:
-                        break;
-                }
+		createAccount();
+ 
 	}
 			
 			
@@ -114,7 +100,8 @@ public class SignUpActivity extends Activity implements OnClickListener
 	        alertDialog.show();
         
 	}
-
+	
+ 
 	private void createAccount(){
 		clearErrors();
 		boolean cancel = false;
@@ -127,67 +114,94 @@ public class SignUpActivity extends Activity implements OnClickListener
 		String lname=editTextLastName.getText().toString();
 		String pattern = "^[a-zA-Z0-9]*$";
 		String email_pattern = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+		String name_pattern = "[a-zA-Z ]+";
 		
-		//check for a valid password
-		if(TextUtils.isEmpty(password)){
-				editTextPassword.setError(getString(R.string.required_field));
-				focusView = editTextPassword;
-				cancel =true;
-		}else if(password.length() < 7 || !password.matches(pattern)){
-				editTextPassword.setError(getString(R.string.invalid_password));
-				focusView = editTextPassword;
-				cancel =true;
-		}
+		email  = email.trim();
+		password = password.trim();
+		confirmPassword = confirmPassword.trim();
+		isInternetPresent = internetdetected.isNetworkAvailable();
+		
+		Toast.makeText(getApplicationContext(), "Signing up...", Toast.LENGTH_LONG).show();
+			Log.d("ProX User Signup", "Connected to internet.." + isInternetPresent);
+		
 				
-		//Check if password & confirm password matches
-		if(TextUtils.isEmpty(confirmPassword)){
-			editTextConfirmPassword.setError(getString(R.string.required_field));
-			focusView = editTextConfirmPassword;
-			cancel =true;
+			//check for a valid password
+			if(TextUtils.isEmpty(password)){
+					editTextPassword.setError(getString(R.string.required_field));
+					focusView = editTextPassword;
+					cancel =true;
+			}else if(password.length() < 7 || !password.matches(pattern)){
+					editTextPassword.setError(getString(R.string.invalid_password));
+					focusView = editTextPassword;
+					cancel =true;
+			}
+					
+			//Check if password & confirm password matches
+			if(TextUtils.isEmpty(confirmPassword)){
+				editTextConfirmPassword.setError(getString(R.string.required_field));
+				focusView = editTextConfirmPassword;
+				cancel =true;
+				
+			} else if(password != null && !confirmPassword.equals(password)){
+				editTextConfirmPassword.setError(getString(R.string.invalid_confirm_password));
+				focusView = editTextPassword;
+				cancel =true;
+				
+			}
 			
-		} else if(password != null && !confirmPassword.equals(password)){
-			editTextConfirmPassword.setError(getString(R.string.invalid_confirm_password));
-			focusView = editTextPassword;
-			cancel =true;
+			email = email.trim();
+			//check for a valid email
+			if(TextUtils.isEmpty(email) ){
+				editTextEmail.setError(getString(R.string.required_field));
+				focusView = editTextEmail;
+				cancel =true;
+			}else if(!email.matches(email_pattern)){
+				editTextEmail.setError(getString(R.string.invalid_email));
+				focusView = editTextEmail;
+				cancel =true;
+			}
 			
-		}
+			fname = fname.trim();
+			// check if first & last name are valid
+			if(TextUtils.isEmpty(fname) ){
+				editTextFirstName.setError(getString(R.string.required_field));
+				focusView = editTextFirstName; 
+				cancel =true;
+			}
+			if(!fname.matches(name_pattern)){
+				editTextFirstName.setError(getString(R.string.valid_name));
+				focusView = editTextFirstName;
+				cancel =true;
+			}
+			
+			lname = lname.trim();
+			if(TextUtils.isEmpty(lname)){
+				editTextLastName.setError(getString(R.string.required_field));
+				focusView = editTextLastName;
+				cancel =true;
+			}
+			if(!lname.matches(name_pattern)){
+				editTextLastName.setError(getString(R.string.valid_name));
+				focusView = editTextLastName;
+				cancel =true;
+			}
+			
+		if(isInternetPresent == true && util.isOnline(this) == true){
+					
+			if(cancel){
+				focusView.requestFocus();
+			} else{
+				signUp(email, password, fname, lname);
+			}
 		
-		email = email.trim();
-		//check for a valid email
-		if(TextUtils.isEmpty(email) ){
-			editTextEmail.setError(getString(R.string.required_field));
-			focusView = editTextEmail;
-			cancel =true;
-		}else if(!email.matches(email_pattern)){
-			editTextEmail.setError(getString(R.string.invalid_email));
-			focusView = editTextEmail;
-			cancel =true;
-		}
-		
-		fname = fname.trim();
-		// check if first & last name are valid
-		if(TextUtils.isEmpty(fname)){
-			editTextFirstName.setError(getString(R.string.required_field));
-			focusView = editTextFirstName; 
-			cancel =true;
-		}
-		lname = lname.trim();
-		if(TextUtils.isEmpty(lname)){
-			editTextLastName.setError(getString(R.string.required_field));
-			focusView = editTextLastName;
-			cancel =true;
-		}
-		
-		if(cancel){
-			focusView.requestFocus();
-		} else{
-			signUp(email, password, fname, lname);
+		}else{
+			util.showAlertDialog(this, "Network error", "Please check your internet connection", false);
 		}
  
 	}
 	
 	private void signUp(final String email, String password, final String fname, final String lname){
-		Toast.makeText(getApplicationContext(), "Signing up.. Please wait for a moment.", Toast.LENGTH_LONG).show();
+		 Toast.makeText(getApplicationContext(), "Signing up.. Please wait for a moment.", Toast.LENGTH_LONG).show();
 		 Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
 		
 		 ParseUser user = new ParseUser();
@@ -214,7 +228,7 @@ public class SignUpActivity extends Activity implements OnClickListener
 				Log.d("ProX User Signup", currentUser.getObjectId());
 				editor.commit();
 				
-               Toast.makeText(getApplicationContext(), "Account created successfully. Logging in...", Toast.LENGTH_SHORT).show();
+               Toast.makeText(getApplicationContext(), "Account successfully created. Logging in...", Toast.LENGTH_SHORT).show();
                Intent in = new Intent(getApplicationContext(), MenuActivity.class);
                startActivity(in);
              } else {

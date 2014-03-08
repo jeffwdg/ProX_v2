@@ -2,9 +2,11 @@ package com.example.prox.reminder;
 
 import com.radaee.reader.R;
 
+import android.app.ActionBar;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +28,15 @@ public class Tablayout extends TabActivity{
 
 		//declaring for TabHost
 		TabHost tabHost = getTabHost();
-
+		
+		Intent i = getIntent();
+		String curtab = i.getExtras().getString("activetab");
+		if(TextUtils.isEmpty(curtab) || TextUtils.equals(curtab, null)){
+			curtab = "1";
+		}
+		
+		
+		
 		// Tab for this last reminder
 		TabSpec lastspec = tabHost.newTabSpec("Last Month");        
 		lastspec.setIndicator("Last Month", getResources().getDrawable(R.drawable.lastmonth));
@@ -49,6 +59,8 @@ public class Tablayout extends TabActivity{
 		tabHost.addTab(lastspec); // Adding songs tab
 		tabHost.addTab(todayspec); // Adding photos tab
 		tabHost.addTab(nextspec); // Adding videos tab
+		
+		tabHost.setCurrentTab(Integer.parseInt(curtab));
 
 	}
 	

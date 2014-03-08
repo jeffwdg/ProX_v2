@@ -10,8 +10,8 @@ public class ReminderValidation {
     private static final String TITLE_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
  
     // Error Messages
-    private static final String REQUIRED_MSG = "required";
-    private static final String TITLE_MSG = "Title too long.";
+    private static final String REQUIRED_MSG = "Required field.";
+    private static final String TITLE_MSG = "Title too long. It must be below 30 characters.";
    
    
 
@@ -91,7 +91,7 @@ public class ReminderValidation {
         editText.setError(null);
 
         // length 0 means there is no text
-        if (text.length() > 35 ) {
+        if (text.length() > 30 ) {
             editText.setError(TITLE_MSG);
             return true;
         }

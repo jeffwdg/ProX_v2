@@ -14,8 +14,10 @@ import android.content.ClipData.Item;
 import android.content.SharedPreferences.Editor;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -86,6 +88,13 @@ public class MyLocalGridViewAdapter extends ArrayAdapter<Item> {
 		  
 		  holder.txtTitle.setText(item.getTitle());
 		  holder.txtAuthor.setText(item.getAuthor());
+		  
+		  //AssetManager asset = null;
+		  //Typeface font = Typeface.createFromAsset(asset, "daddysgirl.ttf");
+		  //holder.txtTitle.setTypeface(font);
+		  //holder.txtAuthor.setTypeface(font);
+ 
+          
 		  String thisurl = item.getCover();
  
 		  Drawable bookcover1;

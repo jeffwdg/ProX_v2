@@ -31,9 +31,12 @@ public class SubjectAdapter extends BaseAdapter{
 	         }
 	 
 	           Pair p = pairs.get(position);
+	           
 	           TextView name = (TextView)v.findViewById(R.id.subjtxt);
+	        
 	           v.setTag(p);
-	           name.setText(p.getDesc());                             
+	           name.setText(p.getDesc());    
+	           
 	                        
 	        return v;
 	}

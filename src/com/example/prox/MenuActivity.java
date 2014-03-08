@@ -68,7 +68,11 @@ public class MenuActivity extends Activity{
 
 	private ArrayList<NavDrawerItem> navDrawerItems;
 	private NavDrawerListAdapter adapter;
-
+	
+	@Override
+	public void onBackPressed() {
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -93,7 +97,7 @@ public class MenuActivity extends Activity{
 		
 		
 		ParseUser currentUser = ParseUser.getCurrentUser();
-		Log.d("ProX User", currentUser.getObjectId());
+		//Log.d("ProX User", currentUser.getObjectId());
 		
 		if (currentUser != null) {
 		   // do stuff with the user

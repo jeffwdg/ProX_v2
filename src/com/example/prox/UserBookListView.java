@@ -94,6 +94,14 @@ public class UserBookListView extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.ebook_grid, menu);
 		
+		String readingnow = pref.getString("readingnow", null);
+		
+		if(TextUtils.equals(readingnow, null) == true){
+			MenuItem readnow= menu.findItem(R.id.reading_now);
+	    	readnow.setEnabled(false);
+	    	readnow.setVisible(false);
+		}
+		
 		// Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search)
@@ -166,10 +174,14 @@ public class UserBookListView extends ListActivity {
 		final ProgressDialog pd = new ProgressDialog(UserBookListView.this);
 		pd.setMessage("Library Synchronizing...");
 		pd.setIndeterminate(true);
-		pd.show();
+		
 		final ArrayList<String> bookstobedownload = new ArrayList<String>(); 
 		
-		
+		if(util.isOnline(this) != true){
+			util.showAlertDialog(this, "Network error", "Please check your internet connection.", false);
+			
+		}else{
+		pd.show();
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("userEbooks");
 		query.whereEqualTo("userID", userobjectId);
 		query.findInBackground(new FindCallback<ParseObject>() {
@@ -296,6 +308,7 @@ public class UserBookListView extends ListActivity {
 			  }
 
 		 });
+		}
 
 	}
 	
@@ -309,10 +322,11 @@ public class UserBookListView extends ListActivity {
 		String title="";
 		Log.d("Reading now book",""+readingnow);
 		
-		if(!TextUtils.isEmpty(readingnow) || !TextUtils.equals(readingnow, null))
-		{
+		if(!TextUtils.isEmpty(readingnow)){
 			openEbook(readingnow,title);
-		}else{
+		} else if(TextUtils.equals(readingnow, null)){
+			Toast.makeText(getApplicationContext(), "You have not read any book yet.", Toast.LENGTH_LONG).show();
+		} else{
 			Toast.makeText(getApplicationContext(), "Sorry, the book you last read does not exist. Please redownload it.", Toast.LENGTH_LONG).show();
 		}
 
@@ -336,7 +350,10 @@ public class UserBookListView extends ListActivity {
         @SuppressWarnings("deprecation")
 		SimpleCursorAdapter ebooks=new SimpleCursorAdapter(this, R.layout.ebooks_row, ebookCursor, from, to);
       
-        
+	        if(ebookCursor.getCount() <= 0){
+	    		Toast.makeText(getApplicationContext(), "There are no books.", Toast.LENGTH_LONG).show();
+	    	}
+    	
         	if (ebookCursor != null) {
         	    startManagingCursor(ebookCursor);
         	    Ebook ebook = new Ebook();
@@ -557,7 +574,7 @@ public class UserBookListView extends ListActivity {
 			//intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME,ebookLocation+ebookFile);
 			startActivity(intent);
 		}else{
-			Toast.makeText(getApplicationContext(), "File not found for " + title, Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(), "Please download ebook " + title, Toast.LENGTH_LONG).show();
 		}
 		
 	}
@@ -573,8 +590,10 @@ public class UserBookListView extends ListActivity {
 		
 		isInternetPresent = internetdetected.isNetworkAvailable();
 		
-		if(isInternetPresent == true){
-			//Toast.makeText(getApplicationContext(), "Ebook downloaded?" +filename, Toast.LENGTH_LONG).show();
+		
+		
+		if(isInternetPresent == true && util.isOnline(this) == true){
+			Toast.makeText(getApplicationContext(), "Downloading...", Toast.LENGTH_LONG).show(); 
 			downloaded = true;
 			new DownloadFileFromURL().execute(filename,objectId);
 			
@@ -663,7 +682,7 @@ public class UserBookListView extends ListActivity {
                 output.flush();
  
                 // closing streams
-                Log.d("Ebook Download", "Download completed");
+                //Log.d("Ebook Download", "Download completed");
                 dismissDialog(progress_bar_type);
                 output.close();
                 input.close();
@@ -680,11 +699,9 @@ public class UserBookListView extends ListActivity {
          * */
         protected void onProgressUpdate(String... progress) {
             // setting progress percentage
-            //pDialog.setProgress(Integer.parseInt(progress[0]));
         	progressBar.setProgress(Integer.parseInt(progress[0]));
  
             if(Integer.parseInt(progress[0]) == 100){
-            	progressBar.getProgressDrawable().setColorFilter(Color.argb(1, 0, 233, 0), Mode.SRC_IN);
             	progressBar.setVisibility(View.INVISIBLE);
             	Toast.makeText(getApplicationContext(), "Download completed.", Toast.LENGTH_SHORT).show();
             }
@@ -723,7 +740,7 @@ public class UserBookListView extends ListActivity {
             
             if(ebookCursor.getCount() <=0 )
             {
-            	Toast.makeText(getApplicationContext(), "Sorry. No results found for query "+ searchquery +"." , Toast.LENGTH_LONG).show();
+            	Toast.makeText(getApplicationContext(), "Sorry, "+ searchquery + " is not found. Please try another ebook." , Toast.LENGTH_LONG).show();
             }
 
             String[] from = new String[] {EbookDatabaseAdapter.KEY_TITLE,EbookDatabaseAdapter.KEY_FILENAME,EbookDatabaseAdapter.KEY_COVER,EbookDatabaseAdapter.KEY_AUTHOR, EbookDatabaseAdapter.KEY_OBJECTID,EbookDatabaseAdapter.KEY_STATUS,EbookDatabaseAdapter.KEY_CATEGORY};

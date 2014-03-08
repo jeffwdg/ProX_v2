@@ -15,8 +15,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 
-
-
 public class SubjectDbAdapter {
 
 	public static final String KEY_ROWID = "_id";
@@ -30,7 +28,8 @@ public class SubjectDbAdapter {
 	    private static final String DATABASE_CREATE =
 	            "create table Subject (_id integer primary key autoincrement, "
 	            + " subjectname text not null);";
-
+			static final String DATABASE_DELETE = "Delete from Subject";
+			
 	        private static final String DATABASE_NAME = "data1";
 	        private static final String DATABASE_TABLE = "Subject";
 	        private static final int DATABASE_VERSION = 2;
@@ -64,8 +63,6 @@ public class SubjectDbAdapter {
 	            this.mCtx = ctx;
 	        }
 
-	      
-
 
 			public SubjectDbAdapter open() throws SQLException {
 	            mDbHelper = new DatabaseHelper(mCtx);
@@ -80,19 +77,28 @@ public class SubjectDbAdapter {
 
 	        public long createSubject(String subjectname) {
 	            ContentValues initialValues = new ContentValues();
-	            subjectname=subjectname.toLowerCase();
+	            
+	            //subjectname=subjectname.toLowerCase();
 	            initialValues.put(KEY_SUBJECTNAME, subjectname);
 	            
 	            return mDb.insert(DATABASE_TABLE, null, initialValues);
 	        }
 
-	    
+	        public int countSubjects(){
+	        	Cursor cur = mDb.rawQuery("select * from Subject",  null);
+	        	return cur.getCount();
+	        }
+	        
+	        
 	        public boolean deleteSubject(String rowId) {
 
 	            return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	        }
 
-	     
+	     	public void emptyUserSubjects(){
+	        	mDb.execSQL(DATABASE_DELETE);
+	    	}
+
 	        public Cursor fetchAllSubject() {
 
 	            return mDb.query(DATABASE_TABLE, null, null, null, null, null, null);
@@ -100,8 +106,9 @@ public class SubjectDbAdapter {
 	        
 	        public Boolean findSubjectIfExist(String name)
 	        {   
-	        	name=name.toLowerCase();
-	        	Cursor cursor = mDb.rawQuery("select * from Subject where subjectname = ?", new String[] { name });
+	        	//name.toLowerCase();
+	        	
+	        	Cursor cursor = mDb.rawQuery("select * from Subject where subjectname = ? COLLATE NOCASE", new String[] { name });
 	        	if(cursor.getCount()<1)
 	        		return false;
 	        	return true;

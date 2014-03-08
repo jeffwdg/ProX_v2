@@ -172,18 +172,27 @@ public class ReminderUpdate extends Activity implements OnClickListener{
          
          rDate = rDate.trim();
          rTime = rTime.trim();
-         scheduleAlarm(rDate,rTime,rTitle,Alarmcheck);
- 
-         dataBase.updateEntry(rID, rTitle, rDate, rTime, rDesc);
-         Toast.makeText(getApplicationContext(), "Reminder updated successfully." + rTitle, Toast.LENGTH_LONG).show();
+         
+         boolean isFuture = scheduleAlarm(rDate,rTime,rTitle,Alarmcheck);
+         
+         if((isFuture == true && Alarmcheck == true ) ||  (isFuture == false && Alarmcheck == false ) ){
+        	  dataBase.updateEntry(rID, rTitle, rDate, rTime, rDesc);
+        	  Toast.makeText(getApplicationContext(), "Reminder updated successfully.", Toast.LENGTH_LONG).show();
+              finish();
+              Intent id = new Intent(this, MainActivity.class);
+              startActivity(id);
+         }
+       
+         
          
          //finish();
          //Intent ix = new Intent(this, MainActivity.class);
          //startActivity(ix);
     }
     
-    public void scheduleAlarm(String alarmdate, String alarmtime, String etitle, boolean Alarmcheck)
-    {
+    public boolean scheduleAlarm(String alarmdate, String alarmtime, String etitle, boolean Alarmcheck)
+    {		boolean isFuture = false;
+    
     		Context context;
     		Calendar thatDay = Calendar.getInstance();
     		String[] tdate = alarmdate.split("-");
@@ -195,17 +204,15 @@ public class ReminderUpdate extends Activity implements OnClickListener{
     		thatDay.set(Calendar.YEAR, Integer.parseInt(tdate[2]));
     		thatDay.set(Calendar.DATE,Integer.parseInt(tdate[1]));
     		
-    		int ampm = 0;
+ 
     		
     		Log.d("",""+ttimes[1]);
     		
-            if(TextUtils.equals(ttimes[1], "AM")){
-            	Log.d("Morning",""+ttimes[1]+ampm);
-            	ampm = 0;
-    		}
-            else if(TextUtils.equals(ttimes[1], "PM")){
-    			ampm = 1;
-    			Log.d("Afternoon",""+ttimes[1]+ampm);
+    		int ampm = 0;
+    		Log.d("Morning",""+ttimes[1]+ampm);
+            if(TextUtils.equals(ttimes[1], "PM")){
+            	ampm = 1;
+            	Log.d("Afternoon",""+ttimes[1]+ampm); 
     		}
             
             thatDay.set(Calendar.AM_PM, ampm);
@@ -261,18 +268,21 @@ public class ReminderUpdate extends Activity implements OnClickListener{
             			}
             			
             		}
-            		
+            		isFuture = true;
+             
             		Toast.makeText(this, "Alarm set in " + alarm,Toast.LENGTH_LONG).show();
                 }else{
-                	Toast.makeText(this, "Date is in the past. Please select a date and time in the future to set an alarm. ", Toast.LENGTH_LONG).show();
+                	Toast.makeText(this, "Alarm can't be set because selected date is in the past. Select a future date and time.", Toast.LENGTH_LONG).show();
+                	 
                 }
             }
             
-            
+            return isFuture;
     }
     
     private void GoToMain() {
         Intent i = new Intent(this, Tablayout.class);
+        i.putExtra("activetab", "1");
         startActivity(i);
     }
     

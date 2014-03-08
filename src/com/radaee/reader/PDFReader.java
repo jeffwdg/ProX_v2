@@ -374,7 +374,7 @@ public class PDFReader extends View implements  PDFViewListener,   OnItemClickLi
 	public void OnPDFFound(boolean found)
 	{
 		if( !found )
-			Toast.makeText(getContext(), "No more found", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getContext(), "Sorry, no results found.", Toast.LENGTH_SHORT).show();
 	}
 	public void PDFSetInk(int code)
 	{

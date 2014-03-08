@@ -146,6 +146,12 @@ public class NotesDbAdapter {
     	
     }
     
+    public int countNotesUnderSubject(String subject)
+    {
+    	Cursor cur = mDb.rawQuery("select * from notes where subject = ?",  new String[]{ subject});
+    	return cur.getCount();
+    }
+    
   //  public String returnSubjectValue(S)
 
     /**

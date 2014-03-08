@@ -3,15 +3,21 @@ android:layout_width="fill_parent"
 android:padding="3dp"
 android:layout_height="fill_parent" >
 
-    
 <TextView
-    android:id="@+id/Date"
-    android:layout_width="fill_parent"
-    
+    android:id="@+id/Time"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:text="Date" />
+    android:text="" />
 
+<TextView
+    android:id="@+id/Title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignBaseline="@+id/Time"
+    android:layout_alignBottom="@+id/Time"
+    android:layout_alignLeft="@+id/Time"
+    android:layout_marginLeft="75dp"
+    android:text="" />
 
 </RelativeLayout>

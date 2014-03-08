@@ -16,6 +16,7 @@ public class thismonthfragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return (LinearLayout) inflater.inflate(R.layout.reminder_editview, container, false);
+		
 	}
 
 }

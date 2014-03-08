@@ -48,6 +48,11 @@ public class NoteList extends ListActivity {
 		mDbHelper = new NotesDbAdapter (this);
 		mDbHelper.open();
 		
+		if(mDbHelper.countNotes()<1)
+		{
+			Toast.makeText(getApplicationContext(), "No note(s)", Toast.LENGTH_SHORT).show();
+		}
+		
 		ListView list = getListView();
 		
 		
@@ -200,37 +205,6 @@ public class NoteList extends ListActivity {
         setListAdapter(notes);
     }
 	
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v,
-//            ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        menu.add(0, DELETE_ID, 0, R.string.menu_delete);
-//    }
-//    
-//    @Override
-//    public boolean onContextItemSelected(MenuItem item) {
-//        switch(item.getItemId()) {
-//            case DELETE_ID:
-//                AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-//                mDbHelper.deleteNote(info.id);
-//                fillData(null);
-//                return true;
-//        }
-//        return super.onContextItemSelected(item);
-//    }
-//    
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        super.onActivityResult(requestCode, resultCode, intent);
-//        if(resultCode==RESULT_OK&&requestCode==ACTIVITY_CREATE)
-//        	fillData(null);
-//        else if(resultCode==RESULT_OK && requestCode==ACTIVITY_EDIT)
-//        {	//get subject value from the previous activity
-//        	String subj=intent.getExtras().getString("subject");
-//        	fillData(subj);
-//        	
-//        }
-//        	
-//    }   
+
     
 }

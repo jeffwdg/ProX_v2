@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class ReminderDatabaseAdapter extends SQLiteOpenHelper {
@@ -105,9 +106,10 @@ public class ReminderDatabaseAdapter extends SQLiteOpenHelper {
 	public Cursor getSingleEntry(int id)
 	{
 		SQLiteDatabase db = this.getReadableDatabase();
+		String[] did = new String[]{String.valueOf(id)};
 		String [] columns = new String[]{"_id",KEY_TITLE, KEY_DATE, KEY_TIME, KEY_DESCRIPTION};
-		Cursor cur = db.query(DATABASE_TABLE, columns, "_id=?", new String[]{String.valueOf(id)}, null, null, null);
-		
+		//Cursor cur = db.query(DATABASE_TABLE, columns, "_id=?", new String[]{String.valueOf(id)}, null, null, null);
+		Cursor cur = db.rawQuery("select * from userreminders where _id=?",  did);
 		return cur;
 		
 	}
@@ -173,7 +175,6 @@ public class ReminderDatabaseAdapter extends SQLiteOpenHelper {
 	                reminder.setTitle(cursor.getString(1));
 	                reminder.setDate(cursor.getString(2));
 	 
-	                // Add book to books
 	                reminders.add(reminder);
 	            } while (cursor.moveToNext());
 	        }
@@ -187,22 +188,24 @@ public class ReminderDatabaseAdapter extends SQLiteOpenHelper {
 	public Cursor fetchAllReminder(){
  
 		return db.query(DATABASE_TABLE, new String[]{KEY_ID,KEY_TITLE,KEY_DATE,KEY_TIME,KEY_DESCRIPTION},null , null, null, null,null);
- 
-	
+
 	}
+	
 	public Cursor fetchAllReminderThisMonth(String month){
-		 
+		
+		if(TextUtils.equals(month, "1")){month = "1-";}
+		
 		Cursor cursor = db.rawQuery("select * from userreminders where  date LIKE '" + month +"%' ", null);
 		Log.d("This Month", ""+cursor.getCount());
 		return cursor; //db.query(DATABASE_TABLE, new String[]{KEY_ID,KEY_TITLE,KEY_DATE,KEY_TIME,KEY_DESCRIPTION},"date" + "LIKE '" + month+ "%'" ,null, null, null,null);
- 
 	}
+	
 	public Cursor fetchAllReminderByDate(String date){
 		 
 		Cursor cursor = db.rawQuery("select * from userreminders where  date LIKE '" + date +"%' ", null);
 		Log.d("This Month", ""+cursor.getCount());
 		return cursor; //db.query(DATABASE_TABLE, new String[]{KEY_ID,KEY_TITLE,KEY_DATE,KEY_TIME,KEY_DESCRIPTION},"date" + "LIKE '" + month+ "%'" ,null, null, null,null);
- 
+
 	}
 	
 	

@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.example.prox.Utilities;
 import com.radaee.reader.R;
 
 import android.app.ActionBar;
@@ -18,6 +19,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
@@ -46,6 +48,7 @@ public class NoteEdit extends Activity{
     private TextView mDateText;
     private Long mRowId;
     private Spinner mSpinner;
+	Utilities util;
 
     private Cursor note;
 
@@ -56,7 +59,9 @@ public class NoteEdit extends Activity{
         super.onCreate(savedInstanceState);
         
         mDbHelper = new NotesDbAdapter(this);
-        mDbHelper.open();        
+        mDbHelper.open();      
+        
+        util = new Utilities();
         
         ActionBar ab = getActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
@@ -188,6 +193,7 @@ public class NoteEdit extends Activity{
 		    	
 		    case R.id.menu_save:
 	    		saveState();
+	    		
 	       	
 		    default:
 		    	return super.onOptionsItemSelected(item);
@@ -247,22 +253,25 @@ public class NoteEdit extends Activity{
 //			
 //		}
 	    private void saveState() {
-	        String title = mTitleText.getText().toString();
-	        //String subject = mSubjectText.getText().toString();
+	        String title = mTitleText.getText().toString().trim();    
 	        String body = mBodyText.getText().toString();
+
 	        
-	        if(title.equals("") )
+			//char char_check=title.charAt(0);
+			if(TextUtils.isEmpty(title) || title == " ")
 			{
-					Toast.makeText(getApplicationContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
+				
+					Toast.makeText(getApplicationContext(), "Please fill out title field", Toast.LENGTH_SHORT).show();
 					return;
-			}
 			
+			}
 	       
 	        else{
 			String subject=mSpinner.getSelectedItem().toString();
 	        if(mRowId == null){
 	        	
 	        	long id = mDbHelper.createNote(title, subject ,body, curDate);
+	        	Toast.makeText(getApplicationContext(), "Note added", Toast.LENGTH_SHORT).show();
 	        	if(id > 0){
 	        		mRowId = id;
 	        	}else{
@@ -282,7 +291,8 @@ public class NoteEdit extends Activity{
 	        
 	        finish();
 	        }
-	    }
+	    
+			}
 	    
 	  
 	    private void populateFields() {
@@ -312,7 +322,8 @@ public class NoteEdit extends Activity{
 	            spin.setSelection(spinnerPosition);
 	        }
 	    }
+			}
 
 
 
-}
+

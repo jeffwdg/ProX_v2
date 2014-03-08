@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    >
 
    <EditText
        android:id="@+id/editTextSubject"
@@ -17,28 +17,28 @@
        android:textColor="#1dae57" 
        android:maxLength="16"/>
 
-   <Button
-       android:id="@+id/savebtn"
-       android:layout_width="80dp"
-       android:layout_height="wrap_content"
-       android:layout_alignBaseline="@+id/cancelbtn"
-       android:layout_alignBottom="@+id/cancelbtn"
-       android:layout_alignParentLeft="true"
-       android:layout_marginLeft="50dp"
-       android:background="@drawable/button_green2"
-       android:text="Save"
-       android:textColor="#ffffff" />
+       <Button
+           android:id="@+id/savebtn"
+           android:layout_width="80dp"
+           android:layout_height="30dp"
+           android:layout_alignBaseline="@+id/cancelbtn"
+           android:layout_alignBottom="@+id/cancelbtn"
+           android:layout_alignParentRight="true"
+           android:layout_marginRight="68dp"
+           android:background="@drawable/button_green2"
+           android:text="Save"
+           android:textColor="#ffffff" />
 
-   <Button
-       android:id="@+id/cancelbtn"
-       android:layout_width="80dp"
-       android:layout_height="wrap_content"
-       android:layout_below="@+id/editTextSubject"
-       android:layout_marginLeft="38dp"
-       android:layout_marginTop="59dp"
-       android:layout_toRightOf="@+id/savebtn"
-       android:background="@drawable/button_green2"
-       android:text="Cancel"
-       android:textColor="#ffffff" />
-
+       <Button
+           android:id="@+id/cancelbtn"
+           android:layout_width="80dp"
+           android:layout_height="30dp"
+           android:layout_below="@+id/editTextSubject"
+           android:layout_marginRight="32dp"
+           android:layout_marginTop="26dp"
+           android:layout_toLeftOf="@+id/savebtn"
+           android:background="@drawable/button_green2"
+           android:text="Cancel"
+           android:textColor="#ffffff" />
+   
 </RelativeLayout>

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,8 +23,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.StatFs;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Utilities extends Activity {
 	FileOutputStream fos;
@@ -174,6 +178,38 @@ public class Utilities extends Activity {
 		    }
 
 		}
+	 
+	 public boolean isOnline(Context context) {
+	    
+		 Log.d("", "Checking if online...");
+		 Toast.makeText(context, "Checking internet connection. One moment please.", Toast.LENGTH_LONG).show();
+		 
+    	 if (android.os.Build.VERSION.SDK_INT > 9) {
+    	      StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+    	      StrictMode.setThreadPolicy(policy);
+    	    }
+    	 
+        try {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); 
+            if (cm.getActiveNetworkInfo().isConnectedOrConnecting()) {
+                URL url = new URL("http://www.google.com");
+                HttpURLConnection urlc = (HttpURLConnection) url .openConnection();
+                urlc.setRequestProperty("User-Agent", "test");
+                urlc.setRequestProperty("Connection", "close"); 
+                urlc.setConnectTimeout(2000); // mTimeout is in seconds
+                urlc.connect();
+                if (urlc.getResponseCode() == 200) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return false;
+    }
 	
 
 }

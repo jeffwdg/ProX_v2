@@ -2,6 +2,9 @@ package com.example.prox;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import com.parse.LogInCallback;
 import com.parse.Parse;
@@ -14,6 +17,7 @@ import com.radaee.reader.R;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -50,7 +54,10 @@ public class MainActivity extends Activity {
     InternetDetector internetdetected;
     
  
- 
+    @Override
+    public void onBackPressed() {
+    }
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,6 +65,7 @@ public class MainActivity extends Activity {
 		internetdetected = new InternetDetector(getApplicationContext());
 		
 		boolean isloggedin = isLoggedIn();
+		
 		if(isloggedin == true){
 			Intent intentMenu = new Intent(getApplicationContext(),MenuActivity.class);
 		    startActivity(intentMenu);
@@ -97,26 +105,24 @@ public class MainActivity extends Activity {
         
 	    btnSignIn.setOnClickListener(new OnClickListener() {
 	    	
+	    	
 			public void onClick(View v) {
 				//check if internet is present
 					boolean isloggedin = isLoggedIn();
-					
-					if(isInternetPresent == true){
-						Log.d("ProX App Initialization","Internet is detected.");
-						// checks if already logged in - redirect to menu app
-						if(isloggedin == true){
-							Intent intentMenu = new Intent(getApplicationContext(),MenuActivity.class);
-						    startActivity(intentMenu);
-						}else{
+					Toast.makeText(getApplicationContext(), "Signing in...", Toast.LENGTH_LONG).show();
+
+					if(isloggedin == true){
+						Intent intentMenu = new Intent(getApplicationContext(),MenuActivity.class);
+					    startActivity(intentMenu);
+					}else if(isInternetPresent == true && util.isOnline(getApplicationContext()) == true){
 							Log.d("ProX Sign In","Signing in...");
 								signIn();				
-						}
-						
 					}else{
 						Log.d("ProX App","No Internet connection detected.");
 						util.showAlertDialog(MainActivity.this, "No Internet Connection", "You don't have internet connection.", false);
-						
 					}
+					
+					
 				}
 			});
 	    
@@ -143,11 +149,14 @@ public class MainActivity extends Activity {
 			Intent intentSignUP=new Intent(getApplicationContext(),SignUpActivity.class);
 			startActivity(intentSignUP);
 		}
+		
+		
 		public void forgotPassword(){
 			/// Create Intent for SignUpActivity  and Start The Activity
 			Intent intent=new Intent(this,ForgotPassword.class);
 			startActivity(intent);
 		}
+		
 		
 		//Method to handleClick Event of Sign In Button
 		public void signIn()
@@ -197,6 +206,8 @@ public class MainActivity extends Activity {
 		
 		public void signInNow(final String email, String password){
 			
+			
+			
 			Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
 			ParseUser.logInInBackground(email, password, new LogInCallback() {
 				
@@ -225,6 +236,7 @@ public class MainActivity extends Activity {
 						editor.putString("email", email); // Storing email
 						editor.putString("fname", fname); // Storing first name
 						editor.putString("lname", lname); // Storing last name
+						editor.putString("readingnow", null);
 						editor.commit();
 						
 						Intent in =  new Intent(MainActivity.this, MenuActivity.class);
@@ -259,7 +271,10 @@ public class MainActivity extends Activity {
 		     }       
 		    return false;
 		}
-		 
+		
+		
+	     
+	    
 		@Override
 		protected void onDestroy() {
 			super.onDestroy();

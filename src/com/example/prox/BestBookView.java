@@ -125,6 +125,7 @@ public class BestBookView extends Activity {
 		        		bookdetails.putExtra("cover", ebook.getCover());
 		    	    	bookdetails.putExtra("ebookID", ebook.getID());
 		        		bookdetails.putExtra("id",position);
+		        		bookdetails.putExtra("ISBN",ebook.getISBN());
 		        		Log.d("ebooks", "Retrieved bookcover " +ebook.getCover());
 		                startActivity(bookdetails);
 				 	}

@@ -29,6 +29,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.TextView;
 import android.widget.Toast;
  
@@ -54,10 +55,29 @@ public class BookSearch extends Activity implements OnNavigationListener{
         inflater.inflate(R.menu.actionbar, menu);
         
         // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        final SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
- 
+        searchView.setIconifiedByDefault(true);
+        searchView.setSubmitButtonEnabled(true);
+        
+        searchView.setOnQueryTextListener(new OnQueryTextListener() {
+
+            public boolean onQueryTextSubmit(String arg0) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            public boolean onQueryTextChange(String arg0) {
+                if(arg0.length()>50){
+                    //System.out.println("Text character is more than 50.");
+                    Toast.makeText(getApplicationContext(),"Only 50 characters are allowed.", Toast.LENGTH_LONG).show(); 
+                    searchView.setQuery(arg0.substring(0,50), false);
+                }
+                return false;
+            }
+        });
+        
         return super.onCreateOptionsMenu(menu);
     }
     
@@ -97,7 +117,6 @@ public class BookSearch extends Activity implements OnNavigationListener{
     
     public boolean onNavigationItemSelected(int position, long id) {
     	 
-    	//Toast.makeText(getApplicationContext(), "Category" + position, Toast.LENGTH_LONG).show();
     	selectedCategory = position;
     	handleIntent(getIntent(), selectedCategory);
 		return true;
@@ -117,7 +136,9 @@ public class BookSearch extends Activity implements OnNavigationListener{
         if (Intent.ACTION_SEARCH.equals(intent.getAction())){
         	
             final String searchquery = intent.getStringExtra(SearchManager.QUERY);
-  
+            
+            //final String searchquery1  = searchquery.substring(0, 1).toUpperCase() + searchquery.substring(1);
+            
             if(TextUtils.isEmpty(searchquery)){
             	Toast.makeText(getApplicationContext(), "Please enter a valid search query.", Toast.LENGTH_LONG).show();
             }else{
@@ -126,13 +147,13 @@ public class BookSearch extends Activity implements OnNavigationListener{
 		            switch(cat){
 			            case 0 : filter = "title"; break;
 			            case 1 : filter = "author"; break;
-			            case 3 : filter = "ISBN"; break;
+			            case 2 : filter = "ISBN"; break;
 			            default: filter="title";
 		            }
 		            
 		            txtQuery.setText("Searching: " + searchquery);
 		            Log.d("Store Search","Searching..."+ searchquery);
-		            Toast.makeText(getApplicationContext(),"Searching in..."+filter, Toast.LENGTH_LONG).show(); 
+		            Toast.makeText(getApplicationContext(),"Searching...", Toast.LENGTH_LONG).show(); 
 		            
 		            Parse.initialize(this, "x9n6KdzqtROdKDXDYF1n5AEoZLZKOih8rIzcbPVP", "JkqOqaHmRCA35t9xTtyoiofgG3IO7E6b82QIIHbF");
 		            
@@ -148,7 +169,6 @@ public class BookSearch extends Activity implements OnNavigationListener{
 								
 								Log.d("ebooks", "Found " + res + " ebooks");
 								txtQuery.setText( res +" result(s) found for " + searchquery);
-								
 								
 								if (e == null) {
 					    	    	
@@ -217,7 +237,7 @@ public class BookSearch extends Activity implements OnNavigationListener{
 						                  }
 						              });
 						              
-					    	    	}else{txtQuery.setText("No results found for " + searchquery); }	
+					    	    	}else{txtQuery.setText("Sorry, "+  searchquery + " is not found. Please try another." ); }	
 					    	    	
 					    	    }else {Log.d("ebooks error", "Error");}
 							 

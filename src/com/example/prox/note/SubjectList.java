@@ -47,7 +47,10 @@ public class SubjectList extends ListActivity{
 		nDbHelper.open();
 		fillData();
 
-		
+		if(mDbHelper.countSubjects()<1)
+		{
+			Toast.makeText(getApplicationContext(), "No subject(s)", Toast.LENGTH_SHORT).show();
+		}
         
 	ListView list = getListView();
 	
@@ -109,7 +112,7 @@ public void showDeleteDialog()
 public void showAlertDialog()
 {	Builder builder = new AlertDialog.Builder(this);
 	builder.setTitle("ERROR DELETION");
-	builder.setMessage("CANNOT DELETE, SUBJECT IS BEING USED.");
+	builder.setMessage("Cannot delete, subject is being used. Please delete all notes under subject first.");
 	builder.setCancelable(true);
 	builder.setNegativeButton("Ok", new CancelOnClickListener());
 	AlertDialog dialog = builder.create();
@@ -170,7 +173,6 @@ public void showErrorDialog()
     editTextSubject=(EditText)dialog.findViewById(R.id.editTextSubject);
     final Button btnSave=(Button)dialog.findViewById(R.id.savebtn);
     
-    
     editTextSubject.addTextChangedListener(new TextWatcher() {
 
         @Override
@@ -222,7 +224,8 @@ public void showErrorDialog()
 						String subj = editTextSubject.getText().toString();
 						dialog.dismiss();
 						
-						subj.toLowerCase();
+						//String subj2=subj.toLowerCase();
+						
 						if(mDbHelper.findSubjectIfExist(subj)==true)
 						{	
 							showErrorDialog();
@@ -270,7 +273,8 @@ public void showErrorDialog()
 	 
 	 Cursor notesCursor = mDbHelper.fetchAllSubject();
 	// startManagingCursor(notesCursor);
-	 
+ 
+		 
 	    pairs=new ArrayList<Pair>();
 	   notesCursor.moveToFirst();
 	    while(notesCursor.isAfterLast()!=true)
@@ -286,5 +290,4 @@ public void showErrorDialog()
 
 	   setListAdapter(new SubjectAdapter(pairs, this));
 	 }
- 
  }

@@ -10,13 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import com.example.prox.UserBookListView;
 import com.radaee.reader.R;
-
- 
-
-
-
-
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -29,6 +24,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -45,11 +41,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +77,7 @@ public class MainActivity extends Activity implements OnClickListener
 	private final DateFormat dateFormatter = new DateFormat();
 	private static final String dateTemplate = "MMMM yyyy";
 	ReminderDatabaseAdapter dataBase;
+	ListView thisDayReminderList;
 	
 	/** Called when the activity is first created. */
 	@SuppressLint("NewApi")
@@ -115,15 +117,18 @@ public class MainActivity extends Activity implements OnClickListener
 					break;
 				case 1:
 					Intent i = new Intent(MainActivity.this, Tablayout.class);
+					i.putExtra("activetab", "1");
 					startActivity(i);
 
 					break;
 				case 2:
 					Intent ia = new Intent(MainActivity.this, Tablayout.class);
+					ia.putExtra("activetab", "0");
 					startActivity(ia);
 					break;
 				case 3:
 					Intent iz = new Intent(MainActivity.this, Tablayout.class);
+					iz.putExtra("activetab", "2");
 					startActivity(iz);
 					break;
 				default:
@@ -147,8 +152,8 @@ public class MainActivity extends Activity implements OnClickListener
 		Log.d(tag, "Calendar Instance:= " + "Month: " + month + " " + "Year: "
 				+ year);
 
-		selectedDayMonthYearButton = (Button) this.findViewById(R.id.selectedDayMonthYear);
-		selectedDayMonthYearButton.setText("Selected: ");
+		//selectedDayMonthYearButton = (Button) this.findViewById(R.id.selectedDayMonthYear);
+		//selectedDayMonthYearButton.setText("");
 
 		prevMonth = (ImageView) this.findViewById(R.id.prevMonth);
 		prevMonth.setOnClickListener(this);
@@ -167,7 +172,10 @@ public class MainActivity extends Activity implements OnClickListener
 		adapter.notifyDataSetChanged();
 		calendarView.setAdapter(adapter);
 
-
+		
+		// Typeface font = Typeface.createFromAsset(getAssets(), "daddysgirl.ttf");
+		// currentMonth.setTypeface(font);
+		 
 		//  displayThisDayReminder();
 
 
@@ -254,8 +262,7 @@ public class MainActivity extends Activity implements OnClickListener
 			{
 				month--;
 			}
-			Log.d(tag, "Setting Prev Month in GridCellAdapter: " + "Month: "
-					+ month + " Year: " + year);
+			//Log.d(tag, "Setting Prev Month in GridCellAdapter: " + "Month: "+ month + " Year: " + year);
 			setGridCellAdapterToDate(month, year);
 		}
 		if (v == nextMonth) {
@@ -265,7 +272,7 @@ public class MainActivity extends Activity implements OnClickListener
 			} else {
 				month++;
 			}
-			Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "+ month + " Year: " + year);
+			//Log.d(tag, "Setting Next Month in GridCellAdapter: " + "Month: "+ month + " Year: " + year);
 			setGridCellAdapterToDate(month, year);
 		}
 
@@ -277,8 +284,10 @@ public class MainActivity extends Activity implements OnClickListener
 		super.onDestroy();
 	}
 
+	
+	
 	// Inner Class
-	public class GridCellAdapter extends BaseAdapter implements OnClickListener, android.content.DialogInterface.OnClickListener {
+	public class GridCellAdapter extends BaseAdapter implements OnClickListener, android.content.DialogInterface.OnClickListener{
 		private static final String tag = "GridCellAdapter";
 		private final Context _context;
 
@@ -297,8 +306,7 @@ public class MainActivity extends Activity implements OnClickListener
 		private Button gridcell;
 		private TextView num_events_per_day;
 		private final HashMap<String, Integer> eventsPerMonthMap;
-		private final SimpleDateFormat dateFormatter = new SimpleDateFormat(
-				"dd-MMM-yyyy");
+		private final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MMM-yyyy");
 
 		// Days in Current Month
 		public GridCellAdapter(Context context, int textViewResourceId,
@@ -449,7 +457,7 @@ public class MainActivity extends Activity implements OnClickListener
 				list.add(String
 						.valueOf((daysInPrevMonth - trailingSpaces + DAY_OFFSET)
 								+ i)
-								+ "-GREY"
+								+ "-PASTELGREEN"
 								+ "-"
 								+ getMonthAsString(prevMonth)
 								+ "-"
@@ -464,7 +472,7 @@ public class MainActivity extends Activity implements OnClickListener
 					list.add(String.valueOf(i) + "-BLUE" + "-"
 							+ getMonthAsString(currentMonth) + "-" + yy);
 				} else {
-					list.add(String.valueOf(i) + "-WHITE" + "-"
+					list.add(String.valueOf(i) + "-PINEGREEN" + "-"
 							+ getMonthAsString(currentMonth) + "-" + yy);
 				}
 			}
@@ -472,7 +480,7 @@ public class MainActivity extends Activity implements OnClickListener
 			// Leading Month days
 			for (int i = 0; i < list.size() % 7; i++) {
 				Log.d(tag, "NEXT MONTH:= " + getMonthAsString(nextMonth));
-				list.add(String.valueOf(i + 1) + "-GREY" + "-"
+				list.add(String.valueOf(i + 1) + "-PASTELGREEN" + "-"
 						+ getMonthAsString(nextMonth) + "-" + nextYear);
 			}
 		 }
@@ -536,6 +544,10 @@ public class MainActivity extends Activity implements OnClickListener
 			 // Set the Day GridCell
 			 gridcell.setText(theday);
 			 gridcell.setTag(cmonth + "-" + theday + "-" + theyear);
+			 
+			 Typeface font = Typeface.createFromAsset(getAssets(), "daddysgirl.ttf");
+			 gridcell.setTypeface(font);
+			 
 			 //int cmonth = getMonthAsInt(themonth);
 			 //String todate = cmonth+ "-" + theday + "-" + theyear;
 			 Log.d("Date", ""+ todate);
@@ -554,13 +566,13 @@ public class MainActivity extends Activity implements OnClickListener
 			   
 			 Log.d(tag, "Setting GridCell " + theday + "-" + themonth + "-"+ theyear);
 
-			 if (day_color[1].equals("GREY")) {
+			 if (day_color[1].equals("PASTELGREEN")) {
 				 gridcell.setTextColor(getResources()
-						 .getColor(R.color.lightgray));
+						 .getColor(R.color.lightgray02));
 			 }
-			 if (day_color[1].equals("WHITE")) {
+			 if (day_color[1].equals("PINEGREEN")) {
 				 gridcell.setTextColor(getResources().getColor(
-						 R.color.lightgray02));
+						 R.color.gray));
 			 }
 			 if (day_color[1].equals("BLUE")) {
 				 gridcell.setTextColor(getResources().getColor(R.color.green));
@@ -571,10 +583,10 @@ public class MainActivity extends Activity implements OnClickListener
 		 @Override
 		 public void onClick(View view) {
 			 String date_month_year = (String) view.getTag();
-			 Toast.makeText(getApplicationContext(), "" + date_month_year, Toast.LENGTH_LONG).show();
+			 //Toast.makeText(getApplicationContext(), "" + date_month_year, Toast.LENGTH_LONG).show();
 			 
 			 this.displayThisDayReminder(date_month_year);
-			 selectedDayMonthYearButton.setText("Selected: " + date_month_year);
+			 //selectedDayMonthYearButton.setText("Selected: " + date_month_year);
 			 Log.e("Selected date", date_month_year);
 			 try {
 				 Date parsedDate = dateFormatter.parse(date_month_year);
@@ -600,40 +612,98 @@ public class MainActivity extends Activity implements OnClickListener
 		 public int getCurrentWeekDay() {
 			 return currentWeekDay;
 		 }
+		 
+		 
 			public void displayThisDayReminder(String date){
-				AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-				//dialog.setContentView(R.layout.todaycalendar);
-				dialog.setCancelable(true);
-		    	dialog.setTitle("Today's Reminder");
-		    	
-		    	    
-		    	//Toast.makeText(getApplicationContext(), "Displaying reminders", Toast.LENGTH_LONG).show();
+				//AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+				//dialog.setCancelable(true);
+		    	//dialog.setTitle("Reminders for this date");	 
+
 		    	Cursor cursor = dataBase.fetchAllReminderByDate(date);
-		    	String[] columns = new String[] {"title", "date", "time", "description"};
+		    	String[] columns = new String[] {"title", "time", "description","_id","date"};
 		    	
-		        int[] to = new int[] { R.id.Date, R.id.editText1, R.id.editText2, R.id.editDesc };
+		        int[] to = new int[] { R.id.Title, R.id.Time, R.id.editDesc };
  
-		    	ListView thisDayReminderList = (ListView) findViewById(R.id.thisDayReminder);
+		    	thisDayReminderList = (ListView) findViewById(R.id.thisDayReminder);
+		    	
+		    	thisDayReminderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		    		 
+		    	    @Override
+		    	     public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3) {
+		    	         // TODO Auto-generated method stub
+		    	        
+		    	      Toast.makeText(getApplicationContext(), "Clicked at Position"+position, Toast.LENGTH_SHORT).show();
+		    	    }
+		    	});
 		    	
 		    	startManagingCursor(cursor);
 		        
 		    		if (cursor!=null){
 		    			startManagingCursor(cursor);
-		    			SimpleCursorAdapter newAdapter = new SimpleCursorAdapter(MainActivity.this, R.layout.thisdayreminder_row, cursor, columns, to);
-		    			//thisDayReminderList.setAdapter(newAdapter);
-		    			dialog.setAdapter(newAdapter, this);
+		    			final SimpleCursorAdapter newAdapter = new SimpleCursorAdapter(MainActivity.this, R.layout.thisdayreminder_row, cursor, columns, to);
+		    			thisDayReminderList.setAdapter(newAdapter);
 		    		}
 		    		
+		    		//String t = cursor.getString(cursor.getColumnIndex("title"));
+		    		//Toast.makeText(getApplicationContext(), "Clicked at Position"+t, Toast.LENGTH_SHORT).show();
+		    		
 		    		if(cursor.getCount() > 0){
-		    			AlertDialog datePicker = dialog.create();
-		    			WindowManager.LayoutParams wmlp = datePicker.getWindow().getAttributes();
-
-				    	wmlp.gravity = Gravity.CENTER_VERTICAL;
-		    			datePicker.show();
+		    			//AlertDialog dateR = dialog.create();
+		    			//WindowManager.LayoutParams wmlp = dateR.getWindow().getAttributes();
+		    			
+				    	//wmlp.gravity = Gravity.TOP;
+		    			//dateR.show();
+				    	 
 		    		}else{
 		    			Toast.makeText(getApplicationContext(), "No reminders for this day.", Toast.LENGTH_SHORT).show();
 		    		}	
-		   }
+		    		
+		    		thisDayReminderList.setOnItemClickListener(new OnItemClickListener() {
+		    			public void onItemClick(AdapterView<?> parent, View view,int position, final long mid) 
+		    			    {
+		    					
+		    			     	String selectedFromList = (thisDayReminderList.getItemAtPosition(position).toString());
+		    			     	
+		    			     	final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+		    					 
+ 
+		    					
+		    					Cursor rcursor = dataBase.getSingleEntry((int) mid);
+		    					rcursor.moveToFirst();
+		    					final String ftitle = rcursor.getString(rcursor.getColumnIndex("title"));
+		    					final String fdate = rcursor.getString(rcursor.getColumnIndex("date"));
+		    					final String ftime = rcursor.getString(rcursor.getColumnIndex("time"));
+		    					final String fdesc = rcursor.getString(rcursor.getColumnIndex("description"));
+		    					
+		    					 
+		    					//Toast.makeText(getApplicationContext(), "Reminder "+ftitle, Toast.LENGTH_SHORT).show();
+		    			     	
+		    					
+		    			        builder.setTitle("Please select an action");
+		    			        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+		    			                   public void onClick(DialogInterface dialog, int id) {
+		    			                	   attemptDelete((int) mid);
+		    			                   }
+		    			               });
+		    			        
+		    			        builder.setNegativeButton("View", new DialogInterface.OnClickListener() {
+		    			                   public void onClick(DialogInterface dialog, int id) {
+		    			                	updateReminder((int) mid, ftitle,  fdate, ftime, fdesc);
+		    			                	   
+		    			                	//Toast.makeText(getApplicationContext(), "Opening..."+ mid, Toast.LENGTH_LONG).show();
+		    			                   }
+		    			               });
+		    			        
+		    			        AlertDialog dialog1 = builder.create();
+		    			        dialog1.show();
+		    			        
+		    			     	
+		    			     	
+		    			}});
+			}
+			
+ 
+			
 			public void updateReminder(int reminderId, String title, String date, String time, String desc){
 				
 				Intent i = new Intent(MainActivity.this, ReminderUpdate.class);
@@ -645,18 +715,22 @@ public class MainActivity extends Activity implements OnClickListener
 				
 				startActivity(i);
 			}
+			
+			
 			public void attemptDelete(final int reminderId){
 				
-				Toast.makeText(getBaseContext(), "ReminderID: "+ reminderId, Toast.LENGTH_LONG).show();
+				//Toast.makeText(getBaseContext(), "ReminderID: "+ reminderId, Toast.LENGTH_LONG).show();
 				
 				AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 		        builder.setTitle("Delete reminder");
-		        builder.setMessage("Are you sure you want to delete this reminder " + reminderId +" in your account?");
+		        builder.setMessage("Are you sure you want to delete this reminder in your account?");
 		        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 		                   public void onClick(DialogInterface dialog, int id) {
-		                	   	   reminderadapter.deleteEntry(reminderId);
-		                		   Toast.makeText(getApplicationContext(), "Successfully deleted " + reminderId, Toast.LENGTH_LONG).show();
+		                	   	   dataBase.deleteEntry(reminderId);
+		                		   Toast.makeText(getApplicationContext(), "Reminder deleted successfully.", Toast.LENGTH_LONG).show();
+		                		   Intent i = getIntent();
 		                		   finish();
+		                		   startActivity(i);
 		                   }
 		               });
 		        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -669,53 +743,19 @@ public class MainActivity extends Activity implements OnClickListener
 		        
 			}	
 			
-		 
-			protected void onListItemClick(ListView l, View v, int position, long id) {
-				// TODO Auto-generated method stub
-				Cursor listCursor = reminderadapter.fetchAllReminder();
-
-				listCursor.moveToPosition(position);
-				
-				final int item_id = listCursor.getInt(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_ID));
-		        final String title = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_TITLE));
-		        final String date = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_DATE));
-		        final String time = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_TIME));
-		        final String desc = listCursor.getString(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_DESCRIPTION));
-		        
-		        CharSequence[] items = {"View","Delete"};
-
-				AlertDialog.Builder builder3 =new AlertDialog.Builder(MainActivity.this);
-				builder3.setTitle("Select an action").setItems(items, new DialogInterface.OnClickListener() {
-
-		    	@Override
-		    	public void onClick(DialogInterface dialog, int which) {
-		    		
-		    		switch(which){
-					case 0: 
-						updateReminder(item_id, title, date, time, desc);
-						break;
-					case 1:
-						attemptDelete(item_id);
-						break;
-					}
-		    	}
-		    	});
-		    	
-		    	builder3.show();
-		        
-		      
-			}
-
+ 
 			@Override
-			public void onClick(DialogInterface arg0, int arg1) {
+			public void onClick(DialogInterface dialog, final int which) {
 				// TODO Auto-generated method stub
-				
+ 
 			}
-			
-
+			  
+ 
+	 
+ 
 		};
-//			
-
-	}
+ 		
+	
+}			
 
 	        

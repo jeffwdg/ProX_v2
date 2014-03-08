@@ -9,7 +9,7 @@
     	android:layout_height="wrap_content"
     	android:layout_alignParentLeft="true"
     	android:layout_marginLeft="10sp"
-    	android:textSize="21sp"
+    	android:textSize="15sp"
     	android:hint="@string/no_title"
    		android:id="@+id/text1"/>
 
@@ -20,7 +20,7 @@
 	    android:layout_alignLeft="@+id/text1"
 	    android:layout_below="@+id/text1"
 	    android:hint="@string/no_subject"
-	    android:textSize="14sp" 
+	    android:textSize="12sp" 
 	    android:textColor="#12da12"/>
 	
 		<TextView
@@ -30,6 +30,6 @@
 		    android:layout_above="@+id/text2"
 		    android:layout_alignParentRight="true"
 		    android:layout_marginRight="10sp"
-		    android:textSize="14sp" />
+		    android:textSize="12sp" />
 
 </RelativeLayout>

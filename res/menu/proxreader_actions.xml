@@ -3,12 +3,12 @@
     android:layout_alignParentBottom="true">
     <!-- Search, should appear as action button -->
         <item android:id="@+id/txt_find"
-          android:title="Search ebooks"
+          android:title="Search Word"
           android:icon="@drawable/searchword"
           android:showAsAction="always"/>
     
     <item android:id="@+id/proxreader_wordsearch"
-          android:title="Back"
+          android:title="Go To Page"
           android:icon="@drawable/gotopage"
           android:showAsAction="always" />
 <!--  

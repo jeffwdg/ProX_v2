@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import com.example.prox.MainActivity;
 import com.radaee.reader.R;
 
  
@@ -20,6 +21,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.widget.ResourceCursorAdapter;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,7 +53,9 @@ public class lastmonthcalendar extends ListActivity{
 		reminderadapter.open();
 		
 		listView = (ListView)findViewById(android.R.id.list);
-
+		
+		
+        
 		displaydata();
 
 	}
@@ -71,12 +75,15 @@ public class lastmonthcalendar extends ListActivity{
 		case R.id.action_new:
 			// add action
 			AddReminder();
-
-			return true;
+		case R.id.action_cancel:  Intent i = new Intent(this, Tablayout.class);
+									i.putExtra("activetab", "0");
+							        startActivity(i);
+							        break;
 
 		default:
-			return super.onOptionsItemSelected(item);
+			
 		}
+		return super.onOptionsItemSelected(item);
 	}
 	private void AddReminder() {
 		Intent i = new Intent(lastmonthcalendar.this, ReminderAdd.class);
@@ -88,20 +95,29 @@ public class lastmonthcalendar extends ListActivity{
 		Calendar _calendar;
 		int month,year, day;
 		_calendar = Calendar.getInstance(Locale.getDefault());
-		month = _calendar.get(Calendar.MONTH) - 1;
+		month = _calendar.get(Calendar.MONTH);
 		year = _calendar.get(Calendar.YEAR);
 		day = _calendar.get(Calendar.DATE);
 		Log.d("Date",""+day+ "-"+month+"-"+year);
-		if(month == 1){ month = 12;}
+		if(month == 0){ month = 12; year -= 1;}
+		
 		
 		String tdate = "" + month;
 		// Get all of the notes from the database and create the item list
 		final Cursor reminderCursor = reminderadapter.fetchAllReminderThisMonth(tdate);
 		
-		// Get all of the notes from the database and create the item list
-		//final Cursor reminderCursor = reminderadapter.fetchAllReminder();
-
-
+		if(reminderCursor.getCount() <= 0){
+			
+LinearLayout linearLayout = (LinearLayout) findViewById(R.id.monthreminder);
+			
+	        TextView noreminder = new TextView(this);
+			noreminder.setText("There are no reminders for last month.");
+			noreminder.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+			linearLayout.setGravity(Gravity.TOP);
+			linearLayout.addView(noreminder);
+		}
+		
+		
 		String[] from = new String[] {ReminderDatabaseAdapter.KEY_TITLE,ReminderDatabaseAdapter.KEY_DATE,ReminderDatabaseAdapter.KEY_TIME};
 		int[] to = new int[] { R.id.Title ,R.id.Date,R.id.Time};
 
@@ -123,16 +139,18 @@ public class lastmonthcalendar extends ListActivity{
 	
 	public void attemptDelete(final int reminderId){
 		
-		Toast.makeText(getBaseContext(), "ReminderID: "+ reminderId, Toast.LENGTH_LONG).show();
+		//Toast.makeText(getBaseContext(), "ReminderID: "+ reminderId, Toast.LENGTH_LONG).show();
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(lastmonthcalendar.this);
         builder.setTitle("Delete reminder");
-        builder.setMessage("Are you sure you want to delete this reminder " + reminderId +" in your account?");
+        builder.setMessage("Are you sure you want to delete this reminder in your account?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                    public void onClick(DialogInterface dialog, int id) {
                 	   	   reminderadapter.deleteEntry(reminderId);
-                		   Toast.makeText(getApplicationContext(), "Successfully deleted " + reminderId, Toast.LENGTH_LONG).show();
+                		   Toast.makeText(getApplicationContext(), "Successfully deleted.", Toast.LENGTH_LONG).show();
+                		   Intent intent = new Intent(getApplicationContext(),  com.example.prox.reminder.MainActivity.class);
                 		   finish();
+	                	startActivity(intent);
                    }
                });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -146,6 +164,8 @@ public class lastmonthcalendar extends ListActivity{
 	}	
 	
 	public void updateReminder(int reminderId, String title, String date, String time, String desc){
+		
+		//Toast.makeText(getApplicationContext(), ""+reminderId, Toast.LENGTH_SHORT).show();
 		
 		Intent i = new Intent(this, ReminderUpdate.class);
 		i.putExtra("id", reminderId);
@@ -161,7 +181,20 @@ public class lastmonthcalendar extends ListActivity{
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
-		Cursor listCursor = reminderadapter.fetchAllReminder();
+		
+		Calendar _calendar;
+		int month,year, day;
+		_calendar = Calendar.getInstance(Locale.getDefault());
+		month = _calendar.get(Calendar.MONTH);
+		year = _calendar.get(Calendar.YEAR);
+		day = _calendar.get(Calendar.DATE);
+		Log.d("Date",""+day+ "-"+month+"-"+year);
+		if(month == 0){ month = 12; year -= 1;}
+		
+		
+		String tdate = "" + month;
+ 
+		Cursor listCursor = reminderadapter.fetchAllReminderThisMonth(tdate);
 
 		listCursor.moveToPosition(position);
 		final int item_id = listCursor.getInt(listCursor.getColumnIndex(ReminderDatabaseAdapter.KEY_ID));
